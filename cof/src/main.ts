@@ -84,7 +84,7 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
 
 function createRocket(vetrina: HTMLElement) {
     const rocket = document.createElement("img");
-    rocket.src = "./imgs/missle.jpg";
+    rocket.src = "./imgs/missle.png";
     rocket.classList.add("imgCompact");
     vetrina.appendChild(rocket);
 }
