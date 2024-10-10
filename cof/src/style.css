@@ -93,3 +93,16 @@ body {
 .blue {
     background-color: blue;
 }
+
+.imgCompact {
+    object-fit: cover;
+    max-width: 90%;
+    max-height: auto;
+}
+
+.vetrina {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
