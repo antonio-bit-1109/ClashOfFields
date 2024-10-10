@@ -142,6 +142,7 @@ function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
     startButton.classList.add("button");
+    startButton.id = "mainBtn";
     startButton.innerHTML = "iniziamo!";
     const welcome = document.createElement("h4");
     welcome.classList.add("h4Style");
@@ -160,17 +161,19 @@ function changeStatusGame() {
     if (!util.isGameStarted) {
         util.isGameStarted = true;
         reloadBattery();
+        handleMessages();
+        handleTimer();
         console.log("gioco iniziato");
         return;
     }
 
     if (util.isGameStarted) {
         util.isGameStarted = false;
+        handleMessages();
+        handleTimer();
         console.log("gioco interrotto");
         return;
     }
-
-    startTimer();
 }
 
 function reloadBattery() {
@@ -186,18 +189,35 @@ function reloadBattery() {
 
         if (currentSlot < slots.length) {
             console.log(currentSlot, "currslot");
-            let slot = slots[currentSlot]; // Seleziona lo slot corrente
-            slot.classList.add("fillSlot"); // Aggiungi la classe solo a questo slot
-            currentSlot++; // Passa allo slot successivo
+            let slot = slots[currentSlot];
+            slot.classList.add("fillSlot");
+            currentSlot++;
             BatteryCharge < maxCharge ? BatteryCharge++ : null;
             console.log("carica batteria:", BatteryCharge);
         } else {
-            clearInterval(interval); // Ferma l'interval una volta che tutti gli slot sono pieni
+            clearInterval(interval);
         }
-    }, 2000); // Ogni 2 secondi
+    }, 2000);
 }
 
-function startTimer() {
-    const welcomeMessage = document.querySelector(".welcome");
-    welcomeMessage?.classList.add("d-none");
+function handleMessages() {
+    const welcomeText = document.querySelector(".welcome");
+    const button = document.getElementById("mainBtn");
+    if (welcomeText) {
+        welcomeText.innerHTML = "default text";
+    }
+
+    if (!button) {
+        return;
+    }
+
+    if (util.isGameStarted) {
+        button.innerHTML = "STOP THE GAME 🖐";
+    } else if (!util.isGameStarted) {
+        button.innerHTML = "RESUME THE GAME 👍";
+    }
 }
+
+// function handleTimer() {
+//     // inserisci il timer da avviare e stoppare a seconda che il gioco sia avviato o fermo
+// }

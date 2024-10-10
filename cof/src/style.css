@@ -136,10 +136,11 @@ body {
 }
 
 .button {
-    width: 150px;
-    height: 60px;
+    width: 180px;
+    height: 80px;
     border-radius: 20px;
     font-size: 20px;
+    padding: 6px;
 }
 
 .d-none {
