@@ -65,7 +65,7 @@ body {
 }
 
 .fillSlot {
-    background-color: green;
+    background-color: rgb(28, 220, 28);
 }
 
 .cell {
@@ -96,7 +96,7 @@ body {
 
 .imgCompact {
     object-fit: cover;
-    max-width: 90%;
+    max-width: 60%;
     max-height: auto;
 }
 
@@ -105,4 +105,19 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.batteryCost {
+    background-color: rgb(28, 220, 28);
+    width: 30%;
+    height: 20px;
+    border: 2px black solid;
+}
+
+.wrapperBatteryCost {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    gap: 4px;
 }

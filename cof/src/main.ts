@@ -63,6 +63,7 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
         case 0:
             nome.innerHTML = `🚀 Missle 🚀`;
             createRocket(vetrina);
+            rocketCost(vetrina);
             break;
         case 1:
             nome.innerHTML = ` arma2 `;
@@ -87,6 +88,18 @@ function createRocket(vetrina: HTMLElement) {
     rocket.src = "./imgs/missle.png";
     rocket.classList.add("imgCompact");
     vetrina.appendChild(rocket);
+}
+
+function rocketCost(vetrina: HTMLElement) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("wrapperBatteryCost");
+    for (let i = 0; i < 2; i++) {
+        const box = document.createElement("div");
+        box.classList.add("batteryCost");
+        // vetrina.appendChild(box);
+        wrapper.appendChild(box);
+    }
+    vetrina.appendChild(wrapper);
 }
 
 function createBatteryContainer(main: HTMLElement) {
