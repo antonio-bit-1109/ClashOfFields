@@ -8,6 +8,10 @@ let maxCharge: number = 6;
 const util = {
     isGameStarted: false,
     puntoCaricamentoBatteria: 0,
+    minSn: 0,
+    minDx: 0,
+    secSn: 0,
+    secDx: 0,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -229,6 +233,22 @@ function handleMessages() {
 }
 
 function handleTimer() {
-    // se il gioco è avviato, avvia il timer, togli d-none al div
+    const timer = document.getElementById("timer");
+    if (timer) {
+        // se il gioco è avviato, avvia il timer, togli d-none al div
+        util.isGameStarted && startClock(timer);
+        !util.isGameStarted && stopClock(timer);
+    }
+
     // se il gioco è bloccato interrompi il timer.
+}
+
+function startClock(timer: HTMLElement) {
+    timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
+
+    console.log("starting the clock...");
+}
+
+function stopClock() {
+    console.log("stopping the clock...");
 }
