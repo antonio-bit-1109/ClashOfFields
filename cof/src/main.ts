@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         createGriglia(main);
         createBatteryContainer(main);
         createMessagesContainer(main);
+        createTimer();
         welcomeMessage();
     }
 });
@@ -138,6 +139,14 @@ function createMessagesContainer(main: HTMLElement) {
     main.appendChild(messageBox);
 }
 
+function createTimer() {
+    const messageBox = document.querySelector(".messagebox");
+    const timer = document.createElement("div");
+    timer.id = "timer";
+    timer.classList.add("d-none");
+    messageBox?.appendChild(timer);
+}
+
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
@@ -163,7 +172,7 @@ function changeStatusGame() {
         util.isGameStarted = true;
         reloadBattery();
         handleMessages();
-        // handleTimer();
+        handleTimer();
         console.log("gioco iniziato");
         return;
     }
@@ -171,7 +180,7 @@ function changeStatusGame() {
     if (util.isGameStarted) {
         util.isGameStarted = false;
         handleMessages();
-        // handleTimer();
+        handleTimer();
         console.log("gioco interrotto");
         return;
     }
@@ -219,6 +228,7 @@ function handleMessages() {
     }
 }
 
-// function handleTimer() {
-//     // inserisci il timer da avviare e stoppare a seconda che il gioco sia avviato o fermo
-// }
+function handleTimer() {
+    // se il gioco è avviato, avvia il timer, togli d-none al div
+    // se il gioco è bloccato interrompi il timer.
+}
