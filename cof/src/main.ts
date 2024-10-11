@@ -155,6 +155,7 @@ function welcomeMessage() {
 
     // PUNTO PARTENZA PER GESTIRE AVVIO/STOP DEL GIOCO
     startButton.addEventListener("click", changeStatusGame);
+    //--------------------------------------------------------//
 }
 
 function changeStatusGame() {
@@ -162,7 +163,7 @@ function changeStatusGame() {
         util.isGameStarted = true;
         reloadBattery();
         handleMessages();
-        handleTimer();
+        // handleTimer();
         console.log("gioco iniziato");
         return;
     }
@@ -170,7 +171,7 @@ function changeStatusGame() {
     if (util.isGameStarted) {
         util.isGameStarted = false;
         handleMessages();
-        handleTimer();
+        // handleTimer();
         console.log("gioco interrotto");
         return;
     }
