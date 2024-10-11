@@ -12,6 +12,12 @@ const util = {
     minDx: 0,
     secSn: 0,
     secDx: 0,
+    id: 0,
+    selectedTruppa: "",
+    intervalTruppaSelez: 0,
+    intervalSchieraTruppa: 0,
+    selectedCell: "",
+    cellColor: "",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -42,9 +48,25 @@ function createBoxes(aside: HTMLElement) {
     for (let i = 0; i < 4; i++) {
         box = document.createElement("div");
         box.classList.add("styleAsideBox");
+
+        ((box) => {
+            box.addEventListener("click", () => {
+                giveSelectedToBox(box);
+            });
+        })(box);
+
         showWeaponsInAside(box, i);
         aside.appendChild(box);
     }
+}
+
+function giveSelectedToBox(Selectedbox: HTMLElement) {
+    const allBoxes = document.querySelectorAll(".styleAsideBox");
+    allBoxes.forEach((box) => {
+        box.classList.remove("selected");
+    });
+    Selectedbox.classList.add("selected");
+    // !box.classList.contains("selected") ? box.classList.add("selected") : box.classList.remove("selected");
 }
 
 function showWeaponsInAside(box: HTMLElement, i: number) {
@@ -60,7 +82,7 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
             weaponCost(vetrina, 2);
             break;
         case 1:
-            nome.innerHTML = ` 🧬 Laser 🧬 `;
+            nome.innerHTML = `🧬 Laser 🧬`;
             createWepon(vetrina, "./imgs/laser.png");
             weaponCost(vetrina, 2);
             break;
@@ -108,6 +130,10 @@ function createGriglia(main: HTMLElement) {
         let cell = document.createElement("div");
         cell.classList.add("cell");
         cell.classList.add(`c${i}`);
+
+        // cell.addEventListener("click", () => {
+        //     selectCell(i);
+        // });
 
         if (i < 989) {
             cell.classList.add("red");
@@ -172,27 +198,116 @@ function welcomeMessage() {
 }
 
 function changeStatusGame() {
+    //richiamata quando il gioco parte
     if (!util.isGameStarted) {
         util.isGameStarted = true;
         reloadBattery();
         handleMessages();
         handleTimer();
+
+        // controllo ogni secondo la truppa selezionata. (watching)
+        // la funzione truppa selezionata ha il suo corrispettivo stopSelezioneTruppe quando viene messo in pausa
+        // il gioco.
+        util.intervalTruppaSelez = setInterval(() => {
+            truppaSelezionata();
+        }, 1000);
+
+        // se selectedTruppa in util è popolato con il nome di una truppa
+        // allora chiamo la funzione per schierare la truppa sul campo di battaglia
+        //la fuzione schiera truppa ha la funzione corrispettiva stop schiera truppa per quando il gioco viene messo in pausa.
+        util.intervalSchieraTruppa = setInterval(() => {
+            util.selectedTruppa !== "" && schieraTruppa();
+        }, 1000);
+
         console.log("gioco iniziato");
         return;
     }
-
+    // richiamata quando il gioco in pausa
     if (util.isGameStarted) {
         util.isGameStarted = false;
         handleMessages();
         handleTimer();
+        stopSelezioneTruppe();
+        stopSchieraTruppa();
         console.log("gioco interrotto");
         return;
     }
 }
 
+// a seconda del valore inserito in util.selectedTruppa avvio una funzione che dovrà gestire il deploy del missile, del laser, del soldato.
+function schieraTruppa() {
+    console.log("sono dentro schiera truppa");
+    switch (util.selectedTruppa) {
+        case "Missle":
+            deployMissile();
+            break;
+        case "Laser":
+            deployLaser();
+            break;
+        case "soldato":
+            deploySoldato();
+            break;
+    }
+}
+
+function deployMissile() {
+    selectCell();
+
+    // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
+}
+function deployLaser() {}
+function deploySoldato() {}
+
+// funzioni comuni a tutte le armi per la selzione della casella cliccata.
+function selectCell() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell, i) => {
+        cell.addEventListener("click", () => {
+            util.selectedCell = `c${i}`;
+            if (cell.classList.contains("red")) {
+                util.cellColor = "red";
+            }
+
+            if (cell.classList.contains("blue")) {
+                util.cellColor = "blue";
+            }
+        });
+    });
+}
+
+function stopSchieraTruppa() {
+    clearInterval(util.intervalSchieraTruppa);
+    console.log("interrompi watch schiera truppa");
+}
+
+// salvo in util la stringa contenente la truppa che l'utente ha selezionato al momento
+function truppaSelezionata() {
+    // capisco quale truppa ha selezionato l'utente
+    const boxSelezionato = document.querySelector(".selected");
+    if (boxSelezionato) {
+        let h4_NomeArma = boxSelezionato.querySelector(".stileNome");
+        if (h4_NomeArma) {
+            util.selectedTruppa = h4_NomeArma.innerHTML.slice(2, -2).trim();
+            console.log(util);
+        }
+        //    let nomeWeapon = weapon?.innerHTML
+        //     util.selectedArma = nomeWeapon?.slice
+    } else {
+        console.log("nessuna truppa selezionata.");
+        return;
+    }
+    // se truppa seleziona è missile succederà qualcosa
+}
+
+// interrompo il looking sulla truppa selezionata.
+function stopSelezioneTruppe() {
+    console.log("non sto guardando alla truppa selezionata.");
+    clearInterval(util.intervalTruppaSelez);
+}
+
 function reloadBattery() {
     let slots = document.querySelectorAll(".slot");
-    let currentSlot = util.puntoCaricamentoBatteria; // Usa puntoCaricamentoBatteria o parte da 0
+    let currentSlot = util.puntoCaricamentoBatteria;
 
     let interval = setInterval(() => {
         if (!util.isGameStarted) {
@@ -234,21 +349,46 @@ function handleMessages() {
 
 function handleTimer() {
     const timer = document.getElementById("timer");
+
     if (timer) {
+        timer.classList.remove("d-none");
         // se il gioco è avviato, avvia il timer, togli d-none al div
         util.isGameStarted && startClock(timer);
-        !util.isGameStarted && stopClock(timer);
+        // se il gioco è bloccato interrompi il timer
+        !util.isGameStarted && stopClock();
     }
-
-    // se il gioco è bloccato interrompi il timer.
 }
 
 function startClock(timer: HTMLElement) {
-    timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
+    console.log("sono in start clock");
+    util.id = setInterval(() => {
+        if (util.secDx === 9 && util.secSn === 5 && util.minDx === 9 && util.minSn === 5) {
+            clearInterval(util.id);
+            timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
+        }
 
+        util.secDx++;
+        if (util.secDx > 9) {
+            util.secSn++;
+            util.secDx = 0;
+        }
+
+        if (util.secSn > 5) {
+            util.minDx++;
+            util.secSn = 0;
+        }
+
+        if (util.minDx > 9) {
+            util.minSn++;
+            util.minDx = 0;
+        }
+
+        timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
+    }, 1000);
     console.log("starting the clock...");
 }
 
 function stopClock() {
-    console.log("stopping the clock...");
+    console.log("sono in stop clock");
+    clearInterval(util.id);
 }

@@ -146,3 +146,12 @@ body {
 .d-none {
     display: none;
 }
+
+#timer {
+    color: #242424;
+    font-size: 6em;
+}
+
+.selected {
+    opacity: 0.6;
+}
