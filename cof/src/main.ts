@@ -234,6 +234,7 @@ function deploy(cellColor: string) {
     util.raggioAzioneMissile.forEach((val) => {
         let cell = document.querySelector(`.${val}`);
         cell?.classList.add(cellColor);
+        cell?.classList.add("flip-cell");
     });
 }
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
