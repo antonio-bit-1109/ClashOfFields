@@ -1,4 +1,9 @@
 import "./style.css";
+import { createAside } from "./createAside";
+import { createGriglia } from "./createGriglia";
+import { createBatteryContainer } from "./createBatteryContainer";
+import { createMessagesContainer } from "./createMessagesContainer";
+import { createTimer } from "./createTimer";
 
 let BatteryCharge: number = 0;
 let maxCharge: number = 6;
@@ -24,158 +29,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // creo la griglia di gioco e la preparo con classi e compagnia bella.
     const main = document.getElementById("main");
     if (main) {
-        // creo campo da gioco e menù laterale
+        // creo campo da gioco e menù laterale - script a parte
+        // crea div laterale
         createAside(main);
+        // crea griglia centrale
         createGriglia(main);
+        // crea contenitore batteria
         createBatteryContainer(main);
+        // crea div per messaggi di servizio
         createMessagesContainer(main);
+        // creazione timer
         createTimer();
+
+        // funzione principale. -- avvio del gioco.
         welcomeMessage();
     }
 });
-
-// crea il menu verticale dal quale si potrà scegliere arma
-function createAside(main: HTMLElement) {
-    const aside = document.createElement("aside");
-    main.appendChild(aside);
-    aside.classList.add("aside");
-    createBoxes(aside);
-}
-
-// crea i 4 boxes che conterranno le 4 armi disponibili
-function createBoxes(aside: HTMLElement) {
-    let box: any;
-    for (let i = 0; i < 4; i++) {
-        box = document.createElement("div");
-        box.classList.add("styleAsideBox");
-
-        ((box) => {
-            box.addEventListener("click", () => {
-                giveSelectedToBox(box);
-            });
-        })(box);
-
-        showWeaponsInAside(box, i);
-        aside.appendChild(box);
-    }
-}
-
-function giveSelectedToBox(Selectedbox: HTMLElement) {
-    const allBoxes = document.querySelectorAll(".styleAsideBox");
-    allBoxes.forEach((box) => {
-        box.classList.remove("selected");
-    });
-    Selectedbox.classList.add("selected");
-    // !box.classList.contains("selected") ? box.classList.add("selected") : box.classList.remove("selected");
-}
-
-function showWeaponsInAside(box: HTMLElement, i: number) {
-    const vetrina = document.createElement("div");
-    vetrina.classList.add(`vetrina`);
-    const nome = document.createElement("h4");
-    nome.classList.add("stileNome");
-    vetrina.appendChild(nome);
-    switch (i) {
-        case 0:
-            nome.innerHTML = `🚀 Missle 🚀`;
-            createWepon(vetrina, "./imgs/missle.png");
-            weaponCost(vetrina, 2);
-            break;
-        case 1:
-            nome.innerHTML = `🧬 Laser 🧬`;
-            createWepon(vetrina, "./imgs/laser.png");
-            weaponCost(vetrina, 2);
-            break;
-        case 2:
-            nome.innerHTML = `⚔ soldato ⚔`;
-            createWepon(vetrina, "./imgs/solder.png");
-            weaponCost(vetrina, 4);
-            break;
-        case 3:
-            nome.innerHTML = ` arma4 `;
-            break;
-
-        default:
-            null;
-            break;
-    }
-
-    box.appendChild(vetrina);
-}
-
-function createWepon(vetrina: HTMLElement, path: string) {
-    const weapon: HTMLImageElement = document.createElement("img");
-    weapon.src = path;
-    weapon.classList.add("imgCompact");
-    vetrina.appendChild(weapon);
-}
-
-function weaponCost(vetrina: HTMLElement, batteryCost: number) {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("wrapperBatteryCost");
-    for (let i = 0; i < batteryCost; i++) {
-        const box = document.createElement("div");
-        box.classList.add("batteryCost");
-        // vetrina.appendChild(box);
-        wrapper.appendChild(box);
-    }
-    vetrina.appendChild(wrapper);
-}
-
-// crea la griglia contenente tutte le celle necessarie al gioco
-function createGriglia(main: HTMLElement) {
-    const cellContainer = document.createElement("div");
-    cellContainer.classList.add("cellsContainers");
-    for (let i = 0; i < 1978; i++) {
-        let cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.classList.add(`c${i}`);
-
-        // cell.addEventListener("click", () => {
-        //     selectCell(i);
-        // });
-
-        if (i < 989) {
-            cell.classList.add("red");
-        } else {
-            cell.classList.add("blue");
-        }
-
-        cellContainer.appendChild(cell);
-    }
-    main.appendChild(cellContainer);
-}
-
-function createBatteryContainer(main: HTMLElement) {
-    const batteryContainer = document.createElement("div");
-    batteryContainer.classList.add("batteryContainer");
-    createSlotBattery(batteryContainer);
-    main.appendChild(batteryContainer);
-}
-
-function createSlotBattery(batteryContainer: HTMLElement) {
-    let slot: any;
-    for (let i = 0; i < 6; i++) {
-        slot = document.createElement("div");
-        slot.classList.add("styleSlot");
-        slot.classList.add("slot");
-        batteryContainer.appendChild(slot);
-    }
-}
-
-function createMessagesContainer(main: HTMLElement) {
-    const messageBox = document.createElement("section");
-    messageBox.classList.add("messagebox");
-    main.appendChild(messageBox);
-}
-
-function createTimer() {
-    const messageBox = document.querySelector(".messagebox");
-    const timer = document.createElement("div");
-    timer.id = "timer";
-    timer.classList.add("d-none");
-    messageBox?.appendChild(timer);
-}
 
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
