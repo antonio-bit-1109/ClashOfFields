@@ -1,0 +1,4 @@
+-- controllare che possa essere fatto il deploy del missile solo se c'è carica della batteria sufficiente. se la carica è sufficiente sottrarre il costo dell arma dalla batteria
+
+-- impostare correttamente i turni ? dopo l'azione del giocatoreX poi tocca la giocatoreY ? 
+-- audio del missile che cade

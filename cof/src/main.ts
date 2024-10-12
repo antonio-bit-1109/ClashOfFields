@@ -9,8 +9,24 @@ let BatteryCharge: number = 0;
 let maxCharge: number = 6;
 // let isGameStarted = false;
 // let puntoCaricamentoBatteria: number = 0;
+interface IUtil {
+    isGameStarted: boolean;
+    puntoCaricamentoBatteria: number;
+    minSn: number;
+    minDx: number;
+    secSn: number;
+    secDx: number;
+    id: number;
+    selectedTruppa: string;
+    intervalTruppaSelez: number;
+    intervalSchieraTruppa: number;
+    selectedCell: string;
+    cellColor: string;
+    isPlayerOneTurn: boolean;
+    raggioAzioneMissile: string[];
+}
 
-const util = {
+const util: IUtil = {
     isGameStarted: false,
     puntoCaricamentoBatteria: 0,
     minSn: 0,
@@ -23,6 +39,8 @@ const util = {
     intervalSchieraTruppa: 0,
     selectedCell: "",
     cellColor: "",
+    isPlayerOneTurn: true,
+    raggioAzioneMissile: [],
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -56,7 +74,7 @@ function welcomeMessage() {
     welcome.classList.add("h4Style");
     welcome.classList.add("welcome");
     welcome.innerHTML =
-        "benvenuto al mio gioco di controlla il campo di battaglia! Spero funzioni... sei pronto per partire ? ";
+        "Benvenuto a sto gioco di controlla il campo di battaglia! Spero funzioni... sei pronto per partire ? ";
 
     messageBox?.appendChild(welcome);
     messageBox?.appendChild(startButton);
@@ -119,31 +137,106 @@ function schieraTruppa() {
     }
 }
 
-function deployMissile() {
-    selectCell();
-
+async function deployMissile() {
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
+    await selectCell();
+    deployOnBattleField();
 }
+
 function deployLaser() {}
 function deploySoldato() {}
 
+// -------------------------------funzioni comuni armi per logica di deploy ---------------------------------------------
 // funzioni comuni a tutte le armi per la selzione della casella cliccata.
-function selectCell() {
-    const cells = document.querySelectorAll(".cell");
-    cells.forEach((cell, i) => {
-        cell.addEventListener("click", () => {
-            util.selectedCell = `c${i}`;
-            if (cell.classList.contains("red")) {
-                util.cellColor = "red";
-            }
+async function selectCell(): Promise<string> {
+    return new Promise((res) => {
+        const cells = document.querySelectorAll(".cell");
+        cells.forEach((cell, i) => {
+            cell.addEventListener("click", () => {
+                util.selectedCell = `c${i}`;
+                if (cell.classList.contains("red")) {
+                    util.cellColor = "red";
+                    res(util.cellColor);
+                }
 
-            if (cell.classList.contains("blue")) {
-                util.cellColor = "blue";
-            }
+                if (cell.classList.contains("blue")) {
+                    util.cellColor = "blue";
+                    res(util.cellColor);
+                }
+            });
         });
     });
 }
 
+// salvo in util la cella cliccata e se il colore è blue o rosso
+function deployOnBattleField() {
+    if (util.isPlayerOneTurn) {
+        // gioco tenendo in considerazione che il campo di battaglia diventa blue
+        deploy("blue");
+        util.isPlayerOneTurn = false;
+    }
+
+    if (!util.isPlayerOneTurn) {
+        // gioco tenendo in considerazione che il campo di battaglia diventa rosso
+        deploy("red");
+        util.isPlayerOneTurn = true;
+    }
+}
+
+function deploy(cellColor: string) {
+    // pulisco array ogni qual volta voglio fare il deploy di un missile
+    util.raggioAzioneMissile.length = 0;
+    // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
+    util.raggioAzioneMissile.push(
+        "c" + (parseInt(util.selectedCell.slice(1)) + 0).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 1).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 2).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 3).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 4).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 1).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 2).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 3).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 4).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 40).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 41).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 42).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 43).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 44).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 45).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 46).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 40).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 41).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 42).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 43).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 44).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 45).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 46).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 84).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 85).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 86).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 87).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 88).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 84).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 85).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 86).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 87).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 88).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 130).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 129).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 128).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 130).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 129).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 128).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) + 172).toString(),
+        "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
+    );
+    console.log(util);
+    util.raggioAzioneMissile.forEach((val) => {
+        let cell = document.querySelector(`.${val}`);
+        cell?.classList.add(cellColor);
+    });
+}
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------
 function stopSchieraTruppa() {
     clearInterval(util.intervalSchieraTruppa);
     console.log("interrompi watch schiera truppa");
