@@ -5,6 +5,9 @@ import { createBatteryContainer } from "./createBatteryContainer";
 import { createMessagesContainer } from "./createMessagesContainer";
 import { createTimer } from "./createTimer";
 
+// suono esplosione missile
+const missleExpl = new Audio("../public/sounds/missleExpl.mp3");
+
 let BatteryCharge: number = 0;
 let maxCharge: number = 6;
 // let isGameStarted = false;
@@ -22,8 +25,9 @@ interface IUtil {
     intervalSchieraTruppa: number;
     selectedCell: string;
     cellColor: string;
-    isPlayerOneTurn: boolean;
+    // isPlayerOneTurn: boolean;
     raggioAzioneMissile: string[];
+    hoMessoPausaAlmenoUnaVolta: boolean;
 }
 
 const util: IUtil = {
@@ -39,8 +43,9 @@ const util: IUtil = {
     intervalSchieraTruppa: 0,
     selectedCell: "",
     cellColor: "",
-    isPlayerOneTurn: true,
+    // isPlayerOneTurn: true,
     raggioAzioneMissile: [],
+    hoMessoPausaAlmenoUnaVolta: false,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -88,7 +93,7 @@ function changeStatusGame() {
     //richiamata quando il gioco parte
     if (!util.isGameStarted) {
         util.isGameStarted = true;
-        reloadBattery();
+        ricaricaBatteria();
         handleMessages();
         handleTimer();
 
@@ -137,10 +142,29 @@ function schieraTruppa() {
     }
 }
 
+function suonoImpattoArma(audioElement: HTMLAudioElement) {
+    if (audioElement.currentTime > 0) {
+        audioElement.currentTime = 0;
+        audioElement.play();
+    } else {
+        audioElement.play();
+    }
+}
+
 async function deployMissile() {
+    const costoMissile = 2;
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
-    await selectCell();
-    deployOnBattleField();
+    let caricato = haiAbbastanzaCaricaBattery(costoMissile);
+    if (caricato) {
+        await selectCell();
+        deployRaggioAzioneMissile("blue");
+        suonoImpattoArma(missleExpl);
+        consumaCaricaBatteria(costoMissile);
+        ricaricaBatteria();
+    } else {
+        giveMessage("non hai accumulato carica sufficiente per usare quest'arma. Attendi la carica bella batteria.");
+        return;
+    }
 }
 
 function deployLaser() {}
@@ -148,6 +172,15 @@ function deploySoldato() {}
 
 // -------------------------------funzioni comuni armi per logica di deploy ---------------------------------------------
 // funzioni comuni a tutte le armi per la selzione della casella cliccata.
+
+function haiAbbastanzaCaricaBattery(costoArma: number) {
+    if (BatteryCharge < costoArma) {
+        return false;
+    }
+
+    return true;
+}
+
 async function selectCell(): Promise<string> {
     return new Promise((res) => {
         const cells = document.querySelectorAll(".cell");
@@ -168,22 +201,61 @@ async function selectCell(): Promise<string> {
     });
 }
 
-// salvo in util la cella cliccata e se il colore è blue o rosso
-function deployOnBattleField() {
-    if (util.isPlayerOneTurn) {
-        // gioco tenendo in considerazione che il campo di battaglia diventa blue
-        deploy("blue");
-        util.isPlayerOneTurn = false;
+function consumaCaricaBatteria(costoArma: number) {
+    // scarica la batteria del costo di utilizzo dell'arma.
+    const taccheBatteria = document.querySelectorAll(".slot");
+    let rimosse = 0; // Contatore per le classi rimosse
+
+    for (let i = taccheBatteria.length - 1; i >= 0 && rimosse < costoArma; i--) {
+        const taccaBatt = taccheBatteria[i];
+        if (taccaBatt.classList.contains("fillSlot")) {
+            taccaBatt.classList.remove("fillSlot");
+            rimosse++;
+        }
     }
 
-    if (!util.isPlayerOneTurn) {
-        // gioco tenendo in considerazione che il campo di battaglia diventa rosso
-        deploy("red");
-        util.isPlayerOneTurn = true;
-    }
+    BatteryCharge -= costoArma;
+    util.puntoCaricamentoBatteria = 6 - costoArma;
+    // if (util.puntoCaricamentoBatteria !== 0) {
+    //     util.puntoCaricamentoBatteria -= costoArma;
+    // }
+
+    //
+    console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
+    console.log(BatteryCharge);
 }
 
-function deploy(cellColor: string) {
+function ricaricaBatteria() {
+    let slots = document.querySelectorAll(".slot");
+    let currentSlot = util.puntoCaricamentoBatteria;
+
+    let interval = setInterval(() => {
+        if (!util.isGameStarted) {
+            util.puntoCaricamentoBatteria = currentSlot;
+            util.hoMessoPausaAlmenoUnaVolta = true;
+            clearInterval(interval);
+            return;
+        }
+
+        if (currentSlot < slots.length) {
+            let slot = slots[currentSlot];
+            // if (!slot.classList.contains("fillSlot")) {
+            slot.classList.add("fillSlot");
+            currentSlot++;
+            BatteryCharge < maxCharge ? BatteryCharge++ : null;
+            //
+            console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
+            console.log(currentSlot, "currentslot");
+            console.log(BatteryCharge, "carica Batteria");
+            // }
+        } else {
+            clearInterval(interval);
+        }
+    }, 2000);
+    //
+}
+
+function deployRaggioAzioneMissile(cellColor: string) {
     // pulisco array ogni qual volta voglio fare il deploy di un missile
     util.raggioAzioneMissile.length = 0;
     // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
@@ -268,30 +340,6 @@ function stopSelezioneTruppe() {
     clearInterval(util.intervalTruppaSelez);
 }
 
-function reloadBattery() {
-    let slots = document.querySelectorAll(".slot");
-    let currentSlot = util.puntoCaricamentoBatteria;
-
-    let interval = setInterval(() => {
-        if (!util.isGameStarted) {
-            util.puntoCaricamentoBatteria = currentSlot;
-            clearInterval(interval);
-            return;
-        }
-
-        if (currentSlot < slots.length) {
-            console.log(currentSlot, "currslot");
-            let slot = slots[currentSlot];
-            slot.classList.add("fillSlot");
-            currentSlot++;
-            BatteryCharge < maxCharge ? BatteryCharge++ : null;
-            console.log("carica batteria:", BatteryCharge);
-        } else {
-            clearInterval(interval);
-        }
-    }, 2000);
-}
-
 function handleMessages() {
     const welcomeText = document.querySelector(".welcome");
     const button = document.getElementById("mainBtn");
@@ -354,4 +402,14 @@ function startClock(timer: HTMLElement) {
 function stopClock() {
     console.log("sono in stop clock");
     clearInterval(util.id);
+}
+
+function giveMessage(message: string) {
+    const divMessage = document.querySelector(".welcome");
+    if (divMessage) {
+        divMessage.innerHTML = message;
+        setTimeout(() => {
+            divMessage.classList.add("d-none");
+        }, 3000);
+    }
 }
