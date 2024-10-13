@@ -142,6 +142,7 @@ function schieraTruppa() {
     }
 }
 
+// funzione per sentire audio dell arma che entra in campo.
 function suonoImpattoArma(audioElement: HTMLAudioElement) {
     if (audioElement.currentTime > 0) {
         audioElement.currentTime = 0;
@@ -162,7 +163,7 @@ async function deployMissile() {
         consumaCaricaBatteria(costoMissile);
         ricaricaBatteria();
     } else {
-        giveMessage("non hai accumulato carica sufficiente per usare quest'arma. Attendi la carica bella batteria.");
+        giveMessage("non hai accumulato carica sufficiente per lanciare un missile. Attendi la carica della batteria.");
         return;
     }
 }
