@@ -6,7 +6,7 @@ import { createMessagesContainer } from "./createMessagesContainer";
 import { createTimer } from "./createTimer";
 
 // suono esplosione missile
-const missleExpl = new Audio("../public/sounds/missleExpl.mp3");
+const missleExpl = new Audio("../sounds/missleExpl.mp3");
 
 let BatteryCharge: number = 0;
 let maxCharge: number = 6;
@@ -23,10 +23,12 @@ interface IUtil {
     selectedTruppa: string;
     intervalTruppaSelez: number;
     intervalSchieraTruppa: number;
+    intervalRicaricaBatteria: number;
     selectedCell: string;
     cellColor: string;
     // isPlayerOneTurn: boolean;
     raggioAzioneMissile: string[];
+    currentSlot: number;
     hoMessoPausaAlmenoUnaVolta: boolean;
 }
 
@@ -41,10 +43,12 @@ const util: IUtil = {
     selectedTruppa: "",
     intervalTruppaSelez: 0,
     intervalSchieraTruppa: 0,
+    intervalRicaricaBatteria: 0,
     selectedCell: "",
     cellColor: "",
     // isPlayerOneTurn: true,
     raggioAzioneMissile: [],
+    currentSlot: 0,
     hoMessoPausaAlmenoUnaVolta: false,
 };
 
@@ -203,6 +207,7 @@ async function selectCell(): Promise<string> {
 }
 
 function consumaCaricaBatteria(costoArma: number) {
+    clearInterval(util.intervalRicaricaBatteria);
     // scarica la batteria del costo di utilizzo dell'arma.
     const taccheBatteria = document.querySelectorAll(".slot");
     let rimosse = 0; // Contatore per le classi rimosse
@@ -216,41 +221,40 @@ function consumaCaricaBatteria(costoArma: number) {
     }
 
     BatteryCharge -= costoArma;
-    util.puntoCaricamentoBatteria = 6 - costoArma;
-    // if (util.puntoCaricamentoBatteria !== 0) {
-    //     util.puntoCaricamentoBatteria -= costoArma;
-    // }
+    util.currentSlot -= costoArma;
+    if (util.hoMessoPausaAlmenoUnaVolta) {
+        util.puntoCaricamentoBatteria -= costoArma;
+    }
 
-    //
     console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
     console.log(BatteryCharge);
 }
 
 function ricaricaBatteria() {
     let slots = document.querySelectorAll(".slot");
-    let currentSlot = util.puntoCaricamentoBatteria;
+    util.currentSlot = util.puntoCaricamentoBatteria;
 
-    let interval = setInterval(() => {
+    util.intervalRicaricaBatteria = setInterval(() => {
         if (!util.isGameStarted) {
-            util.puntoCaricamentoBatteria = currentSlot;
+            util.puntoCaricamentoBatteria = util.currentSlot;
             util.hoMessoPausaAlmenoUnaVolta = true;
-            clearInterval(interval);
+            clearInterval(util.intervalRicaricaBatteria);
             return;
         }
 
-        if (currentSlot < slots.length) {
-            let slot = slots[currentSlot];
+        if (util.currentSlot < slots.length) {
+            let slot = slots[util.currentSlot];
             // if (!slot.classList.contains("fillSlot")) {
             slot.classList.add("fillSlot");
-            currentSlot++;
+            util.currentSlot++;
             BatteryCharge < maxCharge ? BatteryCharge++ : null;
             //
             console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-            console.log(currentSlot, "currentslot");
+            console.log(util.currentSlot, "currentslot");
             console.log(BatteryCharge, "carica Batteria");
             // }
         } else {
-            clearInterval(interval);
+            clearInterval(util.intervalRicaricaBatteria);
         }
     }, 2000);
     //
