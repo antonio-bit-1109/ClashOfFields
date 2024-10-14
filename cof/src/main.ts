@@ -30,6 +30,7 @@ interface IUtil {
     raggioAzioneMissile: string[];
     // currentSlot: number;
     hoMessoPausaAlmenoUnaVolta: boolean;
+    // arrFillSlotClasses: number[];
 }
 
 const util: IUtil = {
@@ -50,6 +51,7 @@ const util: IUtil = {
     raggioAzioneMissile: [],
     // currentSlot: 0,
     hoMessoPausaAlmenoUnaVolta: false,
+    // arrFillSlotClasses: [],
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -165,10 +167,10 @@ async function deployMissile() {
         await selectCell();
         await deployRaggioAzioneMissile("blue");
         suonoImpattoArma(missleExpl);
-        consumaCaricaBatteria(costoMissile);
+        consumaCaricaBatteria(2);
         ricaricaBatteria();
     } else {
-        giveMessage("non hai accumulato carica sufficiente per lanciare un missile. Attendi la carica della batteria.");
+        giveMessage("non hai sufficiente carica per usare quest'arma.");
     }
 }
 
@@ -208,31 +210,48 @@ async function selectCell(): Promise<string> {
     });
 }
 
-function consumaCaricaBatteria(costoArma: number) {
-    clearInterval(util.intervalRicaricaBatteria);
-    // scarica la batteria del costo di utilizzo dell'arma.
-    const taccheBatteria = document.querySelectorAll(".slot");
-    let rimosse = 0; // Contatore per le classi rimosse
+function consumaCaricaBatteria(costoArma: number) {}
+//     clearInterval(util.intervalRicaricaBatteria);
 
-    for (let i = taccheBatteria.length - 1; i >= 0; i--) {
-        if (rimosse < costoArma) {
-            const taccaBatt = taccheBatteria[i];
-            if (taccaBatt.classList.contains("fillSlot")) {
-                taccaBatt.classList.remove("fillSlot");
-                rimosse++;
-            }
-        }
-    }
+//     const taccheBatteria = document.querySelectorAll(".slot");
+//     let rimosse = 0;
+//     let i = 0;
+//     // Esegui il decremento solo se hai sufficiente carica
+//     if (BatteryCharge >= costoArma && util.puntoCaricamentoBatteria >= costoArma) {
+//         // Cicla a ritroso per rimuovere le tacche
+//         // for (let i = taccheBatteria.length - 1; i >= 0 && rimosse < costoArma; i--) {
+//         //     const taccaBatt = taccheBatteria[i];
+//         //     // Rimuovi solo le tacche che sono visivamente piene (fillSlot)
+//         //     if (taccaBatt.classList.contains("fillSlot")) {
+//         //         taccaBatt.classList.remove("fillSlot");
+//         //         rimosse++;
+//         //     }
+//         // }
+//         while (rimosse < costoArma) {
+//             const taccaBatt = taccheBatteria[i];
+//             // Rimuovi solo le tacche che sono visivamente piene (fillSlot)
+//             if (taccaBatt.classList.contains("fillSlot")) {
+//                 taccaBatt.classList.remove("fillSlot");
+//                 rimosse++;
+//                 i++;
+//             }
+//         }
 
-    console.log(rimosse, "tacche rimosse");
-    BatteryCharge -= costoArma;
-    util.puntoCaricamentoBatteria -= costoArma;
+//         // Sottrai il numero di tacche effettivamente rimosse dalla carica
+//         BatteryCharge -= costoArma;
+//         util.puntoCaricamentoBatteria -= costoArma;
 
-    //clearInterval(util.intervalSchieraTruppa);
+//         // Assicurati che BatteryCharge non scenda sotto zero
+//         BatteryCharge = Math.max(0, BatteryCharge);
+//         util.puntoCaricamentoBatteria = Math.max(0, util.puntoCaricamentoBatteria);
+//     } else {
+//         console.log("Non c'è abbastanza carica per usare l'arma.");
+//     }
 
-    console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-    console.log(BatteryCharge, "carica Batteria");
-}
+//     console.log(rimosse, "tacche rimosse");
+//     console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
+//     console.log(BatteryCharge, "carica Batteria");
+// }
 
 function ricaricaBatteria() {
     let slots = document.querySelectorAll(".slot");
@@ -312,11 +331,11 @@ async function deployRaggioAzioneMissile(cellColor: string): Promise<boolean> {
             "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
         );
         console.log(util);
-        util.raggioAzioneMissile.forEach((val) => {
-            let cell = document.querySelector(`.${val}`);
+        util.raggioAzioneMissile.forEach((value) => {
+            let cell = document.querySelector(`.${value}`);
             if (cell) {
-                cell?.classList.add(cellColor);
-                cell?.classList.add("flip-cell");
+                cell.classList.add(cellColor);
+                cell.classList.add("flip-cell");
                 res(true);
                 return;
             }
