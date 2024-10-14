@@ -28,7 +28,7 @@ interface IUtil {
     cellColor: string;
     // isPlayerOneTurn: boolean;
     raggioAzioneMissile: string[];
-    currentSlot: number;
+    // currentSlot: number;
     hoMessoPausaAlmenoUnaVolta: boolean;
 }
 
@@ -48,7 +48,7 @@ const util: IUtil = {
     cellColor: "",
     // isPlayerOneTurn: true,
     raggioAzioneMissile: [],
-    currentSlot: 0,
+    // currentSlot: 0,
     hoMessoPausaAlmenoUnaVolta: false,
 };
 
@@ -160,6 +160,7 @@ async function deployMissile() {
     const costoMissile = 2;
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
     let caricato = haiAbbastanzaCaricaBattery(costoMissile);
+
     if (caricato) {
         await selectCell();
         await deployRaggioAzioneMissile("blue");
@@ -168,7 +169,6 @@ async function deployMissile() {
         ricaricaBatteria();
     } else {
         giveMessage("non hai accumulato carica sufficiente per lanciare un missile. Attendi la carica della batteria.");
-        return;
     }
 }
 
@@ -195,11 +195,13 @@ async function selectCell(): Promise<string> {
                 if (cell.classList.contains("red")) {
                     util.cellColor = "red";
                     res(util.cellColor);
+                    return;
                 }
 
                 if (cell.classList.contains("blue")) {
                     util.cellColor = "blue";
                     res(util.cellColor);
+                    return;
                 }
             });
         });
@@ -212,19 +214,21 @@ function consumaCaricaBatteria(costoArma: number) {
     const taccheBatteria = document.querySelectorAll(".slot");
     let rimosse = 0; // Contatore per le classi rimosse
 
-    for (let i = taccheBatteria.length - 1; i >= 0 && rimosse < costoArma; i--) {
-        const taccaBatt = taccheBatteria[i];
-        if (taccaBatt.classList.contains("fillSlot")) {
-            taccaBatt.classList.remove("fillSlot");
-            rimosse++;
+    for (let i = taccheBatteria.length - 1; i >= 0; i--) {
+        if (rimosse < costoArma) {
+            const taccaBatt = taccheBatteria[i];
+            if (taccaBatt.classList.contains("fillSlot")) {
+                taccaBatt.classList.remove("fillSlot");
+                rimosse++;
+            }
         }
     }
 
+    console.log(rimosse, "tacche rimosse");
     BatteryCharge -= costoArma;
-    util.currentSlot -= costoArma;
-    if (util.hoMessoPausaAlmenoUnaVolta) {
-        util.puntoCaricamentoBatteria -= costoArma;
-    }
+    util.puntoCaricamentoBatteria -= costoArma;
+
+    //clearInterval(util.intervalSchieraTruppa);
 
     console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
     console.log(BatteryCharge, "carica Batteria");
@@ -232,32 +236,31 @@ function consumaCaricaBatteria(costoArma: number) {
 
 function ricaricaBatteria() {
     let slots = document.querySelectorAll(".slot");
-    util.currentSlot = util.puntoCaricamentoBatteria;
+    // util.currentSlot = util.puntoCaricamentoBatteria;
 
     util.intervalRicaricaBatteria = setInterval(() => {
         if (!util.isGameStarted) {
-            util.puntoCaricamentoBatteria = util.currentSlot;
+            //util.puntoCaricamentoBatteria = util.currentSlot;
             util.hoMessoPausaAlmenoUnaVolta = true;
             clearInterval(util.intervalRicaricaBatteria);
             return;
         }
 
-        if (util.currentSlot < slots.length) {
-            let slot = slots[util.currentSlot];
+        if (util.puntoCaricamentoBatteria < slots.length) {
+            let slot = slots[util.puntoCaricamentoBatteria];
             // if (!slot.classList.contains("fillSlot")) {
             slot.classList.add("fillSlot");
-            util.currentSlot++;
             BatteryCharge < maxCharge ? BatteryCharge++ : null;
+            util.puntoCaricamentoBatteria++;
             //
             console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-            console.log(util.currentSlot, "currentslot");
+            // console.log(util.currentSlot, "currentslot");
             console.log(BatteryCharge, "carica Batteria");
             // }
         } else {
             clearInterval(util.intervalRicaricaBatteria);
         }
     }, 2000);
-    //
 }
 
 async function deployRaggioAzioneMissile(cellColor: string): Promise<boolean> {
@@ -385,30 +388,30 @@ function handleTimer() {
 function startClock(timer: HTMLElement) {
     console.log("sono in start clock");
     util.id = setInterval(() => {
-        if (util.secDx === 9 && util.secSn === 5 && util.minDx === 9 && util.minSn === 5) {
-            clearInterval(util.id);
-            timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
-        }
-
+        // Incremento del timer di gioco (secondi e minuti)
         util.secDx++;
         if (util.secDx > 9) {
-            util.secSn++;
             util.secDx = 0;
+            util.secSn++;
         }
-
         if (util.secSn > 5) {
-            util.minDx++;
             util.secSn = 0;
+            util.minDx++;
         }
-
         if (util.minDx > 9) {
-            util.minSn++;
             util.minDx = 0;
+            util.minSn++;
         }
 
+        // Verifica se il timer ha raggiunto il limite massimo
+        if (util.secDx === 9 && util.secSn === 5 && util.minDx === 9 && util.minSn === 5) {
+            clearInterval(util.id); // Interrompe il timer una volta raggiunto il massimo
+        }
+
+        // Aggiorna la visualizzazione del timer
         timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
-    }, 1000);
-    console.log("starting the clock...");
+        console.log("clock is ticking....");
+    }, 1000); // Aggiorna ogni secondo
 }
 
 function stopClock() {
