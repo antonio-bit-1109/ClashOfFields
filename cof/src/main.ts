@@ -162,7 +162,7 @@ async function deployMissile() {
     let caricato = haiAbbastanzaCaricaBattery(costoMissile);
     if (caricato) {
         await selectCell();
-        deployRaggioAzioneMissile("blue");
+        await deployRaggioAzioneMissile("blue");
         suonoImpattoArma(missleExpl);
         consumaCaricaBatteria(costoMissile);
         ricaricaBatteria();
@@ -227,7 +227,7 @@ function consumaCaricaBatteria(costoArma: number) {
     }
 
     console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-    console.log(BatteryCharge);
+    console.log(BatteryCharge, "carica Batteria");
 }
 
 function ricaricaBatteria() {
@@ -260,58 +260,65 @@ function ricaricaBatteria() {
     //
 }
 
-function deployRaggioAzioneMissile(cellColor: string) {
-    // pulisco array ogni qual volta voglio fare il deploy di un missile
-    util.raggioAzioneMissile.length = 0;
-    // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
-    util.raggioAzioneMissile.push(
-        "c" + (parseInt(util.selectedCell.slice(1)) + 0).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 1).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 2).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 3).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 4).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 1).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 2).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 3).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 4).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 40).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 41).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 42).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 43).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 44).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 45).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 46).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 40).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 41).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 42).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 43).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 44).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 45).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 46).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 84).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 85).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 86).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 87).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 88).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 84).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 85).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 86).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 87).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 88).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 130).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 129).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 128).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 130).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 129).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 128).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) + 172).toString(),
-        "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
-    );
-    console.log(util);
-    util.raggioAzioneMissile.forEach((val) => {
-        let cell = document.querySelector(`.${val}`);
-        cell?.classList.add(cellColor);
-        cell?.classList.add("flip-cell");
+async function deployRaggioAzioneMissile(cellColor: string): Promise<boolean> {
+    return new Promise((res, rej) => {
+        // pulisco array ogni qual volta voglio fare il deploy di un missile
+        util.raggioAzioneMissile.length = 0;
+        // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
+        util.raggioAzioneMissile.push(
+            "c" + (parseInt(util.selectedCell.slice(1)) + 0).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 1).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 2).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 3).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 4).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 1).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 2).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 3).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 4).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 40).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 41).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 42).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 43).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 44).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 45).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 46).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 40).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 41).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 42).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 43).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 44).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 45).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 46).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 84).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 85).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 86).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 87).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 88).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 84).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 85).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 86).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 87).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 88).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 130).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 129).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 128).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 130).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 129).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 128).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) + 172).toString(),
+            "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
+        );
+        console.log(util);
+        util.raggioAzioneMissile.forEach((val) => {
+            let cell = document.querySelector(`.${val}`);
+            if (cell) {
+                cell?.classList.add(cellColor);
+                cell?.classList.add("flip-cell");
+                res(true);
+                return;
+            }
+            rej(false);
+        });
     });
 }
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------

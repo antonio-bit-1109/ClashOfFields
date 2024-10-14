@@ -6,3 +6,5 @@
 --audio in generale di sottofondo 
 
 -- la partita dura 2 min, al termine del tempo chi ha conquistato piu caselle ha vinto il round (queryselector ?? )
+
+-- PERCHE CARICA BATTERIA IMPAZZISCE ?? DA 3 DI CARICA, DOPO UN MISSILE FINISCE A -3 O A UN VALORE COMUNQUE SBALLATO ....
