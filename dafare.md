@@ -16,3 +16,5 @@
 -   [ ] Implementare durata partita di 45 secondi e determinare il vincitore (querySelector?)
 
 -   [ ] Gestire pausa partita: QUANDO METTO IN PAUSA NON POSSO POTER CLICCARE LE CELLE. RIMUOVI EV LIST DALLA CELLE. clear interval di tutti i timer e rimuovere event listener dalle celle ??
+
+-   [ ] implementa tutte le armi.
