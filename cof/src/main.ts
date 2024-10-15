@@ -454,6 +454,11 @@ function DecretaVincitore() {
         cell.classList.contains("blue") ? util.blueCell++ : util.redCells++;
     });
 
+    if (util.blueCell === util.redCells) {
+        message = `Incredibile, Parità! 😯  <br> <span style='color:blue'> caselle conquistate: ${util.blueCell}</span> <br> 
+        <span style='color:red'>  caselle dell'avversario: ${util.redCells}  </span>`;
+    }
+
     if (util.blueCell > util.redCells) {
         message = `Hai vinto la partita, Complimenti! 🥳 <br> <span style='color:blue'> caselle conquistate: ${util.blueCell}</span> <br> 
       <span style='color:red'>  caselle dell'avversario: ${util.redCells}  </span>`;
