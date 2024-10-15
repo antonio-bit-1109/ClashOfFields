@@ -86,6 +86,7 @@ function welcomeMessage() {
     logo.src = "../imgs/logo.webp";
     logo.classList.add("stileLogo");
     startButton.classList.add("button");
+    startButton.classList.add("pointer");
     startButton.id = "mainBtn";
     startButton.innerHTML = "iniziamo!";
     const welcome = document.createElement("h4");
@@ -152,11 +153,11 @@ function schieraTruppa() {
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
-            deployWeapon(2, missleExplSound);
+            deployWeapon(2);
             giveMessage("Hai selezionato 'Laser'");
             break;
         case "soldato":
-            deployWeapon(4, missleExplSound);
+            deployWeapon(4);
             giveMessage("Hai selezionato 'Soldato'");
             break;
     }
@@ -174,8 +175,6 @@ function suonoImpattoArma(audioElement: HTMLAudioElement) {
 
 // ogni funzione "deployWeapon" accetta un numero he rappresenta il costo arma , un elemento audio del suono che dovrà generare quell'arma e una funzione che descrive la logica di visualizzazione dell'effetto a schermo dell arma che viene sganciata.
 async function deployWeapon(costoArma: number, suonoImpatto: HTMLAudioElement, functionEffettoArma: Function) {
-    // const costoMissile = 3;
-
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
     let caricato = haiAbbastanzaCaricaBattery(costoArma);
 

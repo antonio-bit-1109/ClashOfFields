@@ -1,12 +1,17 @@
 /* @font-face {
-    font-family: "PixelSans";
-    src: url("../fonts/PixeloidSans-mLxMm.ttf") format("truetype");
+    font-family: "PixSans";
+    src: url("../fonts/PixelifySans-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    font-family: "Times New Roman", Times, serif;
 } */
 
 :root {
-    /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
-    font-weight: 400; */
+    font-weight: 400;
 
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
@@ -22,6 +27,10 @@
 body {
     margin: auto;
     /* font-family: "PixelSans", sans-serif; */
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 #main {
@@ -159,6 +168,10 @@ body {
     border-radius: 20px;
     font-size: 20px;
     padding: 6px;
+}
+
+.button:hover {
+    opacity: 0.8;
 }
 
 .d-none {
