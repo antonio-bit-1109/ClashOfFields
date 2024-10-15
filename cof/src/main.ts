@@ -6,7 +6,7 @@ import { createMessagesContainer } from "./createMessagesContainer";
 import { createTimer } from "./createTimer";
 
 // suono esplosione missile
-const missleExpl = new Audio("../sounds/missleExpl.mp3");
+const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 
 let BatteryCharge: number = 0;
 let maxCharge: number = 6;
@@ -159,15 +159,15 @@ function suonoImpattoArma(audioElement: HTMLAudioElement) {
 }
 
 async function deployMissile() {
-    const costoMissile = 2;
+    const costoMissile = 3;
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
     let caricato = haiAbbastanzaCaricaBattery(costoMissile);
 
     if (caricato) {
         await selectCell();
         await deployRaggioAzioneMissile("blue");
-        suonoImpattoArma(missleExpl);
-        consumaCaricaBatteria(2);
+        suonoImpattoArma(missleExplSound);
+        consumaCaricaBatteria(costoMissile);
         ricaricaBatteria();
     } else {
         giveMessage("non hai sufficiente carica per usare quest'arma.");
@@ -216,11 +216,9 @@ function consumaCaricaBatteria(costoArma: number) {
     const taccheBatteria = document.querySelectorAll(".slot");
     let rimosse = 0;
 
-    if (BatteryCharge > costoArma && util.puntoCaricamentoBatteria > costoArma) {
+    if (BatteryCharge >= costoArma && util.puntoCaricamentoBatteria >= costoArma) {
         for (let i = taccheBatteria.length - 1; i >= 0; i--) {
             if (rimosse === costoArma) {
-                BatteryCharge -= costoArma;
-                util.puntoCaricamentoBatteria -= costoArma;
                 break;
             }
 
@@ -232,46 +230,14 @@ function consumaCaricaBatteria(costoArma: number) {
             console.log(rimosse, "tacche rimosse");
             console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
             console.log(BatteryCharge, "carica Batteria");
+            console.log(costoArma, "costoarma");
         }
+
+        // Decrementa BatteryCharge e util.puntoCaricamentoBatteria dopo il ciclo
+        BatteryCharge -= rimosse;
+        util.puntoCaricamentoBatteria -= rimosse;
     }
 }
-//     let i = 0;
-//     // Esegui il decremento solo se hai sufficiente carica
-//     if (BatteryCharge >= costoArma && util.puntoCaricamentoBatteria >= costoArma) {
-//         // Cicla a ritroso per rimuovere le tacche
-//         // for (let i = taccheBatteria.length - 1; i >= 0 && rimosse < costoArma; i--) {
-//         //     const taccaBatt = taccheBatteria[i];
-//         //     // Rimuovi solo le tacche che sono visivamente piene (fillSlot)
-//         //     if (taccaBatt.classList.contains("fillSlot")) {
-//         //         taccaBatt.classList.remove("fillSlot");
-//         //         rimosse++;
-//         //     }
-//         // }
-//         while (rimosse < costoArma) {
-//             const taccaBatt = taccheBatteria[i];
-//             // Rimuovi solo le tacche che sono visivamente piene (fillSlot)
-//             if (taccaBatt.classList.contains("fillSlot")) {
-//                 taccaBatt.classList.remove("fillSlot");
-//                 rimosse++;
-//                 i++;
-//             }
-//         }
-
-//         // Sottrai il numero di tacche effettivamente rimosse dalla carica
-//         BatteryCharge -= costoArma;
-//         util.puntoCaricamentoBatteria -= costoArma;
-
-//         // Assicurati che BatteryCharge non scenda sotto zero
-//         BatteryCharge = Math.max(0, BatteryCharge);
-//         util.puntoCaricamentoBatteria = Math.max(0, util.puntoCaricamentoBatteria);
-//     } else {
-//         console.log("Non c'è abbastanza carica per usare l'arma.");
-//     }
-
-//     console.log(rimosse, "tacche rimosse");
-//     console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
-//     console.log(BatteryCharge, "carica Batteria");
-// }
 
 function ricaricaBatteria() {
     // pulisco intervallo ogni volta che richiamo la funzione
@@ -295,8 +261,8 @@ function ricaricaBatteria() {
             BatteryCharge < maxCharge ? BatteryCharge++ : null;
             util.puntoCaricamentoBatteria++;
             //
+
             console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-            // console.log(util.currentSlot, "currentslot");
             console.log(BatteryCharge, "carica Batteria");
             // }
         } else {

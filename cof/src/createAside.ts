@@ -43,7 +43,7 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
         case 0:
             nome.innerHTML = `🚀 Missle 🚀`;
             createWepon(vetrina, "./imgs/missle.png");
-            weaponCost(vetrina, 2);
+            weaponCost(vetrina, 3);
             break;
         case 1:
             nome.innerHTML = `🧬 Laser 🧬`;
