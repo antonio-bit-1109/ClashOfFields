@@ -15,11 +15,11 @@
 
 -   [x] inserimento logo
 
--   [ ] Gestire pausa partita: QUANDO METTO IN PAUSA NON POSSO POTER CLICCARE LE CELLE. RIMUOVI EV LIST DALLA CELLE. clear interval di tutti i timer e rimuovere event listener dalle celle ??
+-   [ ] Gestire pausa partita: QUANDO METTO IN PAUSA NON POSSO POTER CLICCARE LE CELLE. RIMUOVI EV. LIST DALLA CELLE. clear interval di tutti i timer e rimuovere event listener dalle celle ??
 
 -   [ ] implementa tutte le armi.
 
--   [ ] se non hai abbastanza carica della batteria per usare quell arma, messaggio rosso animato , sotto al messaggio di servizio per avvertire che la carica non è sufficiente
+-   [x] se non hai abbastanza carica della batteria per usare quell arma, messaggio rosso animato , sotto al messaggio di servizio per avvertire che la carica non è sufficiente
 
 <!-- @font-face {
     font-family: "PixelSans";
