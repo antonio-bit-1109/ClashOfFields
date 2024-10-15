@@ -1,4 +1,4 @@
-# Task List
+# To-do-List
 
 -   [x] Controllare che possa essere fatto il deploy del missile solo se c'è carica della batteria sufficiente.
         Se la carica è sufficiente sottrarre il costo dell'arma dalla batteria
