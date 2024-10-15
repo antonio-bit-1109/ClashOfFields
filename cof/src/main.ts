@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.0;
+    sottofondoMusic.volume = 0.05;
 }
 
 function welcomeMessage() {
@@ -148,15 +148,15 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployMissile();
+            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile);
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
-            deployLaser();
+            deployWeapon(2, missleExplSound);
             giveMessage("Hai selezionato 'Laser'");
             break;
         case "soldato":
-            deploySoldato();
+            deployWeapon(4, missleExplSound);
             giveMessage("Hai selezionato 'Soldato'");
             break;
     }
@@ -172,26 +172,24 @@ function suonoImpattoArma(audioElement: HTMLAudioElement) {
     }
 }
 
-async function deployMissile() {
-    const costoMissile = 3;
+// ogni funzione "deployWeapon" accetta un numero he rappresenta il costo arma , un elemento audio del suono che dovrà generare quell'arma e una funzione che descrive la logica di visualizzazione dell'effetto a schermo dell arma che viene sganciata.
+async function deployWeapon(costoArma: number, suonoImpatto: HTMLAudioElement, functionEffettoArma: Function) {
+    // const costoMissile = 3;
 
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
-    let caricato = haiAbbastanzaCaricaBattery(costoMissile);
+    let caricato = haiAbbastanzaCaricaBattery(costoArma);
 
     if (caricato) {
-        await selectCell(3, 2, 4);
-        await deployRaggioAzioneMissile("blue");
-        suonoImpattoArma(missleExplSound);
-        consumaCaricaBatteria(costoMissile);
+        await selectCell(costoArma);
+        await functionEffettoArma("blue");
+        suonoImpattoArma(suonoImpatto);
+        consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
     } else {
         console.log("carica non ancora sufficiente");
         // giveWarningMessage("carica non ancora carica sufficiente.");
     }
 }
-
-function deployLaser() {}
-function deploySoldato() {}
 
 // -------------------------------funzioni comuni armi per logica di deploy ---------------------------------------------
 // funzioni comuni a tutte le armi per la selzione della casella cliccata.
@@ -205,20 +203,15 @@ function haiAbbastanzaCaricaBattery(costoArma: number) {
     return true;
 }
 
-async function selectCell(costoMissle: number, costoLaser: number, costoSoldato: number): Promise<string> {
+async function selectCell(costoArma: number): Promise<string> {
     return new Promise((res) => {
         const cells = document.querySelectorAll(".cell");
         cells.forEach((cell, i) => {
             cell.addEventListener("click", () => {
-                if (util.selectedTruppa === "Missle") {
-                    BatteryCharge < costoMissle && giveWarningMessage("non hai abbastanza carica");
+                if (util.selectedTruppa !== "") {
+                    BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
                 }
-                if (util.selectedTruppa === "Laser") {
-                    BatteryCharge < costoLaser && giveWarningMessage("non hai abbastanza carica");
-                }
-                if (util.selectedTruppa === "soldato") {
-                    BatteryCharge < costoSoldato && giveWarningMessage("non hai abbastanza carica");
-                }
+
                 util.selectedCell = `c${i}`;
                 if (cell.classList.contains("red")) {
                     util.cellColor = "red";
@@ -461,6 +454,7 @@ function DecretaVincitore() {
     allCells.forEach((cell) => {
         cell.classList.contains("blue") ? util.blueCell++ : util.redCells++;
     });
+
     if (util.blueCell > util.redCells) {
         message = "Hai vinto la partita, Complimenti! 🥳";
     } else {
