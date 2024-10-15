@@ -210,11 +210,31 @@ async function selectCell(): Promise<string> {
     });
 }
 
-function consumaCaricaBatteria(costoArma: number) {}
-//     clearInterval(util.intervalRicaricaBatteria);
+function consumaCaricaBatteria(costoArma: number) {
+    clearInterval(util.intervalRicaricaBatteria);
 
-//     const taccheBatteria = document.querySelectorAll(".slot");
-//     let rimosse = 0;
+    const taccheBatteria = document.querySelectorAll(".slot");
+    let rimosse = 0;
+
+    if (BatteryCharge > costoArma && util.puntoCaricamentoBatteria > costoArma) {
+        for (let i = taccheBatteria.length - 1; i >= 0; i--) {
+            if (rimosse === costoArma) {
+                BatteryCharge -= costoArma;
+                util.puntoCaricamentoBatteria -= costoArma;
+                break;
+            }
+
+            const tacca = taccheBatteria[i];
+            if (tacca.classList.contains("fillSlot")) {
+                tacca.classList.remove("fillSlot");
+                rimosse++;
+            }
+            console.log(rimosse, "tacche rimosse");
+            console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
+            console.log(BatteryCharge, "carica Batteria");
+        }
+    }
+}
 //     let i = 0;
 //     // Esegui il decremento solo se hai sufficiente carica
 //     if (BatteryCharge >= costoArma && util.puntoCaricamentoBatteria >= costoArma) {
@@ -254,6 +274,9 @@ function consumaCaricaBatteria(costoArma: number) {}
 // }
 
 function ricaricaBatteria() {
+    // pulisco intervallo ogni volta che richiamo la funzione
+    clearInterval(util.intervalRicaricaBatteria);
+
     let slots = document.querySelectorAll(".slot");
     // util.currentSlot = util.puntoCaricamentoBatteria;
 
