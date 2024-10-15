@@ -5,7 +5,7 @@ import { createBatteryContainer } from "./createBatteryContainer";
 import { createMessagesContainer } from "./createMessagesContainer";
 import { createTimer } from "./createTimer";
 
-// suono esplosione missile
+// suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 
 let BatteryCharge: number = 0;
