@@ -456,11 +456,14 @@ function DecretaVincitore() {
     });
 
     if (util.blueCell > util.redCells) {
-        message = "Hai vinto la partita, Complimenti! 🥳";
+        message = `Hai vinto la partita, Complimenti! 🥳 <br> <span style='color:blue'> caselle conquistate: ${util.blueCell}</span> <br> 
+      <span style='color:red'>  caselle dell'avversario: ${util.redCells}  </span>`;
     } else {
-        message = "Purtroppo il computer ti ha battuto, Riprova! 😥";
+        message = `Purtroppo il computer ti ha battuto, Riprova! 😥 <br> <span style='color:blue'> Caselle conquistate: ${util.blueCell} </span> <br> 
+       <span style='color:red'> Caselle dell'avversario: ${util.redCells} </span>`;
     }
     giveMessage(message);
+    riavviaPartita();
 }
 
 function interrompiWatcher() {
@@ -480,4 +483,15 @@ function giveWarningMessage(string: string) {
             warning_Par.classList.remove("vibrate");
         }, 1000);
     }
+}
+
+function riavviaPartita() {
+    const mainBtn = document.getElementById("mainBtn");
+    if (mainBtn) {
+        mainBtn.innerHTML = "Nuova Partita ▶️";
+    }
+
+    mainBtn?.addEventListener("click", () => {
+        window.location.reload();
+    });
 }

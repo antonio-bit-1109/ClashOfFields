@@ -143,6 +143,8 @@ body {
     border: 3px black solid;
     width: 720px;
     text-align: center;
+    background-image: url("../public/imgs/logo_transparent.png");
+    background-position: center;
 }
 
 .h4Style {
