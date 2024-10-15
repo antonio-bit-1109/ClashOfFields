@@ -81,6 +81,8 @@ function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
     const logo = document.createElement("img");
+    const warningMessage = document.createElement("p");
+    warningMessage.classList.add("warning");
     logo.src = "../imgs/logo.webp";
     logo.classList.add("stileLogo");
     startButton.classList.add("button");
@@ -89,10 +91,11 @@ function welcomeMessage() {
     const welcome = document.createElement("h4");
     welcome.classList.add("h4Style");
     welcome.classList.add("welcome");
-    welcome.innerHTML = "Benvenuto su Clash of Fields! <br> Facciamo una partita";
+    welcome.innerHTML = "Benvenuto su Clash of Fields! <br> Facciamo una partita!";
 
     messageBox?.appendChild(logo);
     messageBox?.appendChild(welcome);
+    messageBox?.appendChild(warningMessage);
     messageBox?.appendChild(startButton);
 
     // PUNTO PARTENZA PER GESTIRE AVVIO/STOP DEL GIOCO
@@ -171,17 +174,19 @@ function suonoImpattoArma(audioElement: HTMLAudioElement) {
 
 async function deployMissile() {
     const costoMissile = 3;
+
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
     let caricato = haiAbbastanzaCaricaBattery(costoMissile);
 
     if (caricato) {
-        await selectCell();
+        await selectCell(3, 2, 4);
         await deployRaggioAzioneMissile("blue");
         suonoImpattoArma(missleExplSound);
         consumaCaricaBatteria(costoMissile);
         ricaricaBatteria();
     } else {
-        giveMessage("non hai sufficiente carica per usare quest'arma.");
+        console.log("carica non ancora sufficiente");
+        // giveWarningMessage("carica non ancora carica sufficiente.");
     }
 }
 
@@ -193,17 +198,27 @@ function deploySoldato() {}
 
 function haiAbbastanzaCaricaBattery(costoArma: number) {
     if (BatteryCharge < costoArma) {
+        giveMessage("non hai sufficiente carica per usare quest'arma.");
         return false;
     }
 
     return true;
 }
 
-async function selectCell(): Promise<string> {
+async function selectCell(costoMissle: number, costoLaser: number, costoSoldato: number): Promise<string> {
     return new Promise((res) => {
         const cells = document.querySelectorAll(".cell");
         cells.forEach((cell, i) => {
             cell.addEventListener("click", () => {
+                if (util.selectedTruppa === "Missle") {
+                    BatteryCharge < costoMissle && giveWarningMessage("non hai abbastanza carica");
+                }
+                if (util.selectedTruppa === "Laser") {
+                    BatteryCharge < costoLaser && giveWarningMessage("non hai abbastanza carica");
+                }
+                if (util.selectedTruppa === "soldato") {
+                    BatteryCharge < costoSoldato && giveWarningMessage("non hai abbastanza carica");
+                }
                 util.selectedCell = `c${i}`;
                 if (cell.classList.contains("red")) {
                     util.cellColor = "red";
@@ -458,4 +473,17 @@ function interrompiWatcher() {
     clearInterval(util.intervalTruppaSelez);
     clearInterval(util.intervalSchieraTruppa);
     clearInterval(util.intervalRicaricaBatteria);
+}
+
+function giveWarningMessage(string: string) {
+    const warning_Par = document.querySelector(".warning");
+    if (warning_Par) {
+        warning_Par.classList.add("vibrate");
+        warning_Par.classList.remove("d-none");
+        warning_Par.innerHTML = string;
+        setTimeout(() => {
+            warning_Par.classList.add("d-none");
+            warning_Par.classList.remove("vibrate");
+        }, 1000);
+    }
 }
