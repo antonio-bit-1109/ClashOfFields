@@ -7,11 +7,11 @@ import { createTimer } from "./createTimer";
 
 // suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
+const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
 
 let BatteryCharge: number = 0;
 let maxCharge: number = 6;
-// let isGameStarted = false;
-// let puntoCaricamentoBatteria: number = 0;
+
 interface IUtil {
     isGameStarted: boolean;
     puntoCaricamentoBatteria: number;
@@ -26,11 +26,8 @@ interface IUtil {
     intervalRicaricaBatteria: number;
     selectedCell: string;
     cellColor: string;
-    // isPlayerOneTurn: boolean;
     raggioAzioneMissile: string[];
-    // currentSlot: number;
     hoMessoPausaAlmenoUnaVolta: boolean;
-    // arrFillSlotClasses: number[];
 }
 
 const util: IUtil = {
@@ -47,11 +44,8 @@ const util: IUtil = {
     intervalRicaricaBatteria: 0,
     selectedCell: "",
     cellColor: "",
-    // isPlayerOneTurn: true,
     raggioAzioneMissile: [],
-    // currentSlot: 0,
     hoMessoPausaAlmenoUnaVolta: false,
-    // arrFillSlotClasses: [],
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,10 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // creazione timer
         createTimer();
 
+        // avvio musica di sottofondo
+        startBackgroundMusic();
         // funzione principale. -- avvio del gioco.
         welcomeMessage();
     }
 });
+
+function startBackgroundMusic() {
+    sottofondoMusic.play();
+    sottofondoMusic.volume = 0.2;
+}
 
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");

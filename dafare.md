@@ -7,8 +7,6 @@
 
 -   [x] Risolvere il problema della carica batteria che impazzisce: da 3 di carica, dopo un missile finisce a -3 o a un valore comunque sbagliato
 
--   [ ] Impostare correttamente i turni: dopo l'azione del giocatore X, poi tocca al giocatore Y
-
 -   [ ] Implementare un meccanismo di randomicità nelle mosse del computer
 
 -   [ ] Aggiungere audio di sottofondo
