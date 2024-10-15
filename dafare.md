@@ -1,14 +1,18 @@
-// -- controllare che possa essere fatto il deploy del missile solo se c'è carica della batteria sufficiente. se la carica è sufficiente sottrarre il costo dell arma dalla batteria
+# Task List
 
-// -- impostare correttamente i turni ? dopo l'azione del giocatoreX poi tocca la giocatoreY ? 
---implementare un meccanismo di randomicità nelle mosse del computer 
+-   [x] Controllare che possa essere fatto il deploy del missile solo se c'è carica della batteria sufficiente.
+        Se la carica è sufficiente sottrarre il costo dell'arma dalla batteria
 
-// -- audio del missile che cade
+-   [x] Aggiungere audio del missile che cade
 
---audio in generale di sottofondo 
+-   [x] Risolvere il problema della carica batteria che impazzisce: da 3 di carica, dopo un missile finisce a -3 o a un valore comunque sbagliato
 
--- la partita dura 45sec , al termine del tempo chi ha conquistato piu caselle ha vinto il round (queryselector ?? )
+-   [ ] Impostare correttamente i turni: dopo l'azione del giocatore X, poi tocca al giocatore Y
 
-// -- PERCHE CARICA BATTERIA IMPAZZISCE ?? DA 3 DI CARICA, DOPO UN MISSILE FINISCE A -3 O A UN VALORE COMUNQUE SBALLATO ....
+-   [ ] Implementare un meccanismo di randomicità nelle mosse del computer
 
--- se la partita è in pausa devo fare clear interval di tutti i timer e rimuovere event listener dalle cell ?? 
+-   [ ] Aggiungere audio di sottofondo
+
+-   [ ] Implementare durata partita di 45 secondi e determinare il vincitore (querySelector?)
+
+-   [ ] Gestire pausa partita: QUANDO METTO IN PAUSA NON POSSO POTER CLICCARE LE CELLE. RIMUOVI EV LIST DALLA CELLE. clear interval di tutti i timer e rimuovere event listener dalle celle ??
