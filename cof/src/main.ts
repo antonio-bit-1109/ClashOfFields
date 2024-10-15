@@ -28,6 +28,8 @@ interface IUtil {
     cellColor: string;
     raggioAzioneMissile: string[];
     hoMessoPausaAlmenoUnaVolta: boolean;
+    redCells: number;
+    blueCell: number;
 }
 
 const util: IUtil = {
@@ -35,8 +37,8 @@ const util: IUtil = {
     puntoCaricamentoBatteria: 0,
     minSn: 0,
     minDx: 0,
-    secSn: 0,
-    secDx: 0,
+    secSn: 4,
+    secDx: 5,
     id: 0,
     selectedTruppa: "",
     intervalTruppaSelez: 0,
@@ -46,6 +48,8 @@ const util: IUtil = {
     cellColor: "",
     raggioAzioneMissile: [],
     hoMessoPausaAlmenoUnaVolta: false,
+    redCells: 0,
+    blueCell: 0,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -63,9 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
         createMessagesContainer(main);
         // creazione timer
         createTimer();
-
-        // avvio musica di sottofondo
-        startBackgroundMusic();
         // funzione principale. -- avvio del gioco.
         welcomeMessage();
     }
@@ -73,21 +74,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.2;
+    sottofondoMusic.volume = 0.0;
 }
 
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
+    const logo = document.createElement("img");
+    logo.src = "../imgs/logo.webp";
+    logo.classList.add("stileLogo");
     startButton.classList.add("button");
     startButton.id = "mainBtn";
     startButton.innerHTML = "iniziamo!";
     const welcome = document.createElement("h4");
     welcome.classList.add("h4Style");
     welcome.classList.add("welcome");
-    welcome.innerHTML =
-        "Benvenuto a sto gioco di controlla il campo di battaglia! Spero funzioni... sei pronto per partire ? ";
+    welcome.innerHTML = "Benvenuto su Clash of Fields! <br> Facciamo una partita";
 
+    messageBox?.appendChild(logo);
     messageBox?.appendChild(welcome);
     messageBox?.appendChild(startButton);
 
@@ -97,6 +101,9 @@ function welcomeMessage() {
 }
 
 function changeStatusGame() {
+    // avvio musica di sottofondo
+    startBackgroundMusic();
+
     //richiamata quando il gioco parte
     if (!util.isGameStarted) {
         util.isGameStarted = true;
@@ -139,12 +146,15 @@ function schieraTruppa() {
     switch (util.selectedTruppa) {
         case "Missle":
             deployMissile();
+            giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
             deployLaser();
+            giveMessage("Hai selezionato 'Laser'");
             break;
         case "soldato":
             deploySoldato();
+            giveMessage("Hai selezionato 'Soldato'");
             break;
     }
 }
@@ -352,7 +362,7 @@ function truppaSelezionata() {
         //    let nomeWeapon = weapon?.innerHTML
         //     util.selectedArma = nomeWeapon?.slice
     } else {
-        console.log("nessuna truppa selezionata.");
+        giveMessage("nessuna truppa selezionata.");
         return;
     }
     // se truppa seleziona è missile succederà qualcosa
@@ -398,23 +408,17 @@ function startClock(timer: HTMLElement) {
     console.log("sono in start clock");
     util.id = setInterval(() => {
         // Incremento del timer di gioco (secondi e minuti)
-        util.secDx++;
-        if (util.secDx > 9) {
-            util.secDx = 0;
-            util.secSn++;
-        }
-        if (util.secSn > 5) {
-            util.secSn = 0;
-            util.minDx++;
-        }
-        if (util.minDx > 9) {
-            util.minDx = 0;
-            util.minSn++;
+        util.secDx--;
+        if (util.secDx < 0) {
+            util.secSn--;
+            util.secDx = 9;
         }
 
-        // Verifica se il timer ha raggiunto il limite massimo
-        if (util.secDx === 9 && util.secSn === 5 && util.minDx === 9 && util.minSn === 5) {
+        if (util.secDx === 0 && util.secSn === 0) {
             clearInterval(util.id); // Interrompe il timer una volta raggiunto il massimo
+            giveMessage("tempo scaduto!");
+            interrompiWatcher();
+            DecretaVincitore();
         }
 
         // Aggiorna la visualizzazione del timer
@@ -432,8 +436,26 @@ function giveMessage(message: string) {
     const divMessage = document.querySelector(".welcome");
     if (divMessage) {
         divMessage.innerHTML = message;
-        setTimeout(() => {
-            divMessage.classList.add("d-none");
-        }, 3000);
     }
+}
+
+// allo scadere del tempo conto quante celle ha un giocatore e quante il computer e decreto il vincitore.
+function DecretaVincitore() {
+    let message;
+    const allCells = document.querySelectorAll(".cell");
+    allCells.forEach((cell) => {
+        cell.classList.contains("blue") ? util.blueCell++ : util.redCells++;
+    });
+    if (util.blueCell > util.redCells) {
+        message = "Hai vinto la partita, Complimenti! 🥳";
+    } else {
+        message = "Purtroppo il computer ti ha battuto, Riprova! 😥";
+    }
+    giveMessage(message);
+}
+
+function interrompiWatcher() {
+    clearInterval(util.intervalTruppaSelez);
+    clearInterval(util.intervalSchieraTruppa);
+    clearInterval(util.intervalRicaricaBatteria);
 }

@@ -64,6 +64,12 @@ body {
     border: 2px grey solid;
 }
 
+.stileLogo {
+    width: 40%;
+    margin-block-start: 2em;
+    border-radius: 30%;
+}
+
 .fillSlot {
     background-color: rgb(28, 220, 28);
 }
