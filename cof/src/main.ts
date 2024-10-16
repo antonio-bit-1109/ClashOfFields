@@ -4,7 +4,7 @@ import { createGriglia } from "./createGriglia";
 import { createBatteryContainer } from "./createBatteryContainer";
 import { createMessagesContainer } from "./createMessagesContainer";
 import { createTimer } from "./createTimer";
-
+import { giveWarningMessage } from "./warningMessage";
 // suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
@@ -479,19 +479,6 @@ function interrompiWatcher() {
     clearInterval(util.intervalTruppaSelez);
     clearInterval(util.intervalSchieraTruppa);
     clearInterval(util.intervalRicaricaBatteria);
-}
-
-function giveWarningMessage(string: string) {
-    const warning_Par = document.querySelector(".warning");
-    if (warning_Par) {
-        warning_Par.classList.add("vibrate");
-        warning_Par.classList.remove("d-none");
-        warning_Par.innerHTML = string;
-        setTimeout(() => {
-            warning_Par.classList.add("d-none");
-            warning_Par.classList.remove("vibrate");
-        }, 1000);
-    }
 }
 
 function riavviaPartita() {
