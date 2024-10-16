@@ -9,13 +9,30 @@ export function createGriglia(main: HTMLElement) {
         cell.classList.add("cell");
         cell.classList.add(`c${i}`);
 
-        // cell.addEventListener("click", () => {
-        //     selectCell(i);
-        // });
+        if (i >= 0 && i <= 42) {
+            cell.classList.add("b");
+            cell.classList.add("strong-red");
+        }
 
-        if (i < 989) {
+        if (i >= 1935 && i <= 1977) {
+            cell.classList.add("b");
+            cell.classList.add("strong-blue");
+        }
+
+        if (i % 43 === 0) {
+            cell.classList.add("b");
+            i <= 946 ? cell.classList.add("strong-red") : cell.classList.add("strong-blue");
+        }
+
+        if ((i - 42) % 43 === 0) {
+            cell.classList.add("b");
+            i >= 1031 ? cell.classList.add("strong-blue") : cell.classList.add("strong-red");
+        }
+
+        if (i < 989 && !cell.classList.contains("b")) {
             cell.classList.add("red");
-        } else {
+        }
+        if (i >= 989 && !cell.classList.contains("b")) {
             cell.classList.add("blue");
         }
 

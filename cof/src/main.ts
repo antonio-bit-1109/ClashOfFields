@@ -149,7 +149,7 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile);
+            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile);
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
@@ -183,7 +183,7 @@ async function deployWeapon(costoArma: number, suonoImpatto: HTMLAudioElement, f
 
     if (caricato) {
         await selectCell(costoArma);
-        await functionEffettoArma("blue");
+        await functionEffettoArma("blue", "red");
         suonoImpattoArma(suonoImpatto);
         consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
@@ -292,7 +292,7 @@ function ricaricaBatteria() {
     }, 2000);
 }
 
-async function deployRaggioAzioneMissile(cellColor: string): Promise<boolean> {
+async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemove: string): Promise<boolean> {
     return new Promise((res, rej) => {
         // pulisco array ogni qual volta voglio fare il deploy di un missile
         util.raggioAzioneMissile.length = 0;
@@ -343,16 +343,75 @@ async function deployRaggioAzioneMissile(cellColor: string): Promise<boolean> {
         console.log(util);
         util.raggioAzioneMissile.forEach((value) => {
             let cell = document.querySelector(`.${value}`);
-            if (cell) {
-                cell.classList.add(cellColor);
+            console.log(cell, "cella selezionata");
+            if (cell && !cell.classList.contains("b")) {
+                //se la cella cliccata si trova distanziato di n-3, n-4 , n-46 , n+40 ad una delle celle della successione regolare classe "b" alla classe n
+                // adiacentCellToBorderCell(value);
+                cell.classList.add(colorToAdd);
+                cell.classList.remove(colorToRemove);
                 cell.classList.add("flip-cell");
-                res(true);
+                let esiti = adiacentCellToBorderCell();
+                let isOk = true;
+                esiti.forEach((boolVal) => {
+                    !boolVal && !isOk;
+                });
+
+                isOk ? res(true) : rej(false);
+
                 return;
             }
-            rej(false);
         });
     });
 }
+
+// funzione per non far cambiare colore alle celle dall'altro lato della griglia, NO EFFETTO PACMAN!
+// SE LA CELLA CLICCATA SI TROVA ADIACENTE AD UNA CELLA DI BORDO "b" TROVA LE CASELLE x+n che compongono l'altro lato della griglia e togli la classe per farla diventare blue , in sostanza mantienila del suo colore originale
+function adiacentCellToBorderCell(): boolean[] {
+    const esiti = [];
+    let centerCellValue = util.raggioAzioneMissile[0];
+    console.log(centerCellValue, "cella centrale ");
+    // const centerCell = document.querySelector(`${centerCellValue}`);
+    const adiacentCellDx = document.querySelector(`.c${parseInt(centerCellValue.slice(1) + 1).toString()}`);
+    const adiacentCellSn = document.querySelector(`.c${(parseInt(centerCellValue.slice(1)) - 1).toString()}`);
+
+    if (adiacentCellSn?.classList.contains("b")) {
+        let stringValNoLett = centerCellValue.slice(1);
+        let numValue = parseInt(stringValNoLett);
+        const otherSideCell_Center = document.querySelector(`.c${numValue - 3}`);
+        const adicentCell_center_plus_2 = document.querySelector(`.c${numValue - 4}`);
+        const otherSideCell_Top = document.querySelector(`.c${numValue - 46}`);
+        const otherSideCell_Bottom = document.querySelector(`.c${numValue + 40}`);
+
+        otherSideCell_Center && otherSideCell_Center.classList.remove("blue", "flip-cell");
+        adicentCell_center_plus_2 && adicentCell_center_plus_2.classList.remove("blue", "flip-cell");
+        otherSideCell_Top && otherSideCell_Top.classList.remove("blue", "flip-cell");
+        otherSideCell_Bottom && otherSideCell_Bottom.classList.remove("blue", "flip-cell");
+        esiti.push(true);
+    } else {
+        esiti.push(false);
+    }
+
+    if (adiacentCellDx?.classList.contains("b")) {
+        let stringValNoLett = centerCellValue.slice(1);
+        let numValue = parseInt(stringValNoLett);
+        const otherSideCell_Center = document.querySelector(`.c${numValue + 3}`);
+        const adicentCell_center_plus_2 = document.querySelector(`.c${numValue + 4}`);
+        const otherSideCell_Top = document.querySelector(`.c${numValue + 46}`);
+        const otherSideCell_Bottom = document.querySelector(`.c${numValue - 40}`);
+
+        otherSideCell_Center && otherSideCell_Center.classList.remove("blue", "flip-cell");
+        adicentCell_center_plus_2 && adicentCell_center_plus_2.classList.remove("blue", "flip-cell");
+        otherSideCell_Top && otherSideCell_Top.classList.remove("blue", "flip-cell");
+        otherSideCell_Bottom && otherSideCell_Bottom.classList.remove("blue", "flip-cell");
+
+        esiti.push(true);
+    } else {
+        esiti.push(false);
+    }
+
+    return esiti;
+}
+
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 function stopSchieraTruppa() {
     clearInterval(util.intervalSchieraTruppa);

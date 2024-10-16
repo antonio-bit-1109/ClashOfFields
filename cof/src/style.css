@@ -114,8 +114,22 @@ body {
     background-color: red;
 }
 
+.strong-red {
+    background-color: rgb(130, 5, 5);
+    scale: 1.1;
+}
+
 .blue {
     background-color: blue;
+}
+
+.strong-blue {
+    background-color: rgb(6, 6, 99);
+    scale: 1.1;
+}
+
+.black {
+    background-color: black;
 }
 
 .imgCompact {

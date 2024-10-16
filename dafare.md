@@ -27,3 +27,7 @@
 } in CSS  -->
 
 -   [] non riesco ad utilizzare il logo scaricato , nella cartelle fonts
+
+-   [] sistemare le celle in modo da evitare effetto pacMan sulle celle al lato opposto e ridare colore rosso sempre alle celle opposte.
+
+-   [] riporta costo missile a 3
