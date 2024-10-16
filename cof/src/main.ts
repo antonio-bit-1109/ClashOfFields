@@ -156,10 +156,13 @@ function schieraTruppa() {
             deployWeapon(2);
             giveMessage("Hai selezionato 'Laser'");
             break;
-        case "soldato":
+        case "Soldato":
             deployWeapon(4);
             giveMessage("Hai selezionato 'Soldato'");
             break;
+        case "Martello":
+            deployWeapon(3);
+            giveMessage("Hai selezionato 'Martello'");
     }
 }
 

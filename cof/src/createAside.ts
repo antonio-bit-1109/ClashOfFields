@@ -51,12 +51,14 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
             weaponCost(vetrina, 2);
             break;
         case 2:
-            nome.innerHTML = `⚔ soldato ⚔`;
+            nome.innerHTML = `⚔ Soldato ⚔`;
             createWepon(vetrina, "./imgs/solder.png");
             weaponCost(vetrina, 4);
             break;
         case 3:
-            nome.innerHTML = ` arma4 `;
+            nome.innerHTML = `🔨 Martello 🔨`;
+            createWepon(vetrina, "./imgs/martello.webp");
+            weaponCost(vetrina, 3);
             break;
 
         default:
