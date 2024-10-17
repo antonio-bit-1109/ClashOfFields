@@ -28,6 +28,8 @@
 
 -   [] non riesco ad utilizzare il logo scaricato , nella cartelle fonts
 
--   [] sistemare le celle in modo da evitare effetto pacMan sulle celle al lato opposto e ridare colore rosso sempre alle celle opposte.
+-   [x] sistemare le celle in modo da evitare effetto pacMan sulle celle al lato opposto e ridare colore rosso sempre alle celle opposte.
+
+-   [] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
 -   [] riporta costo missile a 3
