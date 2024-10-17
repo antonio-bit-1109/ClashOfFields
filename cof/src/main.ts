@@ -1,18 +1,30 @@
 import "./style.css";
-import { createAside } from "./createAside";
-import { createGriglia } from "./createGriglia";
-import { createBatteryContainer } from "./createBatteryContainer";
-import { createMessagesContainer } from "./createMessagesContainer";
-import { createTimer } from "./createTimer";
-import { giveWarningMessage } from "./warningMessage";
+import { createAside } from "./CREATEDOM/createAside";
+import { createGriglia } from "./CREATEDOM/createGriglia";
+import { createBatteryContainer } from "./CREATEDOM/createBatteryContainer";
+import { createMessagesContainer } from "./CREATEDOM/createMessagesContainer";
+import { createTimer } from "./CREATEDOM/createTimer";
+import { giveWarningMessage } from "./HANDLEMESSAGES/warningMessage";
+import { PATCH_adiacentCellToBorderCell } from "./PATCH/removePacManEffect";
+import { consumaCaricaBatteria } from "./HANDLEBATTERY/consumaCaricaBatteria";
+import { ricaricaBatteria } from "./HANDLEBATTERY/ricaricaBatteria";
+import { giveMessage } from "./HANDLEMESSAGES/giveMessage";
+import { handleTimer } from "./HANDLETIME/handleTimer";
+import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
+//import { stopClock } from "./HANDLETIME/stopClock";
+//import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
+
 // suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
 
-let BatteryCharge: number = 0;
-let maxCharge: number = 6;
+// export let BatteryCharge: number = 0;
+// let maxCharge: number = 6;
 
+// interfaccia
 interface IUtil {
+    // maxCharge: number;
+    BatteryCharge: number;
     isGameStarted: boolean;
     puntoCaricamentoBatteria: number;
     minSn: number;
@@ -32,13 +44,16 @@ interface IUtil {
     blueCell: number;
 }
 
-const util: IUtil = {
+// oggetto contenente alcune variabili blobali
+export const util: IUtil = {
+    // maxCharge: 6,
+    BatteryCharge: 0,
     isGameStarted: false,
     puntoCaricamentoBatteria: 0,
     minSn: 0,
     minDx: 0,
-    secSn: 4,
-    secDx: 5,
+    secSn: 1,
+    secDx: 1,
     id: 0,
     selectedTruppa: "",
     intervalTruppaSelez: 0,
@@ -53,7 +68,7 @@ const util: IUtil = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    // creo la griglia di gioco e la preparo con classi e compagnia bella.
+    // creo la griglia di gioco e la preparo con classi e compagnia bella. FUNZIONI SINCRONE
     const main = document.getElementById("main");
     if (main) {
         // creo campo da gioco e menù laterale - script a parte
@@ -104,6 +119,7 @@ function welcomeMessage() {
     //--------------------------------------------------------//
 }
 
+// punto di ingresso.
 function changeStatusGame() {
     // avvio musica di sottofondo
     startBackgroundMusic();
@@ -145,11 +161,13 @@ function changeStatusGame() {
 }
 
 // a seconda del valore inserito in util.selectedTruppa avvio una funzione che dovrà gestire il deploy del missile, del laser, del soldato.
+// deployWeapon è una funzione parametrica che accetta argomenti differenti a seconda dell'arma da daployare.
+// FUNZIONI EXTRA COME ARGOMENTI DI DEPLOYwEAPON : PATCH PER RIMUOVERE EFFETTO PACMAN SULLE CELLE.
 function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile);
+            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, PATCH_adiacentCellToBorderCell);
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
@@ -167,7 +185,7 @@ function schieraTruppa() {
 }
 
 // funzione per sentire audio dell arma che entra in campo.
-function suonoImpattoArma(audioElement: HTMLAudioElement) {
+async function suonoImpattoArma(audioElement: HTMLAudioElement) {
     if (audioElement.currentTime > 0) {
         audioElement.currentTime = 0;
         audioElement.play();
@@ -177,19 +195,26 @@ function suonoImpattoArma(audioElement: HTMLAudioElement) {
 }
 
 // ogni funzione "deployWeapon" accetta un numero he rappresenta il costo arma , un elemento audio del suono che dovrà generare quell'arma e una funzione che descrive la logica di visualizzazione dell'effetto a schermo dell arma che viene sganciata.
-async function deployWeapon(costoArma: number, suonoImpatto: HTMLAudioElement, functionEffettoArma: Function) {
+// i alcuni caso sono fornite funzioni aggiuntive per PATCH EFFETTO PACMAN (problema griglia)
+async function deployWeapon(
+    costoArma: number,
+    suonoImpatto: HTMLAudioElement,
+    functionEffettoArma: Function,
+    removePacmanEffect?: Function
+) {
     // una serie di funzioni che descrivono la logica di selezione della casella e un modo per cambiare il colore delle caselle colpite dal missile.
     let caricato = haiAbbastanzaCaricaBattery(costoArma);
 
     if (caricato) {
         await selectCell(costoArma);
         await functionEffettoArma("blue", "red");
+        removePacmanEffect && removePacmanEffect();
         suonoImpattoArma(suonoImpatto);
         consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
     } else {
         console.log("carica non ancora sufficiente");
-        // giveWarningMessage("carica non ancora carica sufficiente.");
+        //giveWarningMessage("carica non ancora carica sufficiente.");
     }
 }
 
@@ -197,7 +222,7 @@ async function deployWeapon(costoArma: number, suonoImpatto: HTMLAudioElement, f
 // funzioni comuni a tutte le armi per la selzione della casella cliccata.
 
 function haiAbbastanzaCaricaBattery(costoArma: number) {
-    if (BatteryCharge < costoArma) {
+    if (util.BatteryCharge < costoArma) {
         giveMessage("non hai sufficiente carica per usare quest'arma.");
         return false;
     }
@@ -211,7 +236,7 @@ async function selectCell(costoArma: number): Promise<string> {
         cells.forEach((cell, i) => {
             cell.addEventListener("click", () => {
                 if (util.selectedTruppa !== "") {
-                    BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
+                    util.BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
                 }
 
                 util.selectedCell = `c${i}`;
@@ -231,69 +256,8 @@ async function selectCell(costoArma: number): Promise<string> {
     });
 }
 
-function consumaCaricaBatteria(costoArma: number) {
-    clearInterval(util.intervalRicaricaBatteria);
-
-    const taccheBatteria = document.querySelectorAll(".slot");
-    let rimosse = 0;
-
-    if (BatteryCharge >= costoArma && util.puntoCaricamentoBatteria >= costoArma) {
-        for (let i = taccheBatteria.length - 1; i >= 0; i--) {
-            if (rimosse === costoArma) {
-                break;
-            }
-
-            const tacca = taccheBatteria[i];
-            if (tacca.classList.contains("fillSlot")) {
-                tacca.classList.remove("fillSlot");
-                rimosse++;
-            }
-            console.log(rimosse, "tacche rimosse");
-            console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
-            console.log(BatteryCharge, "carica Batteria");
-            console.log(costoArma, "costoarma");
-        }
-
-        // Decrementa BatteryCharge e util.puntoCaricamentoBatteria dopo il ciclo
-        BatteryCharge -= rimosse;
-        util.puntoCaricamentoBatteria -= rimosse;
-    }
-}
-
-function ricaricaBatteria() {
-    // pulisco intervallo ogni volta che richiamo la funzione
-    clearInterval(util.intervalRicaricaBatteria);
-
-    let slots = document.querySelectorAll(".slot");
-    // util.currentSlot = util.puntoCaricamentoBatteria;
-
-    util.intervalRicaricaBatteria = setInterval(() => {
-        if (!util.isGameStarted) {
-            //util.puntoCaricamentoBatteria = util.currentSlot;
-            util.hoMessoPausaAlmenoUnaVolta = true;
-            clearInterval(util.intervalRicaricaBatteria);
-            return;
-        }
-
-        if (util.puntoCaricamentoBatteria < slots.length) {
-            let slot = slots[util.puntoCaricamentoBatteria];
-            // if (!slot.classList.contains("fillSlot")) {
-            slot.classList.add("fillSlot");
-            BatteryCharge < maxCharge ? BatteryCharge++ : null;
-            util.puntoCaricamentoBatteria++;
-            //
-
-            console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria ");
-            console.log(BatteryCharge, "carica Batteria");
-            // }
-        } else {
-            clearInterval(util.intervalRicaricaBatteria);
-        }
-    }, 2000);
-}
-
 async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemove: string): Promise<boolean> {
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
         // pulisco array ogni qual volta voglio fare il deploy di un missile
         util.raggioAzioneMissile.length = 0;
         // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
@@ -350,66 +314,11 @@ async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemove: stri
                 cell.classList.add(colorToAdd);
                 cell.classList.remove(colorToRemove);
                 cell.classList.add("flip-cell");
-                let esiti = adiacentCellToBorderCell();
-                let isOk = true;
-                esiti.forEach((boolVal) => {
-                    !boolVal && !isOk;
-                });
-
-                isOk ? res(true) : rej(false);
-
-                return;
             }
         });
+
+        res(true);
     });
-}
-
-// funzione per non far cambiare colore alle celle dall'altro lato della griglia, NO EFFETTO PACMAN!
-// SE LA CELLA CLICCATA SI TROVA ADIACENTE AD UNA CELLA DI BORDO "b" TROVA LE CASELLE x+n che compongono l'altro lato della griglia e togli la classe per farla diventare blue , in sostanza mantienila del suo colore originale
-function adiacentCellToBorderCell(): boolean[] {
-    const esiti = [];
-    let centerCellValue = util.raggioAzioneMissile[0];
-    console.log(centerCellValue, "cella centrale ");
-    // const centerCell = document.querySelector(`${centerCellValue}`);
-    const adiacentCellDx = document.querySelector(`.c${parseInt(centerCellValue.slice(1) + 1).toString()}`);
-    const adiacentCellSn = document.querySelector(`.c${(parseInt(centerCellValue.slice(1)) - 1).toString()}`);
-
-    if (adiacentCellSn?.classList.contains("b")) {
-        let stringValNoLett = centerCellValue.slice(1);
-        let numValue = parseInt(stringValNoLett);
-        const otherSideCell_Center = document.querySelector(`.c${numValue - 3}`);
-        const adicentCell_center_plus_2 = document.querySelector(`.c${numValue - 4}`);
-        const otherSideCell_Top = document.querySelector(`.c${numValue - 46}`);
-        const otherSideCell_Bottom = document.querySelector(`.c${numValue + 40}`);
-
-        otherSideCell_Center && otherSideCell_Center.classList.remove("blue", "flip-cell");
-        adicentCell_center_plus_2 && adicentCell_center_plus_2.classList.remove("blue", "flip-cell");
-        otherSideCell_Top && otherSideCell_Top.classList.remove("blue", "flip-cell");
-        otherSideCell_Bottom && otherSideCell_Bottom.classList.remove("blue", "flip-cell");
-        esiti.push(true);
-    } else {
-        esiti.push(false);
-    }
-
-    if (adiacentCellDx?.classList.contains("b")) {
-        let stringValNoLett = centerCellValue.slice(1);
-        let numValue = parseInt(stringValNoLett);
-        const otherSideCell_Center = document.querySelector(`.c${numValue + 3}`);
-        const adicentCell_center_plus_2 = document.querySelector(`.c${numValue + 4}`);
-        const otherSideCell_Top = document.querySelector(`.c${numValue + 46}`);
-        const otherSideCell_Bottom = document.querySelector(`.c${numValue - 40}`);
-
-        otherSideCell_Center && otherSideCell_Center.classList.remove("blue", "flip-cell");
-        adicentCell_center_plus_2 && adicentCell_center_plus_2.classList.remove("blue", "flip-cell");
-        otherSideCell_Top && otherSideCell_Top.classList.remove("blue", "flip-cell");
-        otherSideCell_Bottom && otherSideCell_Bottom.classList.remove("blue", "flip-cell");
-
-        esiti.push(true);
-    } else {
-        esiti.push(false);
-    }
-
-    return esiti;
 }
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -441,112 +350,4 @@ function truppaSelezionata() {
 function stopSelezioneTruppe() {
     console.log("non sto guardando alla truppa selezionata.");
     clearInterval(util.intervalTruppaSelez);
-}
-
-function handleMessages() {
-    const welcomeText = document.querySelector(".welcome");
-    const button = document.getElementById("mainBtn");
-    if (welcomeText) {
-        welcomeText.innerHTML = "default text";
-    }
-
-    if (!button) {
-        return;
-    }
-
-    if (util.isGameStarted) {
-        button.innerHTML = "STOP THE GAME 🖐";
-    } else if (!util.isGameStarted) {
-        button.innerHTML = "RESUME THE GAME 👍";
-    }
-}
-
-function handleTimer() {
-    const timer = document.getElementById("timer");
-
-    if (timer) {
-        timer.classList.remove("d-none");
-        // se il gioco è avviato, avvia il timer, togli d-none al div
-        util.isGameStarted && startClock(timer);
-        // se il gioco è bloccato interrompi il timer
-        !util.isGameStarted && stopClock();
-    }
-}
-
-function startClock(timer: HTMLElement) {
-    console.log("sono in start clock");
-    util.id = setInterval(() => {
-        // Incremento del timer di gioco (secondi e minuti)
-        util.secDx--;
-        if (util.secDx < 0) {
-            util.secSn--;
-            util.secDx = 9;
-        }
-
-        if (util.secDx === 0 && util.secSn === 0) {
-            clearInterval(util.id); // Interrompe il timer una volta raggiunto il massimo
-            giveMessage("tempo scaduto!");
-            interrompiWatcher();
-            DecretaVincitore();
-        }
-
-        // Aggiorna la visualizzazione del timer
-        timer.innerHTML = `${util.minSn}${util.minDx}:${util.secSn}${util.secDx}`;
-        console.log("clock is ticking....");
-    }, 1000); // Aggiorna ogni secondo
-}
-
-function stopClock() {
-    console.log("sono in stop clock");
-    clearInterval(util.id);
-}
-
-function giveMessage(message: string) {
-    const divMessage = document.querySelector(".welcome");
-    if (divMessage) {
-        divMessage.innerHTML = message;
-    }
-}
-
-// allo scadere del tempo conto quante celle ha un giocatore e quante il computer e decreto il vincitore.
-function DecretaVincitore() {
-    let message = "";
-    const allCells = document.querySelectorAll(".cell");
-    allCells.forEach((cell) => {
-        cell.classList.contains("blue") ? util.blueCell++ : util.redCells++;
-    });
-
-    if (util.blueCell === util.redCells) {
-        message = `Incredibile, Parità! 😯  <br> <span style='color:blue'> caselle conquistate: ${util.blueCell}</span> <br> 
-        <span style='color:red'>  caselle dell'avversario: ${util.redCells}  </span>`;
-    }
-
-    if (util.blueCell > util.redCells) {
-        message = `Hai vinto la partita, Complimenti! 🥳 <br> <span style='color:blue'> caselle conquistate: ${util.blueCell}</span> <br> 
-      <span style='color:red'>  caselle dell'avversario: ${util.redCells}  </span>`;
-    }
-
-    if (util.blueCell < util.redCells) {
-        message = `Purtroppo il computer ti ha battuto, Riprova! 😥 <br> <span style='color:blue'> Caselle conquistate: ${util.blueCell} </span> <br> 
-       <span style='color:red'> Caselle dell'avversario: ${util.redCells} </span>`;
-    }
-    giveMessage(message);
-    riavviaPartita();
-}
-
-function interrompiWatcher() {
-    clearInterval(util.intervalTruppaSelez);
-    clearInterval(util.intervalSchieraTruppa);
-    clearInterval(util.intervalRicaricaBatteria);
-}
-
-function riavviaPartita() {
-    const mainBtn = document.getElementById("mainBtn");
-    if (mainBtn) {
-        mainBtn.innerHTML = "Nuova Partita ▶️";
-    }
-
-    mainBtn?.addEventListener("click", () => {
-        window.location.reload();
-    });
 }
