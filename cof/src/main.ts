@@ -168,7 +168,7 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, PATCH_adiacentCellToBorderCell);
+            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, PATCH_adiacentCellToBorderCell);
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
