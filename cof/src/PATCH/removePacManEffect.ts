@@ -1,7 +1,7 @@
 import { util } from "../main";
 // funzione per non far cambiare colore alle celle dall'altro lato della griglia, NO EFFETTO PACMAN!
 // SE LA CELLA CLICCATA SI TROVA ADIACENTE AD UNA CELLA DI BORDO "b" TROVA LE CASELLE x+n che compongono l'altro lato della griglia e togli la classe per farla diventare blue , in sostanza mantienila del suo colore originale
-export async function PATCH_adiacentCellToBorderCell() {
+export async function Patch_removePacMan_Effect() {
     // return new Promise((res, rej) => {
     const esiti = [];
 

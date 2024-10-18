@@ -5,7 +5,7 @@ import { createBatteryContainer } from "./CREATEDOM/createBatteryContainer";
 import { createMessagesContainer } from "./CREATEDOM/createMessagesContainer";
 import { createTimer } from "./CREATEDOM/createTimer";
 import { giveWarningMessage } from "./HANDLEMESSAGES/warningMessage";
-import { PATCH_adiacentCellToBorderCell } from "./PATCH/removePacManEffect";
+import { Patch_removePacMan_Effect } from "./PATCH/removePacManEffect";
 import { consumaCaricaBatteria } from "./HANDLEBATTERY/consumaCaricaBatteria";
 import { ricaricaBatteria } from "./HANDLEBATTERY/ricaricaBatteria";
 import { giveMessage } from "./HANDLEMESSAGES/giveMessage";
@@ -168,7 +168,7 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, PATCH_adiacentCellToBorderCell);
+            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
             giveMessage("Hai selezionato 'Missile'");
             break;
         case "Laser":
