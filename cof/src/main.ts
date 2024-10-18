@@ -53,8 +53,8 @@ export const util: IUtil = {
     puntoCaricamentoBatteria: 0,
     minSn: 0,
     minDx: 0,
-    secSn: 1,
-    secDx: 1,
+    secSn: 4,
+    secDx: 5,
     id: 0,
     selectedTruppa: "",
     intervalTruppaSelez: 0,
@@ -108,7 +108,8 @@ function welcomeMessage() {
     const welcome = document.createElement("h4");
     welcome.classList.add("h4Style");
     welcome.classList.add("welcome");
-    welcome.innerHTML = "Benvenuto su Clash of Fields! <br> Facciamo una partita!";
+    welcome.innerHTML =
+        "Benvenuto su <span style='color:red'> Clash </span> of  <span style='color:blue'> Fields! </span> <br> Facciamo una partita!";
 
     messageBox?.appendChild(logo);
     messageBox?.appendChild(welcome);
@@ -168,20 +169,20 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
-            giveMessage("Hai selezionato 'Missile'");
+            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Missile'</span>`);
             break;
         case "Laser":
             deployWeapon(2);
-            giveMessage("Hai selezionato 'Laser'");
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Laser'</span>`);
             break;
         case "Soldato":
             deployWeapon(4);
-            giveMessage("Hai selezionato 'Soldato'");
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Soldato'</span>`);
             break;
         case "Martello":
             deployWeapon(3);
-            giveMessage("Hai selezionato 'Martello'");
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Martello'</span>`);
     }
 }
 
@@ -209,7 +210,7 @@ async function deployWeapon(
     if (caricato) {
         await selectCell(costoArma);
         await functionEffettoArma("blue", "red");
-        removePacmanEffect && removePacmanEffect();
+        // removePacmanEffect && removePacmanEffect();
         suonoImpattoArma(suonoImpatto);
         consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
