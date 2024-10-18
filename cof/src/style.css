@@ -1,30 +1,34 @@
-/* @font-face {
-    font-family: "PixSans";
-    src: url("../fonts/PixelifySans-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
+@import url("https://fonts.googleapis.com/css2?family=Micro+5+Charted&family=Pixelify+Sans:wght@500&family=Tiny5&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Micro+5+Charted&family=Pixelify+Sans:wght@500&display=swap');
 
-html {
-    font-family: "Times New Roman", Times, serif;
+.pixelify-sans {
+    font-family: "Pixelify Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 } */
 
 :root {
     line-height: 1.5;
-    font-weight: 400;
+    /* font-weight: 400; */
 
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    font-synthesis: none;
+    /* font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -moz-osx-font-smoothing: grayscale; */
+    /* font-family: "Pixelify Sans", sans-serif; */
 }
 
 /* -------------------------------- classi personalizzate ------------------------- */
 body {
+    /* font-family: "Micro 5 Charted", sans-serif; */
+    font-family: "Tiny5", sans-serif;
+    /* font-size: 2rem; */
     margin: auto;
     /* font-family: "PixelSans", sans-serif; */
 }
@@ -102,7 +106,6 @@ body {
 .stileNome {
     text-align: center;
     color: black;
-    font-family: sans-serif;
     font-size: larger;
 }
 
@@ -172,7 +175,6 @@ body {
 
 .h4Style {
     color: black;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
     font-size: xx-large;
 }
 
