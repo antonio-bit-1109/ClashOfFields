@@ -12,6 +12,7 @@ import { giveMessage } from "./HANDLEMESSAGES/giveMessage";
 import { handleTimer } from "./HANDLETIME/handleTimer";
 import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
+
 //import { stopClock } from "./HANDLETIME/stopClock";
 //import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
 
@@ -210,7 +211,7 @@ async function deployWeapon(
     if (caricato) {
         await selectCell(costoArma);
         await functionEffettoArma("blue", "red");
-        // removePacmanEffect && removePacmanEffect();
+        removePacmanEffect && removePacmanEffect();
         suonoImpattoArma(suonoImpatto);
         consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
