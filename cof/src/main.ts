@@ -41,9 +41,12 @@ interface IUtil {
     intervalTruppaSelez: number;
     intervalSchieraTruppa: number;
     intervalRicaricaBatteria: number;
+    intervalAvanzaLaser: number;
+    refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
     raggioAzioneArma: string[];
+    corpoArma: string[];
     hoMessoPausaAlmenoUnaVolta: boolean;
     redCells: number;
     blueCell: number;
@@ -64,9 +67,12 @@ export const util: IUtil = {
     intervalTruppaSelez: 0,
     intervalSchieraTruppa: 0,
     intervalRicaricaBatteria: 0,
+    intervalAvanzaLaser: 0,
+    refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",
     raggioAzioneArma: [],
+    corpoArma: [],
     hoMessoPausaAlmenoUnaVolta: false,
     redCells: 0,
     blueCell: 0,
@@ -135,6 +141,7 @@ function changeStatusGame() {
         util.primoAvvio = false;
         util.isGameStarted = true;
         handleVeloGriglia();
+        // avanzaLaser(util.refAvanzamentoLaser);
         ricaricaBatteria();
         handleMessages();
         handleTimer();
@@ -164,6 +171,7 @@ function changeStatusGame() {
         stopSelezioneTruppe();
         stopSchieraTruppa();
         handleVeloGriglia();
+        stopAvanzaLaser();
         console.log("gioco interrotto");
         return;
     }
@@ -269,6 +277,11 @@ async function selectCell(costoArma: number): Promise<string> {
 function stopSchieraTruppa() {
     clearInterval(util.intervalSchieraTruppa);
     console.log("interrompi watch schiera truppa");
+}
+
+function stopAvanzaLaser() {
+    clearInterval(util.intervalAvanzaLaser);
+    console.log("interrompi avanzamento laser");
 }
 
 // salvo in util la stringa contenente la truppa che l'utente ha selezionato al momento
