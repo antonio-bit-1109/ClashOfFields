@@ -3,9 +3,9 @@ import { util } from "../main";
 export async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemove: string): Promise<boolean> {
     return new Promise((res) => {
         // pulisco array ogni qual volta voglio fare il deploy di un missile
-        util.raggioAzioneMissile.length = 0;
+        util.raggioAzioneArma.length = 0;
         // pusho in array tutte le stringhe , che corrispondono alle classi delle celle, su cui voglio che il missile abbia un raggio d'azione.
-        util.raggioAzioneMissile.push(
+        util.raggioAzioneArma.push(
             "c" + (parseInt(util.selectedCell.slice(1)) + 0).toString(),
             "c" + (parseInt(util.selectedCell.slice(1)) + 1).toString(),
             "c" + (parseInt(util.selectedCell.slice(1)) + 2).toString(),
@@ -49,7 +49,7 @@ export async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemov
             "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
         );
         console.log(util);
-        util.raggioAzioneMissile.forEach((value) => {
+        util.raggioAzioneArma.forEach((value) => {
             let cell = document.querySelector(`.${value}`);
             console.log(cell, "cella selezionata");
             if (cell && !cell.classList.contains("b")) {

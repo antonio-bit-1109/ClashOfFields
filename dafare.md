@@ -33,3 +33,5 @@
 -   [] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
 -   [] riporta costo missile a 3
+
+-   [] sistema caso in cui sto cliccando sempre sulle celle vicino ai bordi ma anche dall altra parte del bordo le celle sono del mio colore, si rompe, riporta le celle rosse.

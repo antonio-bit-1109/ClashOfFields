@@ -1,13 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Micro+5+Charted&family=Pixelify+Sans:wght@500&family=Tiny5&display=swap");
-/* @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Micro+5+Charted&family=Pixelify+Sans:wght@500&display=swap');
-
-.pixelify-sans {
-    font-family: "Pixelify Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-} */
 
 :root {
     line-height: 1.5;
@@ -15,12 +6,6 @@
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
-
-    /* font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; */
-    /* font-family: "Pixelify Sans", sans-serif; */
 }
 
 h4 {
@@ -208,6 +193,7 @@ body {
     border-radius: 20px;
     font-size: 20px;
     padding: 6px;
+    font-family: "Tiny5", sans-serif;
 }
 
 .button:hover {

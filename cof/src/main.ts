@@ -13,12 +13,14 @@ import { handleTimer } from "./HANDLETIME/handleTimer";
 import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
 import { handleVeloGriglia } from "./HANDLEGAME/addVeloGrigliaGiocoPausa";
+import { deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
 
 //import { stopClock } from "./HANDLETIME/stopClock";
 //import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
 
 // suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
+const laserZapSound = new Audio("../sounds/laser_zap.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
 
 // export let BatteryCharge: number = 0;
@@ -41,7 +43,7 @@ interface IUtil {
     intervalRicaricaBatteria: number;
     selectedCell: string;
     cellColor: string;
-    raggioAzioneMissile: string[];
+    raggioAzioneArma: string[];
     hoMessoPausaAlmenoUnaVolta: boolean;
     redCells: number;
     blueCell: number;
@@ -64,7 +66,7 @@ export const util: IUtil = {
     intervalRicaricaBatteria: 0,
     selectedCell: "",
     cellColor: "",
-    raggioAzioneMissile: [],
+    raggioAzioneArma: [],
     hoMessoPausaAlmenoUnaVolta: false,
     redCells: 0,
     blueCell: 0,
@@ -174,11 +176,11 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
+            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Missile'</span>`);
             break;
         case "Laser":
-            deployWeapon(2);
+            deployWeapon(2, laserZapSound, deployRaggioAzioneLaser);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Laser'</span>`);
             break;
         case "Soldato":
