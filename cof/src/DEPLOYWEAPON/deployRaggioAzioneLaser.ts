@@ -58,20 +58,18 @@ function raggioAzioneLaser() {
     // prendo gli ultimi 3 valori dall array che corrispondono alle 3 caselle fontali del laser, da cui faccio partire un ciclo
     console.log(util.corpoArma);
     let cellSnClass = util.corpoArma[util.corpoArma.length - 1];
-    let cellCentrClass = util.corpoArma[util.corpoArma.length - 2];
+    /*    let cellCentrClass = util.corpoArma[util.corpoArma.length - 2]; */
     let cellDxClass = util.corpoArma[util.corpoArma.length - 3];
 
-    console.log(cellSnClass, cellCentrClass, cellDxClass);
+    console.log(cellSnClass, /* cellCentrClass */ cellDxClass);
 
     // prendo le caselle dal DOM
     const cellSn = document.querySelector(`.${cellSnClass}`);
-    const cellCentr = document.querySelector(`.${cellCentrClass}`);
+    /*    const cellCentr = document.querySelector(`.${cellCentrClass}`); */
     const cellDx = document.querySelector(`.${cellDxClass}`);
 
-    if (cellSn && cellCentr && cellDx) {
+    if (cellSn && /* cellCentr && */ cellDx) {
         avanzaLaser(cellSnClass);
-        //   startLaser(cellCentr);
-        //   startLaser(cellDx);
         avanzaLaser(cellDxClass);
     }
 }
