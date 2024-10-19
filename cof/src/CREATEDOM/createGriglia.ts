@@ -4,6 +4,18 @@
 export function createGriglia(main: HTMLElement) {
     const cellContainer = document.createElement("div");
     cellContainer.classList.add("cellsContainers");
+    // creo elemento velo che servirà per non rendere toccabile la griglia se il gioco è in pausa.
+    const velo = document.createElement("div");
+    velo.classList.add("velo");
+    velo.classList.add("d-none");
+    // velo.innerText = "PAUSA";
+
+    const textInnerVelo = document.createElement("p");
+    textInnerVelo.classList.add("veloText");
+    textInnerVelo.innerText = "PAUSA";
+    velo.appendChild(textInnerVelo);
+
+    cellContainer.appendChild(velo);
     for (let i = 0; i < 1978; i++) {
         let cell = document.createElement("div");
         cell.classList.add("cell");

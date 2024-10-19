@@ -26,7 +26,7 @@
     src: url("../fonts/PixeloidSans-mLxMm.ttf") format("truetype");
 } in CSS  -->
 
--   [] non riesco ad utilizzare il logo scaricato , nella cartelle fonts
+-   [x] non riesco ad utilizzare il logo scaricato , nella cartelle fonts
 
 -   [x] sistemare le celle in modo da evitare effetto pacMan sulle celle al lato opposto e ridare colore rosso sempre alle celle opposte.
 

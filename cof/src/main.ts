@@ -12,6 +12,7 @@ import { giveMessage } from "./HANDLEMESSAGES/giveMessage";
 import { handleTimer } from "./HANDLETIME/handleTimer";
 import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
+import { handleVeloGriglia } from "./HANDLEGAME/addVeloGrigliaGiocoPausa";
 
 //import { stopClock } from "./HANDLETIME/stopClock";
 //import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
@@ -25,9 +26,9 @@ const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
 
 // interfaccia
 interface IUtil {
-    // maxCharge: number;
     BatteryCharge: number;
     isGameStarted: boolean;
+    primoAvvio: boolean;
     puntoCaricamentoBatteria: number;
     minSn: number;
     minDx: number;
@@ -48,9 +49,9 @@ interface IUtil {
 
 // oggetto contenente alcune variabili blobali
 export const util: IUtil = {
-    // maxCharge: 6,
     BatteryCharge: 0,
     isGameStarted: false,
+    primoAvvio: true,
     puntoCaricamentoBatteria: 0,
     minSn: 0,
     minDx: 0,
@@ -129,7 +130,9 @@ function changeStatusGame() {
 
     //richiamata quando il gioco parte
     if (!util.isGameStarted) {
+        util.primoAvvio = false;
         util.isGameStarted = true;
+        handleVeloGriglia();
         ricaricaBatteria();
         handleMessages();
         handleTimer();
@@ -158,6 +161,7 @@ function changeStatusGame() {
         handleTimer();
         stopSelezioneTruppe();
         stopSchieraTruppa();
+        handleVeloGriglia();
         console.log("gioco interrotto");
         return;
     }
@@ -170,7 +174,7 @@ function schieraTruppa() {
     console.log("sono dentro schiera truppa");
     switch (util.selectedTruppa) {
         case "Missle":
-            deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
+            deployWeapon(1, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Missile'</span>`);
             break;
         case "Laser":
