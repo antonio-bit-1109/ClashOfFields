@@ -13,11 +13,8 @@ h4 {
 }
 /* -------------------------------- classi personalizzate ------------------------- */
 body {
-    /* font-family: "Micro 5 Charted", sans-serif; */
     font-family: "Tiny5", sans-serif;
-    /* font-size: 2rem; */
     margin: auto;
-    /* font-family: "PixelSans", sans-serif; */
 }
 
 .pointer {
