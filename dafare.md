@@ -37,3 +37,5 @@
 -   [] sistema caso in cui sto cliccando sempre sulle celle vicino ai bordi ma anche dall altra parte del bordo le celle sono del mio colore, si rompe, riporta le celle rosse.
 
 -   [] sistema meccanismo di sottrazione della carica della batteria, su numeri pari non funziona -- SFANCULA CON I MULTIPLI (se costo 2 e carica 4 te la leva tutta) (costo 3 carica 6 te la leva tutta)
+
+-   [] quando metto in pausa devo trovare un modo di gestire interruzione e ripresa della propagazion del laser
