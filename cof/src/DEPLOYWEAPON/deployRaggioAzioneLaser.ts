@@ -108,6 +108,4 @@ export function avanzaLaser(classeRef: string) {
             somma -= 43; // Aggiorna somma per la prossima iterazione
         }
     }, 50);
-
-    // util.intervalAvanzaLaser.push(id);
 }
