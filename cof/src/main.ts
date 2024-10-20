@@ -13,7 +13,7 @@ import { handleTimer } from "./HANDLETIME/handleTimer";
 import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
 import { handleVeloGriglia } from "./HANDLEGAME/addVeloGrigliaGiocoPausa";
-import { avanzaLaser, deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
+import { deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
 
 //import { stopClock } from "./HANDLETIME/stopClock";
 //import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
@@ -139,7 +139,6 @@ function changeStatusGame() {
         util.primoAvvio = false;
         util.isGameStarted = true;
         handleVeloGriglia();
-
         ricaricaBatteria();
         handleMessages();
         handleTimer();
@@ -248,7 +247,7 @@ async function selectCell(costoArma: number): Promise<string> {
     return new Promise((res) => {
         const cells = document.querySelectorAll(".cell");
         cells.forEach((cell, i) => {
-            cell.addEventListener("click", () => {
+            const handleClick = () => {
                 if (util.selectedTruppa !== "") {
                     util.BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
                 }
@@ -265,7 +264,12 @@ async function selectCell(costoArma: number): Promise<string> {
                     res(util.cellColor);
                     return;
                 }
-            });
+            };
+
+            // Rimuovo l'eventuale precedente listener
+            cell.removeEventListener("click", handleClick);
+
+            cell.addEventListener("click", handleClick);
         });
     });
 }
