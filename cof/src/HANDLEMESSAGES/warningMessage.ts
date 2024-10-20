@@ -1,7 +1,7 @@
 // import warningSoundMsg from ""
 
 export function giveWarningMessage(string: string) {
-    const soundMessage = new Audio("../../public/sounds/soundMessage.mp3");
+    const soundMessage = new Audio("../../sounds/soundMessage.mp3");
     soundMessage.play();
     const warning_Par = document.querySelector(".warning");
     if (warning_Par) {

@@ -13,7 +13,7 @@ import { handleTimer } from "./HANDLETIME/handleTimer";
 import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
 import { handleVeloGriglia } from "./HANDLEGAME/addVeloGrigliaGiocoPausa";
-import { deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
+import { avanzaLaser, deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
 
 //import { stopClock } from "./HANDLETIME/stopClock";
 //import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
@@ -41,7 +41,6 @@ interface IUtil {
     intervalTruppaSelez: number;
     intervalSchieraTruppa: number;
     intervalRicaricaBatteria: number;
-    intervalAvanzaLaser: number;
     refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
@@ -67,7 +66,6 @@ export const util: IUtil = {
     intervalTruppaSelez: 0,
     intervalSchieraTruppa: 0,
     intervalRicaricaBatteria: 0,
-    intervalAvanzaLaser: 0,
     refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",
@@ -100,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.05;
+    sottofondoMusic.volume = 0.0;
 }
 
 function welcomeMessage() {
@@ -141,7 +139,7 @@ function changeStatusGame() {
         util.primoAvvio = false;
         util.isGameStarted = true;
         handleVeloGriglia();
-        // avanzaLaser(util.refAvanzamentoLaser);
+
         ricaricaBatteria();
         handleMessages();
         handleTimer();
@@ -171,7 +169,6 @@ function changeStatusGame() {
         stopSelezioneTruppe();
         stopSchieraTruppa();
         handleVeloGriglia();
-        stopAvanzaLaser();
         console.log("gioco interrotto");
         return;
     }
@@ -277,11 +274,6 @@ async function selectCell(costoArma: number): Promise<string> {
 function stopSchieraTruppa() {
     clearInterval(util.intervalSchieraTruppa);
     console.log("interrompi watch schiera truppa");
-}
-
-function stopAvanzaLaser() {
-    clearInterval(util.intervalAvanzaLaser);
-    console.log("interrompi avanzamento laser");
 }
 
 // salvo in util la stringa contenente la truppa che l'utente ha selezionato al momento

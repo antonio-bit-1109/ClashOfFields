@@ -47,13 +47,8 @@ export function deployRaggioAzioneLaser(colorToAdd: string, colorToRemove: strin
 
 function raggioAzioneLaser() {
     console.log("sono in raggio azione laser ");
-    // mi prendo le tre caselle superiori del corpo della torretta e per ogniuna di esse faccio partire un setinterval che gli fa mangiare la casella davanti a se ogni x ms
+    // mi prendo le tre caselle superiori del corpo della torretta e per ognuna di esse faccio partire un setinterval che gli fa mangiare la casella davanti a se ogni x ms
     // le prime tre cell da cui far partire il ciclo sono le ultime tre presenti in util.corpoarma
-    // quinid ciclo dalla fine dell array solog li ultimi 3 elementi
-
-    // for (let i = util.corpoArma.length - 1; i >= util.corpoArma.length - 3; i--) {
-
-    // }
 
     // prendo gli ultimi 3 valori dall array che corrispondono alle 3 caselle fontali del laser, da cui faccio partire un ciclo
     console.log(util.corpoArma);
@@ -61,7 +56,7 @@ function raggioAzioneLaser() {
     let cellCentrClass = util.corpoArma[util.corpoArma.length - 2];
     let cellDxClass = util.corpoArma[util.corpoArma.length - 3];
 
-    console.log(cellSnClass, /* cellCentrClass */ cellDxClass);
+    console.log(cellSnClass, cellCentrClass, cellDxClass);
 
     // prendo le caselle dal DOM
     const cellSn = document.querySelector(`.${cellSnClass}`);
@@ -81,17 +76,38 @@ export function avanzaLaser(classeRef: string) {
     console.log(numero);
     let somma = numero - 43; // Somma il valore desiderato iniziale
 
-    util.intervalAvanzaLaser = setInterval(() => {
+    // inserisco tutti i riferimenti ai setinterval generati in un array , quando devo chiamare pausa chiamo la funzione di stop "stopAvanzaLaser()" che ferma tutti gli interval pushati nell array.
+
+    let id = setInterval(() => {
+        // se il gioco è in pausa, quindi la variabile è false, non fare nulla e ritorna.
+        if (!util.isGameStarted) {
+            return;
+        }
+
         const nuovaClasse = `c${somma}`; // Crea la nuova stringa con il prefisso "c"
         console.log("sono in start laser");
         console.log("nuovaClasse", nuovaClasse);
+
         const cellaAvanti = document.querySelector(`.${nuovaClasse}`); // Seleziona l'elemento con la nuova classe
+
+        // se ilraggio laser raggiunge la fine della griglia (celle con classe "b"), l'interval viene automaticamente interrotto per quel raggio laser (fila di celle)
+        if (cellaAvanti && cellaAvanti.classList.contains("b")) {
+            clearInterval(id);
+            console.log("intervallo interrotto");
+        }
+        // altrimenti continua la propagazione
+        // per identificare a quale div è stato aggiunto il laser gli inserisco un laser insieme a datetime.now() in modo da avere un riferimento temporale a quale div è stato aggiunto per ultimo. in modo tale da poterlo adentificare all occorrenza. FIX: NO ATTRIBUTO
         if (cellaAvanti) {
             if (!cellaAvanti.classList.contains("blue") && !cellaAvanti.classList.contains("b")) {
                 cellaAvanti.classList.add("blue");
                 cellaAvanti.classList.remove("red");
+                cellaAvanti.classList.add("laser");
+                cellaAvanti.classList.add("flip-cell");
+                // cellaAvanti.setAttribute("time-deploy", Date.now().toString());
             }
             somma -= 43; // Aggiorna somma per la prossima iterazione
         }
-    }, 500);
+    }, 50);
+
+    // util.intervalAvanzaLaser.push(id);
 }
