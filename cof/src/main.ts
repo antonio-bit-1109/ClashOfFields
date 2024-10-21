@@ -14,9 +14,11 @@ import { handleMessages } from "./HANDLEMESSAGES/handleMessages";
 import { deployRaggioAzioneMissile } from "./DEPLOYWEAPON/deployRaggioAzioneMissile";
 import { handleVeloGriglia } from "./HANDLEGAME/addVeloGrigliaGiocoPausa";
 import { deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser";
+import { changeSfondoMessageBox } from "./FETCHES/changeSfondo";
+import { builderName } from "./BUILDERNAMES/builderName";
 
-//import { stopClock } from "./HANDLETIME/stopClock";
-//import { riavviaPartita } from "./HANDLEGAME/riavviaPartita";
+// oggetto builder per generare parole random
+let parolaObj = new builderName();
 
 // suoni-audio
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
@@ -49,6 +51,7 @@ interface IUtil {
     hoMessoPausaAlmenoUnaVolta: boolean;
     redCells: number;
     blueCell: number;
+    sfondo: string;
 }
 
 // oggetto contenente alcune variabili blobali
@@ -74,6 +77,7 @@ export const util: IUtil = {
     hoMessoPausaAlmenoUnaVolta: false,
     redCells: 0,
     blueCell: 0,
+    sfondo: "",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -104,6 +108,9 @@ function startBackgroundMusic() {
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
+    const cambiaImg = document.createElement("button");
+    cambiaImg.classList.add("block");
+    cambiaImg.innerHTML = "cambia sfondo";
     const logo = document.createElement("img");
     const warningMessage = document.createElement("p");
     warningMessage.classList.add("warning");
@@ -120,13 +127,43 @@ function welcomeMessage() {
         "Benvenuto su <span style='color:red'> Clash </span> of  <span style='color:blue'> Fields! </span> <br> Facciamo una partita!";
 
     messageBox?.appendChild(logo);
+    messageBox?.appendChild(cambiaImg);
     messageBox?.appendChild(welcome);
     messageBox?.appendChild(warningMessage);
     messageBox?.appendChild(startButton);
 
+    // abilita il bottone per cambiare sfondo
+    cambiaImg.addEventListener("click", cambiaSfondo);
+
     // PUNTO PARTENZA PER GESTIRE AVVIO/STOP DEL GIOCO
     startButton.addEventListener("click", changeStatusGame);
     //--------------------------------------------------------//
+}
+
+async function cambiaSfondo() {
+    let DoAgain: boolean = false;
+
+    do {
+        let parola = parolaObj.startPipeline();
+        console.log(parola);
+        let esito = await changeSfondoMessageBox(parola);
+
+        if (esito instanceof Error) {
+            DoAgain = true;
+        } else {
+            DoAgain = false;
+            util.sfondo = esito;
+            cambiaImmagineTagImg();
+            // usa la stringa ritornata dal server come immagine
+        }
+    } while (DoAgain);
+}
+
+function cambiaImmagineTagImg() {
+    const sfondoSection = document.querySelector(".messagebox") as HTMLElement;
+    if (sfondoSection) {
+        sfondoSection.style.backgroundImage = `url(${util.sfondo})`;
+    }
 }
 
 // punto di ingresso.

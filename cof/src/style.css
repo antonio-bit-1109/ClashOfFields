@@ -44,6 +44,23 @@ body {
     cursor: pointer;
 }
 
+.block {
+    display: block;
+    margin: auto;
+    margin-block: 2em;
+    padding: 1em;
+    border-radius: 30px;
+}
+/* .parent {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    top: 5em;
+    right: 0;
+} */
+
 .warning {
     padding-inline: 0.5rem;
     font-size: 2.5em;
@@ -177,6 +194,15 @@ body {
     width: 720px;
     text-align: center;
     background-image: url("../imgs/logo_transparent.png");
+    background-position: center;
+}
+
+.alternativeSfondo {
+    background-color: white;
+    border: 3px black solid;
+    width: 720px;
+    text-align: center;
+    /* background-image: url("../imgs/logo_transparent.png"); */
     background-position: center;
 }
 
