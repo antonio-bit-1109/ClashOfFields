@@ -153,13 +153,13 @@ async function cambiaSfondo() {
         } else {
             DoAgain = false;
             util.sfondo = esito;
-            cambiaImmagineTagImg();
+            cambiaImmagineDivMessaggi();
             // usa la stringa ritornata dal server come immagine
         }
     } while (DoAgain);
 }
 
-function cambiaImmagineTagImg() {
+function cambiaImmagineDivMessaggi() {
     const sfondoSection = document.querySelector(".messagebox") as HTMLElement;
     if (sfondoSection) {
         sfondoSection.style.backgroundImage = `url(${util.sfondo})`;

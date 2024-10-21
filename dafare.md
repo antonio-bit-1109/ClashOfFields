@@ -23,13 +23,14 @@
 
 -   [x] quando metto in pausa devo trovare un modo di gestire interruzione e ripresa della propagazion del laser
 
+-   [x] riporta costo missile a 3
+-   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
+
 -   [] SISTEMA SELECT CELL E CONSUMA CARICA BATTERIA
 
 -   [ ] implementa tutte le armi.
--   [ ] Implementare un meccanismo di randomicità nelle mosse del computer
+-   [ ] Implementare un meccanismo di randomicità nelle mosse del computer (web socket ? -- server ?? )
 -   [] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
-
--   [] riporta costo missile a 3
 
 -   [] sistema caso in cui sto cliccando sempre sulle celle vicino ai bordi ma anche dall altra parte del bordo le celle sono del mio colore, si rompe, riporta le celle rosse.
 
