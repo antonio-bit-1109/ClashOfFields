@@ -24,6 +24,9 @@
 -   [x] quando metto in pausa devo trovare un modo di gestire interruzione e ripresa della propagazion del laser
 
 -   [x] riporta costo missile a 3
+
+-   [] implementa un meccanismo che fa capire all utente che l immagine sta fetchando e quindi deve aspettare (AWAITING)
+
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
 
 -   [] SISTEMA SELECT CELL E CONSUMA CARICA BATTERIA
