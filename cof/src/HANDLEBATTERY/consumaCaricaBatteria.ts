@@ -17,14 +17,14 @@ export function consumaCaricaBatteria(costoArma: number) {
                 tacca.classList.remove("fillSlot");
                 rimosse++;
             }
-            console.log(rimosse, "tacche rimosse");
-            console.log(util.puntoCaricamentoBatteria, "punto caricamento batteria");
-            console.log(util.BatteryCharge, "carica Batteria");
-            console.log(costoArma, "costoarma");
         }
 
+        console.log("carica batteria", util.BatteryCharge);
+        console.log("carica batteria", util.puntoCaricamentoBatteria);
         // Decrementa BatteryCharge e util.puntoCaricamentoBatteria dopo il ciclo
         util.BatteryCharge -= rimosse;
         util.puntoCaricamentoBatteria -= rimosse;
     }
+    console.log("carica batteria", util.BatteryCharge);
+    console.log("carica batteria", util.puntoCaricamentoBatteria);
 }
