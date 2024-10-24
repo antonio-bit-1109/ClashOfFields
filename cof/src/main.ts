@@ -30,6 +30,7 @@ const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
 
 // interfaccia
 interface IUtil {
+    schiera: boolean;
     BatteryCharge: number;
     isGameStarted: boolean;
     primoAvvio: boolean;
@@ -56,6 +57,7 @@ interface IUtil {
 
 // oggetto contenente alcune variabili blobali
 export const util: IUtil = {
+    schiera: false,
     BatteryCharge: 0,
     isGameStarted: false,
     primoAvvio: true,
@@ -198,7 +200,9 @@ function changeStatusGame() {
         // allora chiamo la funzione per schierare la truppa sul campo di battaglia
         //la fuzione schiera truppa ha la funzione corrispettiva stop schiera truppa per quando il gioco viene messo in pausa.
         util.intervalSchieraTruppa = setInterval(() => {
-            util.selectedTruppa !== "" && schieraTruppa();
+            if (util.selectedTruppa !== "") {
+                schieraTruppa();
+            }
         }, 1000);
 
         console.log("gioco iniziato");
@@ -225,19 +229,23 @@ function schieraTruppa() {
     switch (util.selectedTruppa) {
         case "Missle":
             deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
-            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Missile'</span>`);
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
+
             break;
         case "Laser":
             deployWeapon(2, laserZapSound, deployRaggioAzioneLaser);
-            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Laser'</span>`);
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
+
             break;
         case "Soldato":
             deployWeapon(4);
-            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Soldato'</span>`);
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
+
             break;
         case "Martello":
             deployWeapon(3);
-            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>'Martello'</span>`);
+            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
+            break;
     }
 }
 
@@ -264,11 +272,16 @@ async function deployWeapon(
 
     if (caricato) {
         await selectCell(costoArma);
+
+        if (!util.schiera) {
+            return;
+        }
         await functionEffettoArma("blue", "red");
         removePacmanEffect && removePacmanEffect();
         suonoImpattoArma(suonoImpatto);
         consumaCaricaBatteria(costoArma);
         ricaricaBatteria();
+        util.schiera = false;
     } else {
         console.log("carica non ancora sufficiente");
         //giveWarningMessage("carica non ancora carica sufficiente.");
@@ -287,35 +300,77 @@ function haiAbbastanzaCaricaBattery(costoArma: number) {
     return true;
 }
 
-// async function selectCell(costoArma: number): Promise<string> {
-//     return new Promise((res) => {
-//         const cells = document.querySelectorAll(".cell");
-//         cells.forEach((cell, i) => {
-//             const handleClick = () => {
-//                 if (util.selectedTruppa !== "") {
-//                     util.BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
-//                 }
+async function selectCell(costoArma: number): Promise<boolean> {
+    return new Promise((res) => {
+        const cells = document.querySelectorAll(".cell");
 
-//                 util.selectedCell = `c${i}`;
-//                 if (cell.classList.contains("red")) {
-//                     util.cellColor = "red";
-//                     res(util.cellColor);
-//                     return;
-//                 }
+        // Gestisci il click sull'elemento corrente
+        const handleClick = (event: Event) => {
+            util.schiera = true;
+            const cell = event.currentTarget as HTMLElement; // La cella cliccata
+            const i = Array.from(cells).indexOf(cell); // Ottieni l'indice della cella
 
-//                 if (cell.classList.contains("blue")) {
-//                     util.cellColor = "blue";
-//                     res(util.cellColor);
-//                     return;
-//                 }
-//             };
+            // Controlla se una truppa è selezionata
+            if (util.selectedTruppa !== "") {
+                if (util.BatteryCharge < costoArma) {
+                    giveWarningMessage("non hai abbastanza carica");
+                    return;
+                }
 
-//             // Rimuovo l'eventuale precedente listener
-//             cell.removeEventListener("click", handleClick);
+                // Memorizza l'indice della cella selezionata
+                util.selectedCell = `c${i}`;
 
-//             cell.addEventListener("click", handleClick);
-//         });
-//     });
+                // Controlla il colore della cella tramite le classi
+                if (cell.classList.contains("red")) {
+                    util.cellColor = "red";
+                    res(true); // Risolvi la Promise
+                    return;
+                }
+
+                if (cell.classList.contains("blue")) {
+                    util.cellColor = "blue";
+                    res(true); // Risolvi la Promise
+                    return;
+                }
+            }
+        };
+
+        // Rimuovi eventuali listener precedenti e aggiungi quello nuovo
+        cells.forEach((cell) => {
+            cell.removeEventListener("click", handleClick); // Rimuovi eventuali listener precedenti
+            cell.addEventListener("click", handleClick); // Aggiungi il listener
+        });
+
+        res(true); // Risolvi la Promise al termine della funzione
+    });
+}
+
+// Usa un solo event listener e gestisci la logica dentro
+// function handleClick(e: Event) {
+//     const cell = e.currentTarget as HTMLElement;
+
+//     if (util.selectedTruppa !== "") {
+//         if (util.BatteryCharge < costoArma) {
+//             giveWarningMessage("non hai abbastanza carica");
+//             return; // Evita esecuzioni inutili
+//         }
+
+//         const cellIndex = Array.from(cells).indexOf(cell);
+//         util.selectedCell = `c${cellIndex}`;
+
+//         // Controllo del colore della cella
+//         if (cell.classList.contains("red")) {
+//             util.cellColor = "red";
+//             res(true); // Risolvi la Promise
+//             return;
+//         }
+
+//         if (cell.classList.contains("blue")) {
+//             util.cellColor = "blue";
+//             res(true); // Risolvi la Promise
+//             return;
+//         }
+//     }
 // }
 
 // async function selectCell(costoArma: number): Promise<boolean> {
@@ -327,34 +382,6 @@ function haiAbbastanzaCaricaBattery(costoArma: number) {
 //             cell.removeEventListener("click", handleClick); // Rimuovi eventuali listener duplicati
 //             cell.addEventListener("click", handleClick); // Aggiungi il nuovo listener
 //         });
-
-//         // Usa un solo event listener e gestisci la logica dentro
-//         function handleClick(e: Event) {
-//             const cell = e.currentTarget as HTMLElement;
-
-//             if (util.selectedTruppa !== "") {
-//                 if (util.BatteryCharge < costoArma) {
-//                     giveWarningMessage("non hai abbastanza carica");
-//                     return; // Evita esecuzioni inutili
-//                 }
-
-//                 const cellIndex = Array.from(cells).indexOf(cell);
-//                 util.selectedCell = `c${cellIndex}`;
-
-//                 // Controllo del colore della cella
-//                 if (cell.classList.contains("red")) {
-//                     util.cellColor = "red";
-//                     res(true); // Risolvi la Promise
-//                     return;
-//                 }
-
-//                 if (cell.classList.contains("blue")) {
-//                     util.cellColor = "blue";
-//                     res(true); // Risolvi la Promise
-//                     return;
-//                 }
-//             }
-//         }
 //     });
 // }
 
