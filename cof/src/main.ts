@@ -40,9 +40,9 @@ interface IUtil {
     secDx: number;
     id: number;
     selectedTruppa: string;
-    intervalTruppaSelez: number;
-    intervalSchieraTruppa: number;
-    intervalRicaricaBatteria: number;
+    intervalTruppaSelez: ReturnType<typeof setInterval>;
+    intervalSchieraTruppa: ReturnType<typeof setInterval>;
+    intervalRicaricaBatteria: ReturnType<typeof setInterval>;
     refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
@@ -66,9 +66,9 @@ export const util: IUtil = {
     secDx: 5,
     id: 0,
     selectedTruppa: "",
-    intervalTruppaSelez: 0,
-    intervalSchieraTruppa: 0,
-    intervalRicaricaBatteria: 0,
+    intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization
+    intervalSchieraTruppa: setInterval(() => {}, 0), // Placeholder initialization
+    intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
     refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",

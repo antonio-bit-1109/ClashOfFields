@@ -11,9 +11,5 @@
   "devDependencies": {
     "typescript": "^5.5.3",
     "vite": "^5.4.8"
-  },
-  "dependencies": {
-    "@types/get-image-colors": "^4.0.5",
-    "get-image-colors": "^4.0.1"
   }
 }
