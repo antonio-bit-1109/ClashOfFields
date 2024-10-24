@@ -27,6 +27,8 @@
 
 -   [x] implementa un meccanismo che fa capire all utente che l immagine sta fetchando e quindi deve aspettare (AWAITING)
 
+-   [] completa funzione per modificare il timer di gioco
+
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
 
 -   [] SISTEMA SELECT CELL E CONSUMA CARICA BATTERIA

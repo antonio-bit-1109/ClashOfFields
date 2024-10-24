@@ -106,6 +106,32 @@ function startBackgroundMusic() {
     sottofondoMusic.play();
     sottofondoMusic.volume = 0.0;
 }
+
+function scegliTempoDiGioco() {
+    const div = document.createElement("div");
+    div.classList.add("block", "d-flex");
+    for (let i = 0; i < 3; i++) {
+        const button = document.createElement("button");
+        button.classList.add("pointer", "btnTime");
+        if (i === 0) {
+            button.innerHTML = "00:45";
+        }
+        if (i === 1) {
+            button.innerHTML = "01:00";
+        }
+        if (i === 2) {
+            button.innerHTML = "01:30";
+        }
+        button.addEventListener("click", () => {
+            impostaNuovoTimer(button.innerText);
+        });
+        div.appendChild(button);
+    }
+    return div;
+}
+
+function impostaNuovoTimer(val: string) {}
+
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
@@ -137,6 +163,8 @@ function welcomeMessage() {
     messageBox?.appendChild(welcome);
     messageBox?.appendChild(warningMessage);
     messageBox?.appendChild(startButton);
+    const div = scegliTempoDiGioco();
+    messageBox?.appendChild(div);
 
     // abilita il bottone per cambiare sfondo
     cambiaImg.addEventListener("click", cambiaSfondo);
@@ -276,6 +304,7 @@ async function deployWeapon(
         if (!util.schiera) {
             return;
         }
+
         await functionEffettoArma("blue", "red");
         removePacmanEffect && removePacmanEffect();
         suonoImpattoArma(suonoImpatto);
