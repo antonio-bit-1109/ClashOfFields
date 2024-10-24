@@ -104,11 +104,14 @@ function startBackgroundMusic() {
     sottofondoMusic.play();
     sottofondoMusic.volume = 0.0;
 }
-
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
     const cambiaImg = document.createElement("button");
+    const GifAwaiting = document.createElement("img");
+
+    GifAwaiting.src = "../imgs/load.gif";
+    GifAwaiting.classList.add("gifDimension", "d-none");
     cambiaImg.classList.add("block");
     cambiaImg.innerHTML = "cambia sfondo";
     const logo = document.createElement("img");
@@ -128,6 +131,7 @@ function welcomeMessage() {
 
     messageBox?.appendChild(logo);
     messageBox?.appendChild(cambiaImg);
+    messageBox?.appendChild(GifAwaiting);
     messageBox?.appendChild(welcome);
     messageBox?.appendChild(warningMessage);
     messageBox?.appendChild(startButton);
@@ -142,8 +146,10 @@ function welcomeMessage() {
 
 async function cambiaSfondo() {
     let DoAgain: boolean = false;
+    const loadingDiv = document.querySelector(".gifDimension");
 
     do {
+        loadingDiv?.classList.remove("d-none");
         let parola = parolaObj.startPipeline();
         console.log(parola);
         let esito = await changeSfondoMessageBox(parola);
@@ -151,6 +157,7 @@ async function cambiaSfondo() {
         if (esito instanceof Error) {
             DoAgain = true;
         } else {
+            loadingDiv?.classList.add("d-none");
             DoAgain = false;
             util.sfondo = esito;
             cambiaImmagineDivMessaggi();

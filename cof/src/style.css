@@ -206,6 +206,10 @@ body {
     background-position: center;
 }
 
+.gifDimension {
+    width: 80px;
+}
+
 .h4Style {
     color: black;
     font-size: xx-large;
