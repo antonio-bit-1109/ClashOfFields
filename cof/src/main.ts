@@ -287,36 +287,76 @@ function haiAbbastanzaCaricaBattery(costoArma: number) {
     return true;
 }
 
-async function selectCell(costoArma: number): Promise<string> {
-    return new Promise((res) => {
-        const cells = document.querySelectorAll(".cell");
-        cells.forEach((cell, i) => {
-            const handleClick = () => {
-                if (util.selectedTruppa !== "") {
-                    util.BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
-                }
+// async function selectCell(costoArma: number): Promise<string> {
+//     return new Promise((res) => {
+//         const cells = document.querySelectorAll(".cell");
+//         cells.forEach((cell, i) => {
+//             const handleClick = () => {
+//                 if (util.selectedTruppa !== "") {
+//                     util.BatteryCharge < costoArma && giveWarningMessage("non hai abbastanza carica");
+//                 }
 
-                util.selectedCell = `c${i}`;
-                if (cell.classList.contains("red")) {
-                    util.cellColor = "red";
-                    res(util.cellColor);
-                    return;
-                }
+//                 util.selectedCell = `c${i}`;
+//                 if (cell.classList.contains("red")) {
+//                     util.cellColor = "red";
+//                     res(util.cellColor);
+//                     return;
+//                 }
 
-                if (cell.classList.contains("blue")) {
-                    util.cellColor = "blue";
-                    res(util.cellColor);
-                    return;
-                }
-            };
+//                 if (cell.classList.contains("blue")) {
+//                     util.cellColor = "blue";
+//                     res(util.cellColor);
+//                     return;
+//                 }
+//             };
 
-            // Rimuovo l'eventuale precedente listener
-            cell.removeEventListener("click", handleClick);
+//             // Rimuovo l'eventuale precedente listener
+//             cell.removeEventListener("click", handleClick);
 
-            cell.addEventListener("click", handleClick);
-        });
-    });
-}
+//             cell.addEventListener("click", handleClick);
+//         });
+//     });
+// }
+
+// async function selectCell(costoArma: number): Promise<boolean> {
+//     return new Promise((res) => {
+//         const cells = document.querySelectorAll(".cell");
+
+//         // Rimuovi eventuali listener precedenti solo una volta
+//         cells.forEach((cell) => {
+//             cell.removeEventListener("click", handleClick); // Rimuovi eventuali listener duplicati
+//             cell.addEventListener("click", handleClick); // Aggiungi il nuovo listener
+//         });
+
+//         // Usa un solo event listener e gestisci la logica dentro
+//         function handleClick(e: Event) {
+//             const cell = e.currentTarget as HTMLElement;
+
+//             if (util.selectedTruppa !== "") {
+//                 if (util.BatteryCharge < costoArma) {
+//                     giveWarningMessage("non hai abbastanza carica");
+//                     return; // Evita esecuzioni inutili
+//                 }
+
+//                 const cellIndex = Array.from(cells).indexOf(cell);
+//                 util.selectedCell = `c${cellIndex}`;
+
+//                 // Controllo del colore della cella
+//                 if (cell.classList.contains("red")) {
+//                     util.cellColor = "red";
+//                     res(true); // Risolvi la Promise
+//                     return;
+//                 }
+
+//                 if (cell.classList.contains("blue")) {
+//                     util.cellColor = "blue";
+//                     res(true); // Risolvi la Promise
+//                     return;
+//                 }
+//             }
+//         }
+//     });
+// }
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 function stopSchieraTruppa() {
