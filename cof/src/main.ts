@@ -39,8 +39,8 @@ interface IUtil {
     minDx: number;
     secSn: number;
     secDx: number;
-    id: number;
     selectedTruppa: string;
+    id: ReturnType<typeof setInterval>;
     intervalTruppaSelez: ReturnType<typeof setInterval>;
     intervalSchieraTruppa: ReturnType<typeof setInterval>;
     intervalRicaricaBatteria: ReturnType<typeof setInterval>;
@@ -66,8 +66,8 @@ export const util: IUtil = {
     minDx: 0,
     secSn: 4,
     secDx: 5,
-    id: 0,
     selectedTruppa: "",
+    id: setInterval(() => {}, 0),
     intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization
     intervalSchieraTruppa: setInterval(() => {}, 0), // Placeholder initialization
     intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
@@ -133,7 +133,27 @@ function scegliTempoDiGioco() {
     return div;
 }
 
-function impostaNuovoTimer(val: string) {}
+function impostaNuovoTimer(val: string) {
+    if (val) {
+        val === "00:45" && null;
+        val === "01:00" && impostaOneMin();
+        val === "01:30" && impostaOneMin30();
+    }
+}
+
+function impostaOneMin() {
+    util.minSn = 0;
+    util.minDx = 1;
+    util.secSn = 0;
+    util.secDx = 0;
+}
+
+function impostaOneMin30() {
+    util.minSn = 0;
+    util.minDx = 1;
+    util.secSn = 3;
+    util.secDx = 0;
+}
 
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
@@ -380,46 +400,6 @@ async function selectCell(costoArma: number): Promise<boolean> {
         res(true); // Risolvi la Promise al termine della funzione
     });
 }
-
-// Usa un solo event listener e gestisci la logica dentro
-// function handleClick(e: Event) {
-//     const cell = e.currentTarget as HTMLElement;
-
-//     if (util.selectedTruppa !== "") {
-//         if (util.BatteryCharge < costoArma) {
-//             giveWarningMessage("non hai abbastanza carica");
-//             return; // Evita esecuzioni inutili
-//         }
-
-//         const cellIndex = Array.from(cells).indexOf(cell);
-//         util.selectedCell = `c${cellIndex}`;
-
-//         // Controllo del colore della cella
-//         if (cell.classList.contains("red")) {
-//             util.cellColor = "red";
-//             res(true); // Risolvi la Promise
-//             return;
-//         }
-
-//         if (cell.classList.contains("blue")) {
-//             util.cellColor = "blue";
-//             res(true); // Risolvi la Promise
-//             return;
-//         }
-//     }
-// }
-
-// async function selectCell(costoArma: number): Promise<boolean> {
-//     return new Promise((res) => {
-//         const cells = document.querySelectorAll(".cell");
-
-//         // Rimuovi eventuali listener precedenti solo una volta
-//         cells.forEach((cell) => {
-//             cell.removeEventListener("click", handleClick); // Rimuovi eventuali listener duplicati
-//             cell.addEventListener("click", handleClick); // Aggiungi il nuovo listener
-//         });
-//     });
-// }
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 function stopSchieraTruppa() {

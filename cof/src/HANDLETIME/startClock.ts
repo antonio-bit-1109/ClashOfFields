@@ -8,13 +8,38 @@ export function startClock(timer: HTMLElement) {
     console.log("sono in start clock");
     util.id = setInterval(() => {
         // Incremento del timer di gioco (secondi e minuti)
+
+        //COMPLETA DECREMENTO LOGICA TIMER!!!!
+
+        // if (util.secDx <= 0) {
+        //     util.minSn--;
+        //     util.secSn = 5;
+        //     util.secDx = 9;
+        // }
+
+        // if (util.secDx <= 0) {
+        //     util.secSn--;
+        //     util.secDx = 9;
+        // }
+
+        // util.secSn--;
+
+        // if(util.minDx <= 0){
+
+        // }
         util.secDx--;
         if (util.secDx < 0) {
             util.secSn--;
             util.secDx = 9;
         }
 
-        if (util.secDx === 0 && util.secSn === 0) {
+        // util.secDx--;
+        // if (util.secDx < 0) {
+        //     util.secSn--;
+        //     util.secDx = 9;
+        // }
+
+        if (util.minSn === 0 && util.minDx === 0 && util.secDx === 0 && util.secSn === 0) {
             clearInterval(util.id); // Interrompe il timer una volta raggiunto il massimo
             giveMessage("tempo scaduto!");
             interrompiWatcher();
