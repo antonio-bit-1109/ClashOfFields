@@ -1,7 +1,7 @@
 import { giveWarningMessage } from "../HANDLEMESSAGES/warningMessage";
 import { util } from "../main";
 
-export function deployRaggioAzioneLaser(colorToAdd: string, colorToRemove: string): Promise<boolean> {
+export function deployRaggioAzioneLaser(): Promise<boolean> {
     return new Promise((res, rej) => {
         let isBlueCell = false;
         // controllo che la cella selezionata sia del colore del giocatore (blue)
@@ -17,9 +17,9 @@ export function deployRaggioAzioneLaser(colorToAdd: string, colorToRemove: strin
             // pulisco array ogni qual volta voglio fare il deploy di un arma - pulisco array nel quale verrà posizionato corpo arma
             // pulisco array nel quale inserisco raggio azione arma, in questo caso laser
             util.raggioAzioneArma.length = 0;
-            util.corpoArma.length = 0;
+            util.corpoArmaLaser.length = 0;
             // pusho in array corpoarma tutte quelle stringhe che mi identificano le classi del corpo dell arma.
-            util.corpoArma.push(
+            util.corpoArmaLaser.push(
                 "c" + (parseInt(util.selectedCell.slice(1)) + 0).toString(),
                 "c" + (parseInt(util.selectedCell.slice(1)) + 1).toString(),
                 "c" + (parseInt(util.selectedCell.slice(1)) - 1).toString(),
@@ -32,7 +32,7 @@ export function deployRaggioAzioneLaser(colorToAdd: string, colorToRemove: strin
             );
 
             // le celle contenenti queste classi cambiano colore e diventano il corpo dell arma laser
-            util.corpoArma.forEach((value) => {
+            util.corpoArmaLaser.forEach((value) => {
                 let cell = document.querySelector(`.${value}`);
                 cell?.classList.add("corpoLaser");
             });
@@ -51,10 +51,10 @@ function raggioAzioneLaser() {
     // le prime tre cell da cui far partire il ciclo sono le ultime tre presenti in util.corpoarma
 
     // prendo gli ultimi 3 valori dall array che corrispondono alle 3 caselle fontali del laser, da cui faccio partire un ciclo
-    console.log(util.corpoArma);
-    let cellSnClass = util.corpoArma[util.corpoArma.length - 1];
-    let cellCentrClass = util.corpoArma[util.corpoArma.length - 2];
-    let cellDxClass = util.corpoArma[util.corpoArma.length - 3];
+    console.log(util.corpoArmaLaser);
+    let cellSnClass = util.corpoArmaLaser[util.corpoArmaLaser.length - 1];
+    let cellCentrClass = util.corpoArmaLaser[util.corpoArmaLaser.length - 2];
+    let cellDxClass = util.corpoArmaLaser[util.corpoArmaLaser.length - 3];
 
     console.log(cellSnClass, cellCentrClass, cellDxClass);
 

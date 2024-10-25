@@ -17,6 +17,8 @@ import { deployRaggioAzioneLaser } from "./DEPLOYWEAPON/deployRaggioAzioneLaser"
 import { changeSfondoMessageBox } from "./FETCHES/changeSfondo";
 import { builderName } from "./BUILDERNAMES/builderName";
 import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGioco";
+import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
+import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
 
 // oggetto builder per generare parole random
 let parolaObj = new builderName();
@@ -25,6 +27,7 @@ let parolaObj = new builderName();
 const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 const laserZapSound = new Audio("../sounds/laser_zap.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
+const hammerCrush = new Audio("../sounds/crush.mp3");
 
 // export let BatteryCharge: number = 0;
 // let maxCharge: number = 6;
@@ -49,7 +52,8 @@ interface IUtil {
     selectedCell: string;
     cellColor: string;
     raggioAzioneArma: string[];
-    corpoArma: string[];
+    corpoArmaLaser: string[];
+    corpoArmaMartello: string[];
     hoMessoPausaAlmenoUnaVolta: boolean;
     redCells: number;
     blueCell: number;
@@ -76,7 +80,8 @@ export const util: IUtil = {
     selectedCell: "",
     cellColor: "",
     raggioAzioneArma: [],
-    corpoArma: [],
+    corpoArmaLaser: [],
+    corpoArmaMartello: [],
     hoMessoPausaAlmenoUnaVolta: false,
     redCells: 0,
     blueCell: 0,
@@ -257,7 +262,7 @@ function schieraTruppa() {
 
             break;
         case "Martello":
-            deployWeapon(3);
+            deployWeapon(3, hammerCrush, deployRaggioAzioneMartello);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
             break;
     }
@@ -358,35 +363,4 @@ async function selectCell(costoArma: number): Promise<boolean> {
 
         res(true); // Risolvi la Promise al termine della funzione
     });
-}
-
-// -----------------------------------------------------------------------------------------------------------------------------------------------------------
-function stopSchieraTruppa() {
-    clearInterval(util.intervalSchieraTruppa);
-    console.log("interrompi watch schiera truppa");
-}
-
-// salvo in util la stringa contenente la truppa che l'utente ha selezionato al momento
-function truppaSelezionata() {
-    // capisco quale truppa ha selezionato l'utente
-    const boxSelezionato = document.querySelector(".selected");
-    if (boxSelezionato) {
-        let h4_NomeArma = boxSelezionato.querySelector(".stileNome");
-        if (h4_NomeArma) {
-            util.selectedTruppa = h4_NomeArma.innerHTML.slice(2, -2).trim();
-            console.log(util);
-        }
-        //    let nomeWeapon = weapon?.innerHTML
-        //     util.selectedArma = nomeWeapon?.slice
-    } else {
-        giveMessage("nessuna truppa selezionata.");
-        return;
-    }
-    // se truppa seleziona è missile succederà qualcosa
-}
-
-// interrompo il looking sulla truppa selezionata.
-function stopSelezioneTruppe() {
-    console.log("non sto guardando alla truppa selezionata.");
-    clearInterval(util.intervalTruppaSelez);
 }
