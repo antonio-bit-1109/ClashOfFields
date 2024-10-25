@@ -27,16 +27,18 @@
 
 -   [x] implementa un meccanismo che fa capire all utente che l immagine sta fetchando e quindi deve aspettare (AWAITING)
 
--   [] completa funzione per modificare il timer di gioco
+-   [x] completa funzione per modificare il timer di gioco
+
+-   [xxxxxxx] SISTEMA SELECT CELL E CONSUMA CARICA BATTERIA
+
+-   [xxxxx] sistema meccanismo di sottrazione della carica della batteria, su numeri pari non funziona -- SFANCULA CON I MULTIPLI (se costo 2 e carica 4 te la leva tutta) (costo 3 carica 6 te la leva tutta)
 
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
 
--   [] SISTEMA SELECT CELL E CONSUMA CARICA BATTERIA
-
 -   [ ] implementa tutte le armi.
+
 -   [ ] Implementare un meccanismo di randomicità nelle mosse del computer (web socket ? -- server ?? )
+
 -   [] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
 -   [] sistema caso in cui sto cliccando sempre sulle celle vicino ai bordi ma anche dall altra parte del bordo le celle sono del mio colore, si rompe, riporta le celle rosse.
-
--   [] sistema meccanismo di sottrazione della carica della batteria, su numeri pari non funziona -- SFANCULA CON I MULTIPLI (se costo 2 e carica 4 te la leva tutta) (costo 3 carica 6 te la leva tutta)
