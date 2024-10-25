@@ -109,7 +109,9 @@ function startBackgroundMusic() {
 
 function scegliTempoDiGioco() {
     const div = document.createElement("div");
+
     div.classList.add("block", "d-flex");
+
     for (let i = 0; i < 3; i++) {
         const button = document.createElement("button");
         button.classList.add("pointer", "btnTime");
@@ -127,6 +129,7 @@ function scegliTempoDiGioco() {
         });
         div.appendChild(button);
     }
+
     return div;
 }
 
@@ -137,7 +140,10 @@ function welcomeMessage() {
     const startButton = document.createElement("button");
     const cambiaImg = document.createElement("button");
     const GifAwaiting = document.createElement("img");
+    const msgScegliTempo = document.createElement("p");
 
+    msgScegliTempo.classList.add("pStyle");
+    msgScegliTempo.innerHTML = `Scegli il tuo tempo di gioco, <br> Default : 00:45 `;
     GifAwaiting.src = "../imgs/load.gif";
     GifAwaiting.classList.add("gifDimension", "d-none");
     cambiaImg.classList.add("block");
@@ -164,6 +170,7 @@ function welcomeMessage() {
     messageBox?.appendChild(warningMessage);
     messageBox?.appendChild(startButton);
     const div = scegliTempoDiGioco();
+    messageBox?.appendChild(msgScegliTempo);
     messageBox?.appendChild(div);
 
     // abilita il bottone per cambiare sfondo
