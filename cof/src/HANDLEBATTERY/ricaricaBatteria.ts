@@ -29,5 +29,5 @@ export function ricaricaBatteria() {
         } else {
             clearInterval(util.intervalRicaricaBatteria);
         }
-    }, 2000);
+    }, 1000);
 }
