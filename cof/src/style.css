@@ -45,10 +45,17 @@ body {
 }
 
 .pStyle {
-    font-size: 1.5em;
+    font-size: 2em;
     font-weight: bold;
-    color: black;
+    color: red;
+}
+
+.vibrate {
     animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite both;
+}
+
+.bigger {
+    font-size: 3em;
 }
 
 .block {

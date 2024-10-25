@@ -9,13 +9,25 @@ export function startClock(timer: HTMLElement) {
     util.id = setInterval(() => {
         // Incremento del timer di gioco (secondi e minuti)
 
-        //COMPLETA DECREMENTO LOGICA TIMER!!!!
-
+        // Decrementa i decimi di secondo
         util.secDx--;
 
+        // Se i decimi di secondo sono meno di 0, decrementa i secondi
         if (util.secDx < 0) {
-            util.secSn--;
             util.secDx = 9;
+            util.secSn--;
+        }
+
+        // Se i secondi sono meno di 0, decrementa i decimi di minuto
+        if (util.secSn < 0) {
+            util.secSn = 5;
+            util.minDx--;
+        }
+
+        // Se i decimi di minuto sono meno di 0, decrementa i minuti
+        if (util.minDx < 0) {
+            util.minDx = 9;
+            util.minSn--;
         }
 
         if (util.minSn === 0 && util.minDx === 0 && util.secDx === 0 && util.secSn === 0) {

@@ -110,7 +110,7 @@ function startBackgroundMusic() {
 function scegliTempoDiGioco() {
     const div = document.createElement("div");
 
-    div.classList.add("block", "d-flex");
+    div.classList.add("block", "d-flex", "btnTimeContainer");
 
     for (let i = 0; i < 3; i++) {
         const button = document.createElement("button");
@@ -139,6 +139,8 @@ function impostaNuovoTimer(val: string) {
         val === "01:00" && impostaOneMin();
         val === "01:30" && impostaOneMin30();
     }
+    confermaSceltaTempo(val);
+    nascondiOptions();
 }
 
 function impostaOneMin() {
@@ -155,6 +157,21 @@ function impostaOneMin30() {
     util.secDx = 0;
 }
 
+function nascondiOptions() {
+    console.log("sono qui dentro ");
+    const btnTimeContainer = document.querySelector(".btnTimeContainer");
+    btnTimeContainer?.classList.add("d-none");
+}
+
+function confermaSceltaTempo(val: string) {
+    const pTime = document.querySelector(".pStyle");
+    if (pTime) {
+        pTime.innerHTML = `Hai selezionato: ${val} `;
+        pTime.classList.remove("vibrate");
+        pTime.classList.add("bigger");
+    }
+}
+
 function welcomeMessage() {
     const messageBox = document.querySelector(".messagebox");
     const startButton = document.createElement("button");
@@ -162,8 +179,8 @@ function welcomeMessage() {
     const GifAwaiting = document.createElement("img");
     const msgScegliTempo = document.createElement("p");
 
-    msgScegliTempo.classList.add("pStyle");
-    msgScegliTempo.innerHTML = `Scegli il tuo tempo di gioco, <br> Default : 00:45 `;
+    msgScegliTempo.classList.add("pStyle", "vibrate");
+    msgScegliTempo.innerHTML = `Scegli il tuo tempo di gioco, <br> ( Default : 00:45 ) `;
     GifAwaiting.src = "../imgs/load.gif";
     GifAwaiting.classList.add("gifDimension", "d-none");
     cambiaImg.classList.add("block");
@@ -232,6 +249,12 @@ function cambiaImmagineDivMessaggi() {
 
 // punto di ingresso.
 function changeStatusGame() {
+    const pTime = document.querySelector(".pStyle");
+
+    //rendi opzioni tempo invisibili a prescindere se è stata fatta una scelta o no.
+    nascondiOptions();
+    pTime?.classList.add("d-none");
+
     // avvio musica di sottofondo
     startBackgroundMusic();
 
