@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.05;
+    sottofondoMusic.volume = 0.1;
 }
 
 function welcomeMessage() {
