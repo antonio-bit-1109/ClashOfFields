@@ -134,7 +134,7 @@ function welcomeMessage() {
     startButton.classList.add("button");
     startButton.classList.add("pointer");
     startButton.id = "mainBtn";
-    startButton.innerHTML = "iniziamo!";
+    startButton.innerHTML = "Iniziamo!";
     const welcome = document.createElement("h4");
     welcome.classList.add("h4Style");
     welcome.classList.add("welcome");
