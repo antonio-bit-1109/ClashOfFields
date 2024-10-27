@@ -47,4 +47,99 @@ export async function deployRaggioAzioneMartello() {
 }
 
 // l azione del martello prevede che per cinque volte, (o raggio 5??), il martello vada colorando del mio colore tutte le caselle intorno al suo corpo.
-function raggioAzioneMartello() {}
+function raggioAzioneMartello() {
+    console.log("sono dentro raggio azione martello");
+    // creo un array che contiene le stesse celle del crpo martello ma eliminando la cella centrale.
+    const startcells = [...util.corpoArmaMartello];
+    startcells.splice(0, 1);
+    console.log(startcells, "STARTCELLS");
+
+    let cellUpSn;
+    let cellUpCentr;
+    let cellUpDx;
+    let cellMidSn;
+    let cellMidDx;
+    let cellDownSn;
+    let cellDownCentr;
+    let cellDownDx;
+
+    for (let i = 0; i < startcells.length; i++) {
+        if (i === 0) {
+            cellMidDx = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 1) {
+            cellMidSn = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 2) {
+            cellDownSn = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 3) {
+            cellDownCentr = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 4) {
+            cellDownDx = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 5) {
+            cellUpDx = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 6) {
+            cellUpCentr = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 5) {
+            cellUpDx = document.querySelector(`.${startcells[i]}`);
+        }
+        if (i === 7) {
+            cellUpSn = document.querySelector(`.${startcells[i]}`);
+        }
+    }
+
+    if (cellUpCentr && cellMidSn && cellMidDx && cellDownCentr && startcells) {
+        linearPropagation(cellUpCentr, cellMidSn, cellMidDx, cellDownCentr, startcells);
+    }
+
+    if (cellUpDx && cellUpSn && cellDownSn && cellDownDx) {
+        angularPropagation(cellUpDx, cellUpSn, cellDownSn, cellDownDx);
+    }
+}
+
+// prendo il corpo del martello e mi trovo ogni cella, eccetto  la cella centrale, da cui farò iniziare la propagazione.
+// function assignNode(className: string) {
+//     return document.querySelector(className);
+// }
+
+// funzione per descrivre la progazione lineare dell "onda d'urto" del martello
+function linearPropagation(
+    cellUpCentr: Element,
+    cellMidSn: Element,
+    cellMidDx: Element,
+    cellDownCentr: Element,
+    arrayCells: string[]
+) {
+    // AGGIUNGI AD OGNI FUNZIONE IN BOOLEAN PER INTERRROMPERE L INTERVAL (PAUSA) E FARLO RIPRENDERE A RIPRESA GIOCO
+
+    util.intervalPropagazioneLineareMartello = setInterval(() => {
+        console.log("sono dentro linear propagation");
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellUpCentr.classList.contains(className)) {
+                let value = addSomma(className);
+                document.querySelector(value)?.classList.add("blue");
+            }
+        });
+    }, 1500);
+}
+
+// funzione per descrivere la propagazione angolare dell "onda d'urto" del martello
+function angularPropagation(cellUpDx: Element, cellUpSn: Element, cellDownSn: Element, cellDownDx: Element) {
+    util.intervalPropagazioneAngolareMartello = setInterval(() => {}, 1500);
+}
+
+function addSomma(className: string) {
+    let nextCell = className.slice(1);
+    let value: number = parseInt(nextCell + 43);
+    return `c${value}`;
+}
+// export function stopPropagazioneMartello() {
+//     clearInterval(util.intervalPropagazioneLineareMartello);
+//     clearInterval(util.intervalPropagazioneAngolareMartello);
+// }

@@ -18,7 +18,7 @@ import { changeSfondoMessageBox } from "./FETCHES/changeSfondo";
 import { builderName } from "./BUILDERNAMES/builderName";
 import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGioco";
 import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
-import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
+import { deployRaggioAzioneMartello, stopPropagazioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
 
 // oggetto builder per generare parole random
 let parolaObj = new builderName();
@@ -48,6 +48,8 @@ interface IUtil {
     intervalTruppaSelez: ReturnType<typeof setInterval>;
     intervalSchieraTruppa: ReturnType<typeof setInterval>;
     intervalRicaricaBatteria: ReturnType<typeof setInterval>;
+    intervalPropagazioneLineareMartello: ReturnType<typeof setInterval>;
+    intervalPropagazioneAngolareMartello: ReturnType<typeof setInterval>;
     refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
@@ -76,6 +78,8 @@ export const util: IUtil = {
     intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization
     intervalSchieraTruppa: setInterval(() => {}, 0), // Placeholder initialization
     intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
+    intervalPropagazioneLineareMartello: setInterval(() => {}, 0),
+    intervalPropagazioneAngolareMartello: setInterval(() => {}, 0),
     refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",
@@ -110,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.1;
+    sottofondoMusic.volume = 0.0;
 }
 
 function welcomeMessage() {

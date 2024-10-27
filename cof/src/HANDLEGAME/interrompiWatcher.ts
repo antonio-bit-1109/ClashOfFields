@@ -4,5 +4,6 @@ export function interrompiWatcher() {
     clearInterval(util.intervalTruppaSelez);
     clearInterval(util.intervalSchieraTruppa);
     clearInterval(util.intervalRicaricaBatteria);
-    // clearInterval(util.intervalAvanzaLaser);
+    // clearInterval(util.intervalPropagazioneLineareMartello);
+    // clearInterval(util.intervalPropagazioneAngolareMartello);
 }
