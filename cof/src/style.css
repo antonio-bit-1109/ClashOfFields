@@ -394,3 +394,21 @@ body {
         transform: translateX(-4px);
     }
 }
+
+/* .martelloSlam {
+    animation: smash 0.5s linear infinite both;
+}
+
+@keyframes smash {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 3;
+    }
+
+    100% {
+        scale: 1;
+    }
+} */

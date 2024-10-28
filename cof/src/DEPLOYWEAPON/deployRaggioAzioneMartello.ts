@@ -36,6 +36,8 @@ export async function deployRaggioAzioneMartello() {
             util.corpoArmaMartello.forEach((value) => {
                 let cell = document.querySelector(`.${value}`);
                 cell?.classList.add("corpoMartello");
+                cell?.classList.add("blue");
+                cell?.classList.remove("red");
             });
 
             // adesso in maniera ciclica devo andare a prendere le caselle intorno al corpo e cambiarle tutte di colore, finche non raggiungo il raggio desiderato.
@@ -115,63 +117,126 @@ function linearPropagation(
     cellDownCentr: Element,
     arrayCells: string[]
 ) {
-    // AGGIUNGI AD OGNI FUNZIONE IN BOOLEAN PER INTERRROMPERE L INTERVAL (PAUSA) E FARLO RIPRENDERE A RIPRESA GIOCO
-
     util.intervalPropagazioneLineareMartello = setInterval(() => {
         console.log("sono dentro linear propagation");
 
-        let linearInterval: ReturnType<typeof setInterval>;
+        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta.
+        let linearIntervalUpCentr: ReturnType<typeof setInterval>;
+        let linearIntervalMidSn: ReturnType<typeof setInterval>;
+        let linearIntervalMidDx: ReturnType<typeof setInterval>;
+        let linearIntervalDownCntr: ReturnType<typeof setInterval>;
         let raggio: number = 0;
+
         arrayCells.forEach((className) => {
             console.log(className);
             if (cellUpCentr.classList.contains(className)) {
                 let value = findNext(className, -43);
 
-                linearInterval = setInterval(() => {
-                    if (raggio !== 4) {
+                linearIntervalUpCentr = setInterval(() => {
+                    // se il gioco è in pausa ritorna. blocca temporaneamente la propagazione del martello.
+                    if (!util.isGameStarted) {
+                        return;
+                    }
+
+                    if (raggio < 4) {
                         let nextCell = document.querySelector(value);
-                        if (!nextCell?.classList.contains("b")) {
-                            nextCell && nextCell.classList.add("blue");
-                            //value = findNext(className, -43);
-                            let next = value.slice(2);
-                            let nextValue = parseInt(next) - 43;
-                            value = `.c${nextValue}`;
-                            raggio++;
+                        if (nextCell) {
+                            let val = propagate(nextCell, value, -43);
+                            value = val;
+                        } else {
+                            console.error("nextCell è nullo o undefined");
                         }
                     } else {
-                        clearInterval(linearInterval);
+                        clearInterval(linearIntervalUpCentr);
+                    }
+                }, 800);
+            }
+        });
+
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellMidSn.classList.contains(className)) {
+                let value = findNext(className, -1);
+
+                linearIntervalMidSn = setInterval(() => {
+                    // se il gioco è in pausa ritorna.
+                    if (!util.isGameStarted) {
+                        return;
+                    }
+
+                    if (raggio < 4) {
+                        let nextCell = document.querySelector(value);
+                        if (nextCell) {
+                            let val = propagate(nextCell, value, -1);
+                            value = val;
+                        } else {
+                            console.error("nextCell è nullo o undefined");
+                        }
+                    } else {
+                        clearInterval(linearIntervalMidSn);
+                    }
+                }, 800);
+            }
+        });
+
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellMidDx.classList.contains(className)) {
+                let value = findNext(className, +1);
+
+                linearIntervalMidDx = setInterval(() => {
+                    // se il gioco è in pausa ritorna.
+                    if (!util.isGameStarted) {
+                        return;
+                    }
+
+                    if (raggio < 4) {
+                        let nextCell = document.querySelector(value);
+                        if (!nextCell?.classList.contains("b")) {
+                            if (nextCell) {
+                                let val = propagate(nextCell, value, +1);
+                                value = val;
+                            } else {
+                                console.error("nextCell è nullo o undefined");
+                            }
+                        }
+                    } else {
+                        clearInterval(linearIntervalMidDx);
                     }
                 }, 800);
             }
         });
         arrayCells.forEach((className) => {
             console.log(className);
-            if (cellMidSn.classList.contains(className)) {
-                let value = findNext(className, -1);
-                let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) {
-                    nextCell && nextCell.classList.add("blue");
-                }
-            }
-        });
-        arrayCells.forEach((className) => {
-            console.log(className);
-            if (cellMidDx.classList.contains(className)) {
-                let value = findNext(className, +1);
-                let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) {
-                    nextCell && nextCell.classList.add("blue");
-                }
-            }
-        });
-        arrayCells.forEach((className) => {
-            console.log(className);
             if (cellDownCentr.classList.contains(className)) {
                 let value = findNext(className, +43);
-                let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) {
-                    nextCell && nextCell.classList.add("blue");
-                }
+
+                linearIntervalDownCntr = setInterval(() => {
+                    // se il gioco è in pausa ritorna.
+                    if (!util.isGameStarted) {
+                        return;
+                    }
+
+                    if (raggio < 4) {
+                        let nextCell = document.querySelector(value);
+                        if (!nextCell?.classList.contains("b")) {
+                            if (nextCell) {
+                                let val = propagate(nextCell, value, +43);
+                                value = val;
+                            } else {
+                                console.error("nextCell è nullo o undefined");
+                            }
+
+                            // nextCell && nextCell.classList.add("blue");
+                            // let next = value.slice(2);
+                            // let nextValue = parseInt(next) + 43;
+                            // value = `.c${nextValue}`;
+                        }
+                    } else {
+                        clearInterval(linearIntervalDownCntr);
+                    }
+                    raggio++;
+                }, 800);
             }
         });
     }, 1500);
@@ -193,3 +258,12 @@ function findNext(className: string, modificator: number) {
 //     clearInterval(util.intervalPropagazioneLineareMartello);
 //     clearInterval(util.intervalPropagazioneAngolareMartello);
 // }
+
+// funzione che prende in input elemento dom della cella e gli aggiunge la classe blue
+function propagate(nextCell: Element, value: string, modificator: number) {
+    nextCell && nextCell.classList.add("blue");
+    nextCell && nextCell.classList.remove("red");
+    let next = value.slice(2);
+    let nextValue = parseInt(next) + modificator;
+    return (value = `.c${nextValue}`);
+}
