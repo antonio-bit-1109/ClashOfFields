@@ -33,7 +33,7 @@
 
 -   [xxxxx] sistema meccanismo di sottrazione della carica della batteria, su numeri pari non funziona -- SFANCULA CON I MULTIPLI (se costo 2 e carica 4 te la leva tutta) (costo 3 carica 6 te la leva tutta)
 
--   [] linear propagation è rotta, fix
+-   [x] linear propagation è rotta, fix
 
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
 

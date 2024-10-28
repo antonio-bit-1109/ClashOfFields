@@ -266,12 +266,6 @@ function schieraTruppa() {
         case "Laser":
             deployWeapon(2, laserZapSound, deployRaggioAzioneLaser);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
-
-            //     break;
-            // case "Soldato":
-            //     deployWeapon(4);
-            //     giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
-
             break;
         case "Martello":
             deployWeapon(3, hammerCrush, deployRaggioAzioneMartello);
