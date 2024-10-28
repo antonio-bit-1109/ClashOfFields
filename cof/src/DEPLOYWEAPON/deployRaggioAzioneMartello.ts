@@ -125,13 +125,14 @@ function linearPropagation(
             if (cellUpCentr.classList.contains(className)) {
                 let value = findNext(className, -43);
                 let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
-                let sliceValue = value.slice(2);
-                let next = parseInt(sliceValue) - 43;
-                let formattedNext = `.c${next}`;
-                value = formattedNext;
-                //nextCell = document.querySelector(`.c${}`)
-                // value = `.c${parseInt(nextValue) - 43}`;
+                if (!nextCell?.classList.contains("b")) {
+                    nextCell && nextCell.classList.add("blue");
+                }
+
+                // let sliceValue = value.slice(2);
+                // let next = parseInt(sliceValue) - 43;
+                // let formattedNext = `.c${next}`;
+                // value = formattedNext;
             }
         });
         arrayCells.forEach((className) => {
@@ -139,7 +140,9 @@ function linearPropagation(
             if (cellMidSn.classList.contains(className)) {
                 let value = findNext(className, -1);
                 let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+                if (!nextCell?.classList.contains("b")) {
+                    nextCell && nextCell.classList.add("blue");
+                }
             }
         });
         arrayCells.forEach((className) => {
@@ -147,7 +150,9 @@ function linearPropagation(
             if (cellMidDx.classList.contains(className)) {
                 let value = findNext(className, +1);
                 let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+                if (!nextCell?.classList.contains("b")) {
+                    nextCell && nextCell.classList.add("blue");
+                }
             }
         });
         arrayCells.forEach((className) => {
@@ -155,7 +160,9 @@ function linearPropagation(
             if (cellDownCentr.classList.contains(className)) {
                 let value = findNext(className, +43);
                 let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+                if (!nextCell?.classList.contains("b")) {
+                    nextCell && nextCell.classList.add("blue");
+                }
             }
         });
     }, 1500);
