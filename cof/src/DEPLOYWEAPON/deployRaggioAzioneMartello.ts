@@ -120,19 +120,16 @@ function linearPropagation(
     util.intervalPropagazioneLineareMartello = setInterval(() => {
         console.log("sono dentro linear propagation");
 
-        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta.
-        let linearIntervalUpCentr: ReturnType<typeof setInterval>;
-        let linearIntervalMidSn: ReturnType<typeof setInterval>;
-        let linearIntervalMidDx: ReturnType<typeof setInterval>;
-        let linearIntervalDownCntr: ReturnType<typeof setInterval>;
+        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta. (interval raggio lineare in oggetto util)
         let raggio: number = 0;
 
+        // per ognuna delle celle da cui faccio partire la propagazione lineare, trovo la cella successiva e la coloro blue, fino a raggiungere raggio = 4
         arrayCells.forEach((className) => {
             console.log(className);
             if (cellUpCentr.classList.contains(className)) {
                 let value = findNext(className, -43);
 
-                linearIntervalUpCentr = setInterval(() => {
+                util.linearIntervalUpCentr = setInterval(() => {
                     // se il gioco è in pausa ritorna. blocca temporaneamente la propagazione del martello.
                     if (!util.isGameStarted) {
                         return;
@@ -147,7 +144,7 @@ function linearPropagation(
                             console.error("nextCell è nullo o undefined");
                         }
                     } else {
-                        clearInterval(linearIntervalUpCentr);
+                        clearInterval(util.linearIntervalUpCentr);
                     }
                 }, 800);
             }
@@ -158,7 +155,7 @@ function linearPropagation(
             if (cellMidSn.classList.contains(className)) {
                 let value = findNext(className, -1);
 
-                linearIntervalMidSn = setInterval(() => {
+                util.linearIntervalMidSn = setInterval(() => {
                     // se il gioco è in pausa ritorna.
                     if (!util.isGameStarted) {
                         return;
@@ -173,7 +170,7 @@ function linearPropagation(
                             console.error("nextCell è nullo o undefined");
                         }
                     } else {
-                        clearInterval(linearIntervalMidSn);
+                        clearInterval(util.linearIntervalMidSn);
                     }
                 }, 800);
             }
@@ -184,7 +181,7 @@ function linearPropagation(
             if (cellMidDx.classList.contains(className)) {
                 let value = findNext(className, +1);
 
-                linearIntervalMidDx = setInterval(() => {
+                util.linearIntervalMidDx = setInterval(() => {
                     // se il gioco è in pausa ritorna.
                     if (!util.isGameStarted) {
                         return;
@@ -201,17 +198,18 @@ function linearPropagation(
                             }
                         }
                     } else {
-                        clearInterval(linearIntervalMidDx);
+                        clearInterval(util.linearIntervalMidDx);
                     }
                 }, 800);
             }
         });
+
         arrayCells.forEach((className) => {
             console.log(className);
             if (cellDownCentr.classList.contains(className)) {
                 let value = findNext(className, +43);
 
-                linearIntervalDownCntr = setInterval(() => {
+                util.linearIntervalDownCntr = setInterval(() => {
                     // se il gioco è in pausa ritorna.
                     if (!util.isGameStarted) {
                         return;
@@ -226,14 +224,9 @@ function linearPropagation(
                             } else {
                                 console.error("nextCell è nullo o undefined");
                             }
-
-                            // nextCell && nextCell.classList.add("blue");
-                            // let next = value.slice(2);
-                            // let nextValue = parseInt(next) + 43;
-                            // value = `.c${nextValue}`;
                         }
                     } else {
-                        clearInterval(linearIntervalDownCntr);
+                        clearInterval(util.linearIntervalDownCntr);
                     }
                     raggio++;
                 }, 800);
@@ -253,11 +246,6 @@ function findNext(className: string, modificator: number) {
     console.log(value);
     return `.c${value}`;
 }
-
-// export function stopPropagazioneMartello() {
-//     clearInterval(util.intervalPropagazioneLineareMartello);
-//     clearInterval(util.intervalPropagazioneAngolareMartello);
-// }
 
 // funzione che prende in input elemento dom della cella e gli aggiunge la classe blue
 function propagate(nextCell: Element, value: string, modificator: number) {

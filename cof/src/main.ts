@@ -50,6 +50,10 @@ interface IUtil {
     intervalRicaricaBatteria: ReturnType<typeof setInterval>;
     intervalPropagazioneLineareMartello: ReturnType<typeof setInterval>;
     intervalPropagazioneAngolareMartello: ReturnType<typeof setInterval>;
+    linearIntervalUpCentr: ReturnType<typeof setInterval>;
+    linearIntervalMidSn: ReturnType<typeof setInterval>;
+    linearIntervalMidDx: ReturnType<typeof setInterval>;
+    linearIntervalDownCntr: ReturnType<typeof setInterval>;
     refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
@@ -80,6 +84,10 @@ export const util: IUtil = {
     intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
     intervalPropagazioneLineareMartello: setInterval(() => {}, 0),
     intervalPropagazioneAngolareMartello: setInterval(() => {}, 0),
+    linearIntervalUpCentr: setInterval(() => {}, 0),
+    linearIntervalMidSn: setInterval(() => {}, 0),
+    linearIntervalMidDx: setInterval(() => {}, 0),
+    linearIntervalDownCntr: setInterval(() => {}, 0),
     refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",
