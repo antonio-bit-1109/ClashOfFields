@@ -49,9 +49,9 @@ export function createGriglia(main: HTMLElement) {
         }
 
         // CASELLA PER TEST
-        if (i === 666) {
-            cell.classList.add("blue");
-        }
+        // if (i === 666) {
+        //     cell.classList.add("blue");
+        // }
 
         cellContainer.appendChild(cell);
     }

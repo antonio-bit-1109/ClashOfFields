@@ -9,7 +9,7 @@ export function createAside(main: HTMLElement) {
 // crea i 4 boxes che conterranno le 4 armi disponibili
 function createBoxes(aside: HTMLElement) {
     let box: any;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
         box = document.createElement("div");
         box.classList.add("styleAsideBox");
 
@@ -51,11 +51,6 @@ function showWeaponsInAside(box: HTMLElement, i: number) {
             weaponCost(vetrina, 2);
             break;
         case 2:
-            nome.innerHTML = `⚔ Soldato ⚔`;
-            createWepon(vetrina, "./imgs/solder.png");
-            weaponCost(vetrina, 4);
-            break;
-        case 3:
             nome.innerHTML = `🔨 Martello 🔨`;
             createWepon(vetrina, "./imgs/martello.webp");
             weaponCost(vetrina, 3);

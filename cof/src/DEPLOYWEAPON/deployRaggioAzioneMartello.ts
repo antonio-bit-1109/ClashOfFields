@@ -50,11 +50,9 @@ export async function deployRaggioAzioneMartello() {
 
 // l azione del martello prevede che per cinque volte, (o raggio 5??), il martello vada colorando del mio colore tutte le caselle intorno al suo corpo.
 function raggioAzioneMartello() {
-    console.log("sono dentro raggio azione martello");
     // creo un array che contiene le stesse celle del crpo martello ma eliminando la cella centrale.
     const startcells = [...util.corpoArmaMartello];
     startcells.splice(0, 1);
-    console.log(startcells, "STARTCELLS");
 
     let cellUpSn;
     let cellUpCentr;
@@ -117,143 +115,196 @@ function linearPropagation(
     cellDownCentr: Element,
     arrayCells: string[]
 ) {
-    util.intervalPropagazioneLineareMartello = setInterval(() => {
-        console.log("sono dentro linear propagation");
+    // AGGIUNGI AD OGNI FUNZIONE IN BOOLEAN PER INTERRROMPERE L INTERVAL (PAUSA) E FARLO RIPRENDERE A RIPRESA GIOCO
+    let raggioUpCentr: number = 0;
+    let raggioMidSn: number = 0;
+    let raggioMidDx: number = 0;
+    let raggioDownCentr: number = 0;
 
-        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta.
-        // let linearIntervalUpCentr: ReturnType<typeof setInterval>;
-        // let linearIntervalMidSn: ReturnType<typeof setInterval>;
-        // let linearIntervalMidDx: ReturnType<typeof setInterval>;
-        // let linearIntervalDownCntr: ReturnType<typeof setInterval>;
-        let raggio: number = 0;
+    // util.intervalPropagazioneLineareMartello = setInterval(() => {
 
-        // per ognuna delle celle da cui faccio partire la propagazione lineare, trovo la cella successiva e la coloro blue, fino a raggiungere raggio = 4
-        arrayCells.forEach((className) => {
-            console.log(className);
-            if (cellUpCentr.classList.contains(className)) {
-                let value = findNext(className, -43);
+    // let linearInterval: ReturnType<typeof setInterval>;
 
-                util.linearIntervalUpCentr = setInterval(() => {
-                    // se il gioco è in pausa ritorna. blocca temporaneamente la propagazione del martello.
-                    if (!util.isGameStarted) {
-                        return;
-                    }
+    arrayCells.forEach((className) => {
+        if (cellUpCentr.classList.contains(className)) {
+            let value = findNext(className, -43);
 
-                    if (raggio < 4) {
-                        let nextCell = document.querySelector(value);
+            util.linearIntervalUpCentr = setInterval(() => {
+                if (!util.isGameStarted) {
+                    return;
+                }
+
+                if (raggioUpCentr < 4) {
+                    let nextCell = document.querySelector(value);
+                    if (!nextCell?.classList.contains("b")) {
                         if (nextCell) {
-                            nextCell && nextCell.classList.add("blue");
-                            nextCell && nextCell.classList.remove("red");
-                            let next = value.slice(2);
-                            let nextValue = parseInt(next) - 43;
-                            value = `.c${nextValue}`;
-                        } else {
-                            console.error("nextCell è nullo o undefined");
+                            let val = propagate(nextCell, value, -43);
+                            value = val;
+                            raggioUpCentr++;
                         }
-                    } else {
-                        clearInterval(util.linearIntervalUpCentr);
                     }
-                }, 800);
-            }
-        });
+                } else {
+                    clearInterval(util.linearIntervalUpCentr);
+                }
+            }, 800);
+        }
+    });
 
-        arrayCells.forEach((className) => {
-            console.log(className);
-            if (cellMidSn.classList.contains(className)) {
-                let value = findNext(className, -1);
+    arrayCells.forEach((className) => {
+        if (cellMidSn.classList.contains(className)) {
+            let value = findNext(className, -1);
 
-                util.linearIntervalMidSn = setInterval(() => {
-                    // se il gioco è in pausa ritorna.
-                    if (!util.isGameStarted) {
-                        return;
-                    }
+            util.linearIntervalMidSn = setInterval(() => {
+                if (!util.isGameStarted) {
+                    return;
+                }
 
-                    if (raggio < 4) {
-                        let nextCell = document.querySelector(value);
+                if (raggioMidSn < 4) {
+                    let nextCell = document.querySelector(value);
+                    if (!nextCell?.classList.contains("b")) {
                         if (nextCell) {
-                            nextCell && nextCell.classList.add("blue");
-                            nextCell && nextCell.classList.remove("red");
-                            let next = value.slice(2);
-                            let nextValue = parseInt(next) - 1;
-                            value = `.c${nextValue}`;
-                        } else {
-                            console.error("nextCell è nullo o undefined");
+                            let val = propagate(nextCell, value, -1);
+                            value = val;
+                            raggioMidSn++;
                         }
-                    } else {
-                        clearInterval(util.linearIntervalMidSn);
                     }
-                }, 800);
-            }
-        });
+                } else {
+                    clearInterval(util.linearIntervalMidSn);
+                }
+            }, 800);
+        }
+    });
 
-        arrayCells.forEach((className) => {
-            console.log(className);
-            if (cellMidDx.classList.contains(className)) {
-                let value = findNext(className, +1);
+    arrayCells.forEach((className) => {
+        if (cellMidDx.classList.contains(className)) {
+            let value = findNext(className, +1);
 
-                util.linearIntervalMidDx = setInterval(() => {
-                    // se il gioco è in pausa ritorna.
-                    if (!util.isGameStarted) {
-                        return;
-                    }
+            util.linearIntervalMidDx = setInterval(() => {
+                if (!util.isGameStarted) {
+                    return;
+                }
 
-                    if (raggio < 4) {
-                        let nextCell = document.querySelector(value);
-                        if (!nextCell?.classList.contains("b")) {
-                            if (nextCell) {
-                                nextCell && nextCell.classList.add("blue");
-                                nextCell && nextCell.classList.remove("red");
-                                let next = value.slice(2);
-                                let nextValue = parseInt(next) + 1;
-                                value = `.c${nextValue}`;
-                            } else {
-                                console.error("nextCell è nullo o undefined");
-                            }
+                if (raggioMidDx < 4) {
+                    let nextCell = document.querySelector(value);
+                    if (!nextCell?.classList.contains("b")) {
+                        if (nextCell) {
+                            let val = propagate(nextCell, value, +1);
+                            value = val;
+                            raggioMidDx++;
                         }
-                    } else {
-                        clearInterval(util.linearIntervalMidDx);
                     }
-                }, 800);
-            }
-        });
+                } else {
+                    clearInterval(util.linearIntervalMidDx);
+                }
+            }, 800);
+        }
+    });
 
-        arrayCells.forEach((className) => {
-            console.log(className);
-            if (cellDownCentr.classList.contains(className)) {
-                let value = findNext(className, +43);
+    arrayCells.forEach((className) => {
+        if (cellDownCentr.classList.contains(className)) {
+            let value = findNext(className, +43);
 
-                util.linearIntervalDownCntr = setInterval(() => {
-                    // se il gioco è in pausa ritorna.
-                    if (!util.isGameStarted) {
-                        return;
-                    }
+            util.linearIntervalDownCntr = setInterval(() => {
+                if (!util.isGameStarted) {
+                    return;
+                }
 
-                    if (raggio < 4) {
-                        let nextCell = document.querySelector(value);
-                        if (!nextCell?.classList.contains("b")) {
-                            if (nextCell) {
-                                nextCell && nextCell.classList.add("blue");
-                                nextCell && nextCell.classList.remove("red");
-                                let next = value.slice(2);
-                                let nextValue = parseInt(next) + 43;
-                                value = `.c${nextValue}`;
-                            } else {
-                                console.error("nextCell è nullo o undefined");
-                            }
+                if (raggioDownCentr < 4) {
+                    let nextCell = document.querySelector(value);
+                    if (!nextCell?.classList.contains("b")) {
+                        if (nextCell) {
+                            let val = propagate(nextCell, value, +43);
+                            value = val;
+                            raggioDownCentr++;
                         }
-                    } else {
-                        clearInterval(util.linearIntervalDownCntr);
                     }
-                    raggio++;
-                }, 800);
-            }
-        });
-    }, 1500);
+                } else {
+                    clearInterval(util.linearIntervalDownCntr);
+                }
+            }, 800);
+        }
+    });
 }
 
 // funzione per descrivere la propagazione angolare dell "onda d'urto" del martello
 function angularPropagation(cellUpDx: Element, cellUpSn: Element, cellDownSn: Element, cellDownDx: Element) {
-    util.intervalPropagazioneAngolareMartello = setInterval(() => {}, 1500);
+    let critClass0 = retriveCriticalClass(cellUpDx);
+    if (critClass0) {
+        goUp(critClass0);
+        goDx(critClass0);
+        goUpRigth(critClass0);
+    }
+
+    let critClass1 = retriveCriticalClass(cellUpSn);
+    if (critClass1) {
+        goUp(critClass1);
+        goSn(critClass1);
+        goUpLeft(critClass1);
+    }
+
+    let critClass2 = retriveCriticalClass(cellDownSn);
+    if (critClass2) {
+        goDown(critClass2);
+        goSn(critClass2);
+        goDownLeft(critClass2);
+    }
+
+    let critClass3 = retriveCriticalClass(cellDownDx);
+    if (critClass3) {
+        goDown(critClass3);
+        goDx(critClass3);
+        goDownRigth(critClass3);
+    }
+}
+
+function retriveCriticalClass(cell: Element) {
+    let classiCellUpDx = Array.from(cell.classList);
+    let criticalClass;
+    for (let i = 0; i < classiCellUpDx.length; i++) {
+        const myClass = classiCellUpDx[i];
+        console.log(myClass);
+        if (myClass[0] === "c" && !isNaN(Number(myClass[1]))) {
+            criticalClass = myClass;
+            console.log("QUESTA è GIUSTA!!", criticalClass);
+            break;
+        } else {
+            console.error("not this one");
+        }
+    }
+    return criticalClass;
+}
+
+function goUp(className: string) {
+    let value = findNext(className, -43);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goDown(className: string) {
+    let value = findNext(className, +43);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goDx(className: string) {
+    let value = findNext(className, +1);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goSn(className: string) {
+    let value = findNext(className, -1);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goUpRigth(className: string) {
+    let value = findNext(className, -42);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goUpLeft(className: string) {
+    let value = findNext(className, -44);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goDownRigth(className: string) {
+    let value = findNext(className, +44);
+    document.querySelector(value)?.classList.add("blue");
+}
+function goDownLeft(className: string) {
+    let value = findNext(className, +42);
+    document.querySelector(value)?.classList.add("blue");
 }
 
 function findNext(className: string, modificator: number) {
@@ -264,10 +315,12 @@ function findNext(className: string, modificator: number) {
 }
 
 // funzione che prende in input elemento dom della cella e gli aggiunge la classe blue
-// function propagate(nextCell: Element, value: string, modificator: number) {
-//     nextCell && nextCell.classList.add("blue");
-//     nextCell && nextCell.classList.remove("red");
-//     let next = value.slice(2);
-//     let nextValue = parseInt(next) + modificator;
-//     return (value = `.c${nextValue}`);
-// }
+function propagate(nextCell: Element, value: string, modificator: number) {
+    nextCell && nextCell.classList.add("blue");
+    nextCell && nextCell.classList.remove("red");
+    //value = findNext(className, -43);
+    let next = value.slice(2);
+    let nextValue = parseInt(next) + modificator;
+    return (value = `.c${nextValue}`);
+    // raggio++;
+}

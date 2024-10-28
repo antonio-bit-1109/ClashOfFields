@@ -48,8 +48,8 @@ interface IUtil {
     intervalTruppaSelez: ReturnType<typeof setInterval>;
     intervalSchieraTruppa: ReturnType<typeof setInterval>;
     intervalRicaricaBatteria: ReturnType<typeof setInterval>;
-    intervalPropagazioneLineareMartello: ReturnType<typeof setInterval>;
-    intervalPropagazioneAngolareMartello: ReturnType<typeof setInterval>;
+    // intervalPropagazioneLineareMartello: ReturnType<typeof setInterval>;
+    // intervalPropagazioneAngolareMartello: ReturnType<typeof setInterval>;
     linearIntervalUpCentr: ReturnType<typeof setInterval>;
     linearIntervalMidSn: ReturnType<typeof setInterval>;
     linearIntervalMidDx: ReturnType<typeof setInterval>;
@@ -73,17 +73,17 @@ export const util: IUtil = {
     isGameStarted: false,
     primoAvvio: true,
     puntoCaricamentoBatteria: 0,
-    minSn: 90,
-    minDx: 90,
-    secSn: 94,
-    secDx: 95,
+    minSn: 0,
+    minDx: 0,
+    secSn: 4,
+    secDx: 5,
     selectedTruppa: "",
     id: setInterval(() => {}, 0),
     intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization
     intervalSchieraTruppa: setInterval(() => {}, 0), // Placeholder initialization
     intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
-    intervalPropagazioneLineareMartello: setInterval(() => {}, 0),
-    intervalPropagazioneAngolareMartello: setInterval(() => {}, 0),
+    // intervalPropagazioneLineareMartello: setInterval(() => {}, 0),
+    // intervalPropagazioneAngolareMartello: setInterval(() => {}, 0),
     linearIntervalUpCentr: setInterval(() => {}, 0),
     linearIntervalMidSn: setInterval(() => {}, 0),
     linearIntervalMidDx: setInterval(() => {}, 0),
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.0;
+    sottofondoMusic.volume = 0.1;
 }
 
 function welcomeMessage() {
@@ -267,10 +267,10 @@ function schieraTruppa() {
             deployWeapon(2, laserZapSound, deployRaggioAzioneLaser);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
 
-            break;
-        case "Soldato":
-            deployWeapon(4);
-            giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
+            //     break;
+            // case "Soldato":
+            //     deployWeapon(4);
+            //     giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
 
             break;
         case "Martello":

@@ -5,7 +5,7 @@ export function interrompiWatcher() {
     clearInterval(util.intervalSchieraTruppa);
     clearInterval(util.intervalRicaricaBatteria);
     // ---- interruzione intervalli di propagazione lineare del martello -----
-    clearInterval(util.intervalPropagazioneLineareMartello);
+    // clearInterval(util.intervalPropagazioneLineareMartello);
     clearInterval(util.linearIntervalUpCentr);
     clearInterval(util.linearIntervalMidSn);
     clearInterval(util.linearIntervalMidDx);
