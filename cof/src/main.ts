@@ -18,7 +18,7 @@ import { changeSfondoMessageBox } from "./FETCHES/changeSfondo";
 import { builderName } from "./BUILDERNAMES/builderName";
 import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGioco";
 import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
-import { deployRaggioAzioneMartello, stopPropagazioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
+import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
 
 // oggetto builder per generare parole random
 let parolaObj = new builderName();
@@ -73,10 +73,10 @@ export const util: IUtil = {
     isGameStarted: false,
     primoAvvio: true,
     puntoCaricamentoBatteria: 0,
-    minSn: 0,
-    minDx: 0,
-    secSn: 4,
-    secDx: 5,
+    minSn: 90,
+    minDx: 90,
+    secSn: 94,
+    secDx: 95,
     selectedTruppa: "",
     id: setInterval(() => {}, 0),
     intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization

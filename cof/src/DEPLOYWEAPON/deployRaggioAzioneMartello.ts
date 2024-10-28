@@ -120,7 +120,11 @@ function linearPropagation(
     util.intervalPropagazioneLineareMartello = setInterval(() => {
         console.log("sono dentro linear propagation");
 
-        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta. (interval raggio lineare in oggetto util)
+        // impongo un intervallo per ogni direzione di propagazione lineare e lo interrompo quando la condizione di raggio = 4 è soddisfatta.
+        // let linearIntervalUpCentr: ReturnType<typeof setInterval>;
+        // let linearIntervalMidSn: ReturnType<typeof setInterval>;
+        // let linearIntervalMidDx: ReturnType<typeof setInterval>;
+        // let linearIntervalDownCntr: ReturnType<typeof setInterval>;
         let raggio: number = 0;
 
         // per ognuna delle celle da cui faccio partire la propagazione lineare, trovo la cella successiva e la coloro blue, fino a raggiungere raggio = 4
@@ -138,8 +142,11 @@ function linearPropagation(
                     if (raggio < 4) {
                         let nextCell = document.querySelector(value);
                         if (nextCell) {
-                            let val = propagate(nextCell, value, -43);
-                            value = val;
+                            nextCell && nextCell.classList.add("blue");
+                            nextCell && nextCell.classList.remove("red");
+                            let next = value.slice(2);
+                            let nextValue = parseInt(next) - 43;
+                            value = `.c${nextValue}`;
                         } else {
                             console.error("nextCell è nullo o undefined");
                         }
@@ -164,8 +171,11 @@ function linearPropagation(
                     if (raggio < 4) {
                         let nextCell = document.querySelector(value);
                         if (nextCell) {
-                            let val = propagate(nextCell, value, -1);
-                            value = val;
+                            nextCell && nextCell.classList.add("blue");
+                            nextCell && nextCell.classList.remove("red");
+                            let next = value.slice(2);
+                            let nextValue = parseInt(next) - 1;
+                            value = `.c${nextValue}`;
                         } else {
                             console.error("nextCell è nullo o undefined");
                         }
@@ -191,8 +201,11 @@ function linearPropagation(
                         let nextCell = document.querySelector(value);
                         if (!nextCell?.classList.contains("b")) {
                             if (nextCell) {
-                                let val = propagate(nextCell, value, +1);
-                                value = val;
+                                nextCell && nextCell.classList.add("blue");
+                                nextCell && nextCell.classList.remove("red");
+                                let next = value.slice(2);
+                                let nextValue = parseInt(next) + 1;
+                                value = `.c${nextValue}`;
                             } else {
                                 console.error("nextCell è nullo o undefined");
                             }
@@ -219,8 +232,11 @@ function linearPropagation(
                         let nextCell = document.querySelector(value);
                         if (!nextCell?.classList.contains("b")) {
                             if (nextCell) {
-                                let val = propagate(nextCell, value, +43);
-                                value = val;
+                                nextCell && nextCell.classList.add("blue");
+                                nextCell && nextCell.classList.remove("red");
+                                let next = value.slice(2);
+                                let nextValue = parseInt(next) + 43;
+                                value = `.c${nextValue}`;
                             } else {
                                 console.error("nextCell è nullo o undefined");
                             }
@@ -248,10 +264,10 @@ function findNext(className: string, modificator: number) {
 }
 
 // funzione che prende in input elemento dom della cella e gli aggiunge la classe blue
-function propagate(nextCell: Element, value: string, modificator: number) {
-    nextCell && nextCell.classList.add("blue");
-    nextCell && nextCell.classList.remove("red");
-    let next = value.slice(2);
-    let nextValue = parseInt(next) + modificator;
-    return (value = `.c${nextValue}`);
-}
+// function propagate(nextCell: Element, value: string, modificator: number) {
+//     nextCell && nextCell.classList.add("blue");
+//     nextCell && nextCell.classList.remove("red");
+//     let next = value.slice(2);
+//     let nextValue = parseInt(next) + modificator;
+//     return (value = `.c${nextValue}`);
+// }
