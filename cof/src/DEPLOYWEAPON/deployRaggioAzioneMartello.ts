@@ -124,10 +124,16 @@ function linearPropagation(
             console.log(className);
             if (cellUpCentr.classList.contains(className)) {
                 let value = findNext(className, -43);
-                let nextCell = document.querySelector(value);
-                if (!nextCell?.classList.contains("b")) {
-                    nextCell && nextCell.classList.add("blue");
-                }
+                setInterval(() => {
+                    let nextCell = document.querySelector(value);
+                    if (!nextCell?.classList.contains("b")) {
+                        nextCell && nextCell.classList.add("blue");
+                        //value = findNext(className, -43);
+                        let next = value.slice(2);
+                        let nextValue = parseInt(next) - 43;
+                        value = `.c${nextValue}`;
+                    }
+                }, 800);
 
                 // let sliceValue = value.slice(2);
                 // let next = parseInt(sliceValue) - 43;
