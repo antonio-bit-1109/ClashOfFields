@@ -119,11 +119,43 @@ function linearPropagation(
 
     util.intervalPropagazioneLineareMartello = setInterval(() => {
         console.log("sono dentro linear propagation");
+
         arrayCells.forEach((className) => {
             console.log(className);
             if (cellUpCentr.classList.contains(className)) {
-                let value = addSomma(className);
-                document.querySelector(value)?.classList.add("blue");
+                let value = findNext(className, -43);
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+                let sliceValue = value.slice(2);
+                let next = parseInt(sliceValue) - 43;
+                let formattedNext = `.c${next}`;
+                value = formattedNext;
+                //nextCell = document.querySelector(`.c${}`)
+                // value = `.c${parseInt(nextValue) - 43}`;
+            }
+        });
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellMidSn.classList.contains(className)) {
+                let value = findNext(className, -1);
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+            }
+        });
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellMidDx.classList.contains(className)) {
+                let value = findNext(className, +1);
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
+            }
+        });
+        arrayCells.forEach((className) => {
+            console.log(className);
+            if (cellDownCentr.classList.contains(className)) {
+                let value = findNext(className, +43);
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) nextCell && nextCell.classList.add("blue");
             }
         });
     }, 1500);
@@ -134,11 +166,13 @@ function angularPropagation(cellUpDx: Element, cellUpSn: Element, cellDownSn: El
     util.intervalPropagazioneAngolareMartello = setInterval(() => {}, 1500);
 }
 
-function addSomma(className: string) {
+function findNext(className: string, modificator: number) {
     let nextCell = className.slice(1);
-    let value: number = parseInt(nextCell + 43);
-    return `c${value}`;
+    let value: number = parseInt(nextCell) + modificator;
+    console.log(value);
+    return `.c${value}`;
 }
+
 // export function stopPropagazioneMartello() {
 //     clearInterval(util.intervalPropagazioneLineareMartello);
 //     clearInterval(util.intervalPropagazioneAngolareMartello);
