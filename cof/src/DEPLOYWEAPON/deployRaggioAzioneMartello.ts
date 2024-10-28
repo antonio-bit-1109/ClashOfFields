@@ -120,25 +120,28 @@ function linearPropagation(
     util.intervalPropagazioneLineareMartello = setInterval(() => {
         console.log("sono dentro linear propagation");
 
+        let linearInterval: ReturnType<typeof setInterval>;
+        let raggio: number = 0;
         arrayCells.forEach((className) => {
             console.log(className);
             if (cellUpCentr.classList.contains(className)) {
                 let value = findNext(className, -43);
-                setInterval(() => {
-                    let nextCell = document.querySelector(value);
-                    if (!nextCell?.classList.contains("b")) {
-                        nextCell && nextCell.classList.add("blue");
-                        //value = findNext(className, -43);
-                        let next = value.slice(2);
-                        let nextValue = parseInt(next) - 43;
-                        value = `.c${nextValue}`;
+
+                linearInterval = setInterval(() => {
+                    if (raggio !== 4) {
+                        let nextCell = document.querySelector(value);
+                        if (!nextCell?.classList.contains("b")) {
+                            nextCell && nextCell.classList.add("blue");
+                            //value = findNext(className, -43);
+                            let next = value.slice(2);
+                            let nextValue = parseInt(next) - 43;
+                            value = `.c${nextValue}`;
+                            raggio++;
+                        }
+                    } else {
+                        clearInterval(linearInterval);
                     }
                 }, 800);
-
-                // let sliceValue = value.slice(2);
-                // let next = parseInt(sliceValue) - 43;
-                // let formattedNext = `.c${next}`;
-                // value = formattedNext;
             }
         });
         arrayCells.forEach((className) => {
