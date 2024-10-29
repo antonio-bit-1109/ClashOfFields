@@ -282,9 +282,12 @@ function schieraTruppa() {
 }
 
 // funzione per sentire audio dell arma che entra in campo.
-export async function suonoImpattoArma(audioElement: HTMLAudioElement) {
+export async function suonoImpattoArma(audioElement: HTMLAudioElement, volume?: number) {
     if (audioElement.currentTime > 0) {
         audioElement.currentTime = 0;
+        if (volume) {
+            audioElement.volume = volume;
+        }
         audioElement.play();
     } else {
         audioElement.play();

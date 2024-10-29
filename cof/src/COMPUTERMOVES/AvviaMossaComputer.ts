@@ -17,7 +17,11 @@ export function AvviaMossaComputer() {
         if (batteriaPc < 2) {
             return;
         }
-        suonoImpattoArma(missleExplSound);
+
+        if (!util.isGameStarted) {
+            return;
+        }
+        suonoImpattoArma(missleExplSound, 0.05);
         deployWeaponPc();
     }, 3000);
 }
