@@ -257,7 +257,7 @@ function angularPropagation(cellUpDx: Element, cellUpSn: Element, cellDownSn: El
     }
 }
 
-function retriveCriticalClass(cell: Element) {
+export function retriveCriticalClass(cell: Element) {
     let classiCellUpDx = Array.from(cell.classList);
     let criticalClass;
     for (let i = 0; i < classiCellUpDx.length; i++) {

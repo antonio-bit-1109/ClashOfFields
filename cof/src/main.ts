@@ -19,15 +19,16 @@ import { builderName } from "./BUILDERNAMES/builderName";
 import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGioco";
 import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
 import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
+import { AvviaMossaComputer } from "./COMPUTERMOVES/AvviaMossaComputer";
 
 // oggetto builder per generare parole random
 let parolaObj = new builderName();
 
 // suoni-audio
-const missleExplSound = new Audio("../sounds/missleExpl.mp3");
-const laserZapSound = new Audio("../sounds/laser_zap.mp3");
+export const missleExplSound = new Audio("../sounds/missleExpl.mp3");
+export const laserZapSound = new Audio("../sounds/laser_zap.mp3");
+export const hammerCrush = new Audio("../sounds/crush.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
-const hammerCrush = new Audio("../sounds/crush.mp3");
 
 // export let BatteryCharge: number = 0;
 // let maxCharge: number = 6;
@@ -54,6 +55,8 @@ interface IUtil {
     linearIntervalMidSn: ReturnType<typeof setInterval>;
     linearIntervalMidDx: ReturnType<typeof setInterval>;
     linearIntervalDownCntr: ReturnType<typeof setInterval>;
+    intervalRicaricaBattPc: ReturnType<typeof setInterval>;
+    faiMossaPc: ReturnType<typeof setInterval>;
     refAvanzamentoLaser: string;
     selectedCell: string;
     cellColor: string;
@@ -88,6 +91,8 @@ export const util: IUtil = {
     linearIntervalMidSn: setInterval(() => {}, 0),
     linearIntervalMidDx: setInterval(() => {}, 0),
     linearIntervalDownCntr: setInterval(() => {}, 0),
+    intervalRicaricaBattPc: setInterval(() => {}, 0),
+    faiMossaPc: setInterval(() => {}, 0),
     refAvanzamentoLaser: "",
     selectedCell: "",
     cellColor: "",
@@ -122,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.1;
+    sottofondoMusic.volume = 0.0;
 }
 
 function welcomeMessage() {
@@ -202,6 +207,8 @@ function cambiaImmagineDivMessaggi() {
 
 // punto di ingresso.
 function changeStatusGame() {
+    AvviaMossaComputer();
+
     const pTime = document.querySelector(".pStyle");
 
     //rendi opzioni tempo invisibili a prescindere se è stata fatta una scelta o no.
@@ -275,7 +282,7 @@ function schieraTruppa() {
 }
 
 // funzione per sentire audio dell arma che entra in campo.
-async function suonoImpattoArma(audioElement: HTMLAudioElement) {
+export async function suonoImpattoArma(audioElement: HTMLAudioElement) {
     if (audioElement.currentTime > 0) {
         audioElement.currentTime = 0;
         audioElement.play();
@@ -370,3 +377,7 @@ async function selectCell(costoArma: number): Promise<boolean> {
         res(true); // Risolvi la Promise al termine della funzione
     });
 }
+
+// export function eliminaAnimazione(){
+
+// }

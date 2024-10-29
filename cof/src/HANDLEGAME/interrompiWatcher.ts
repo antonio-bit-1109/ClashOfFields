@@ -10,6 +10,8 @@ export function interrompiWatcher() {
     clearInterval(util.linearIntervalMidSn);
     clearInterval(util.linearIntervalMidDx);
     clearInterval(util.linearIntervalDownCntr);
+    clearInterval(util.intervalRicaricaBattPc);
+    clearInterval(util.faiMossaPc);
     // clearInterval(util.intervalPropagazioneLineareMartello);
     // clearInterval(util.intervalPropagazioneAngolareMartello);
 }
