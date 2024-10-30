@@ -20,6 +20,8 @@ import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGio
 import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
 import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
 import { AvviaMossaComputer } from "./COMPUTERMOVES/AvviaMossaComputer";
+// ERORRE FINTO, NON è VERO
+import ColorThief from "color-thief-ts";
 // import { removeAnimationClasses } from "./HANDLEGAME/pulisciCellaDaAnimazione";
 
 // oggetto builder per generare parole random
@@ -30,9 +32,6 @@ export const missleExplSound = new Audio("../sounds/missleExpl.mp3");
 export const laserZapSound = new Audio("../sounds/laser_zap.mp3");
 export const hammerCrush = new Audio("../sounds/crush.mp3");
 const sottofondoMusic = new Audio("../sounds/sottofondo.mp3");
-
-// export let BatteryCharge: number = 0;
-// let maxCharge: number = 6;
 
 // interfaccia
 interface IUtil {
@@ -126,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startBackgroundMusic() {
     sottofondoMusic.play();
-    sottofondoMusic.volume = 0.0;
+    sottofondoMusic.volume = 0.04;
 }
 
 function welcomeMessage() {
@@ -183,25 +182,56 @@ async function cambiaSfondo() {
         loadingDiv?.classList.remove("d-none");
         let parola = parolaObj.startPipeline();
         console.log(parola);
-        let esito = await changeSfondoMessageBox(parola);
+        let ImgFetched = await changeSfondoMessageBox(parola);
 
-        if (esito instanceof Error) {
+        if (ImgFetched instanceof Error) {
             DoAgain = true;
         } else {
-            loadingDiv?.classList.add("d-none");
+            // const dominantColor = await colorThief.getColorAsync(ImgFetched);
+            // console.log(dominantColor, "THE DOMINANT COLOOOOOOORRRRRRR");
             DoAgain = false;
-            util.sfondo = esito;
-            cambiaImmagineDivMessaggi();
+            util.sfondo = ImgFetched;
+            loadingDiv && (await cambiaImmagineDivMessaggi(ImgFetched, loadingDiv));
             // usa la stringa ritornata dal server come immagine
         }
     } while (DoAgain);
 }
 
-function cambiaImmagineDivMessaggi() {
-    const sfondoSection = document.querySelector(".messagebox") as HTMLElement;
-    if (sfondoSection) {
-        sfondoSection.style.backgroundImage = `url(${util.sfondo})`;
+async function cambiaImmagineDivMessaggi(ImgFetched: string, loadingDiv: Element) {
+    try {
+        const colorThief = new ColorThief();
+        const dominantColor = await colorThief.getColorAsync(ImgFetched);
+        console.log(dominantColor, "DOMINANT COLORRRRRRRRRRRRRRRRRRR");
+        const sfondoSection = document.querySelector(".messagebox") as HTMLElement;
+        const h4_p = document.querySelector(".h4Style") as HTMLElement;
+        let oppositeColor = getOppositeColor(dominantColor);
+
+        if (sfondoSection && h4_p) {
+            sfondoSection.style.backgroundImage = `url(${util.sfondo})`;
+            h4_p.style.color = oppositeColor;
+            loadingDiv?.classList.add("d-none");
+        }
+    } catch (err) {
+        console.error("errore durante il cambio dell immagine" + err);
     }
+}
+
+function getOppositeColor(hexColor: string) {
+    // Rimuovi il simbolo '#' se presente
+    hexColor = hexColor.replace("#", "");
+
+    // Ottieni i componenti rosso, verde e blu del colore
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+
+    // Calcola il colore opposto invertendo ogni componente
+    const oppositeR = (255 - r).toString(16).padStart(2, "0");
+    const oppositeG = (255 - g).toString(16).padStart(2, "0");
+    const oppositeB = (255 - b).toString(16).padStart(2, "0");
+
+    // Combina i componenti per ottenere il colore opposto in esadecimale
+    return `#${oppositeR}${oppositeG}${oppositeB}`;
 }
 
 // punto di ingresso.
@@ -378,7 +408,3 @@ async function selectCell(costoArma: number): Promise<boolean> {
         res(true); // Risolvi la Promise al termine della funzione
     });
 }
-
-// export function eliminaAnimazione(){
-
-// }
