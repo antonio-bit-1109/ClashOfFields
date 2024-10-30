@@ -35,12 +35,17 @@
 
 -   [x] linear propagation è rotta, fix
 
+-   [x] implementa tutte le armi.
+
+-   [x] Implementare un meccanismo di randomicità nelle mosse del computer (web socket ? -- server ?? )
+
+-   [x] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
+
+-   [] implementa meccanismo di difficoltà del pc, in base alla difficoltà selezionata pc parte gia con carica iniziale e fa attacchi piu ravvicinati nel tempo ??
+
+-   [] modifica funzione deploy laser del computer in modo che faccia deploy dalle sue caselle rosse, verso le celle blue
+-   [] implementa una funzione per ripulire tutte le celle dalla classe flip cell dell animaizone, dopo ogni attacco
+
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
-
--   [ ] implementa tutte le armi.
-
--   [ ] Implementare un meccanismo di randomicità nelle mosse del computer (web socket ? -- server ?? )
-
--   [] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
 -   [] sistema caso in cui sto cliccando sempre sulle celle vicino ai bordi ma anche dall altra parte del bordo le celle sono del mio colore, si rompe, riporta le celle rosse.

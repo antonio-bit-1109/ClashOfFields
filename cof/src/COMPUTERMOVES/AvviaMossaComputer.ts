@@ -1,9 +1,10 @@
 import { retriveCriticalClass } from "../DEPLOYWEAPON/deployRaggioAzioneMartello";
-import { missleExplSound, suonoImpattoArma } from "../main";
+import { laserZapSound, missleExplSound, suonoImpattoArma } from "../main";
 import { util } from "../main";
 
 let batteriaPc = 0;
 let raggioAzioneMissilePc: string[] = [];
+let corpoRaggioLaserComputer: string[] = [];
 
 export function AvviaMossaComputer() {
     // ricarica batteriapc
@@ -17,59 +18,66 @@ export function AvviaMossaComputer() {
         if (batteriaPc < 2) {
             return;
         }
-
+        // se gioco in pausa non fare deploy
         if (!util.isGameStarted) {
             return;
         }
-        suonoImpattoArma(missleExplSound, 0.05);
+        // altrimenti fai deploy
         deployWeaponPc();
     }, 3000);
 }
 
 export function deployWeaponPc() {
-    const arrArmiDisp = ["Missle", "Laser", "Martello"];
+    const arrArmiDisp = ["Missle", "Laser" /*, "Martello"*/];
     let random = Math.floor(Math.random() * arrArmiDisp.length);
 
-    // let randomWep = arrArmiDisp[random];
-    let randomWep = "Missle";
-
+    let randomWep = arrArmiDisp[random];
+    // let randomWep = "Missle";
     do {
+        // scelgo una casella blue a caso.
+        const allBlueCells = document.querySelectorAll(".blue");
+        let randomNum = Math.floor(Math.random() * allBlueCells.length);
+        const selectCell = allBlueCells[randomNum];
+
         if (randomWep === "Missle" && batteriaPc >= 3) {
             // genera num random per cella su cui fare deploy
 
-            const allBlueCells = document.querySelectorAll(".blue");
-            let randomNum = Math.floor(Math.random() * allBlueCells.length);
-            const selectCell = allBlueCells[randomNum];
+            // const allBlueCells = document.querySelectorAll(".blue");
+            // let randomNum = Math.floor(Math.random() * allBlueCells.length);
+            // const selectCell = allBlueCells[randomNum];
             // console.log(selectCell, "CELLA SELECTED");
 
             let critClass = retriveCriticalClass(selectCell);
             // const pickUpRandomNum = Math.floor(Math.random() * allBlueCells.length);
             // console.log(pickUpRandomNum, "randooooommmm");
             critClass && deployMissileComputer(critClass);
+            suonoImpattoArma(missleExplSound, 0.05);
             //entra
             // chiama deploymissile
             // decrementa la batteria
         }
-        console.log("sto aspettando la batteria caricarsi");
-    } while (batteriaPc < 3);
-}
 
-// function retriveCriticalClass(cell: Element) {
-//     let classiCellUpDx = Array.from(cell.classList);
-//     let criticalClass;
-//     for (let i = 0; i < classiCellUpDx.length; i++) {
-//         const myClass = classiCellUpDx[i];
-//         console.log(myClass);
-//         if (myClass[0] === "c" && !isNaN(Number(myClass[1]))) {
-//             criticalClass = myClass;
-//             console.log("QUESTA è GIUSTA!!", criticalClass);
-//             break;
-//         } else {
-//             console.error("not this one");
-//         }
-//     }
-//     return criticalClass;
-// }
+        if (randomWep === "Laser" && batteriaPc >= 2) {
+            // genera num random per cella su cui fare deploy
+
+            // const allBlueCells = document.querySelectorAll(".blue");
+            // let randomNum = Math.floor(Math.random() * allBlueCells.length);
+            // const selectCell = allBlueCells[randomNum];
+            // console.log(selectCell, "CELLA SELECTED");
+
+            let critClass = retriveCriticalClass(selectCell);
+            // const pickUpRandomNum = Math.floor(Math.random() * allBlueCells.length);
+            // console.log(pickUpRandomNum, "randooooommmm");
+            critClass && deployRaggioLaserComputer(critClass);
+            suonoImpattoArma(laserZapSound, 0.05);
+            //entra
+            // chiama deploymissile
+            // decrementa la batteria
+        }
+
+        console.log("sto aspettando la batteria caricarsi");
+    } while (batteriaPc < 2);
+}
 
 export async function deployMissileComputer(cellOfDeploiment: string): Promise<boolean> {
     return new Promise((res) => {
@@ -135,4 +143,112 @@ export async function deployMissileComputer(cellOfDeploiment: string): Promise<b
         console.log(raggioAzioneMissilePc);
         res(true);
     });
+}
+
+function deployRaggioLaserComputer(cellOfDeploiment: string): Promise<boolean> {
+    return new Promise((res, rej) => {
+        // let isBlueCell = false;
+        // controllo che la cella selezionata sia del colore del giocatore (blue)
+        //const selectedCell = document.querySelector(`.${util.selectedCell}`);
+
+        // if (selectedCell) {
+        //     selectedCell.classList.contains("blue") ? (isBlueCell = true) : (isBlueCell = false);
+
+        // if (!isBlueCell) {
+        //     giveWarningMessage("puoi piantare la torretta solo sulle tue caselle.");
+        //     return;
+        // }
+        // pulisco array ogni qual volta voglio fare il deploy di un arma - pulisco array nel quale verrà posizionato corpo arma
+        // pulisco array nel quale inserisco raggio azione arma, in questo caso laser
+        corpoRaggioLaserComputer.length = 0;
+        // util.corpoArmaLaser.length = 0;
+        // pusho in array corpoarma tutte quelle stringhe che mi identificano le classi del corpo dell arma.
+        corpoRaggioLaserComputer.push(
+            "c" + (parseInt(cellOfDeploiment.slice(1)) + 0).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) + 1).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) - 1).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) + 42).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) + 43).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) + 44).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) - 42).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) - 43).toString(),
+            "c" + (parseInt(cellOfDeploiment.slice(1)) - 44).toString()
+        );
+
+        // le celle contenenti queste classi cambiano colore e diventano il corpo dell arma laser
+        corpoRaggioLaserComputer.forEach((value) => {
+            let cell = document.querySelector(`.${value}`);
+            cell?.classList.add("corpoLaserComputer");
+        });
+
+        // adesso in maniera ciclica (setinterval) vado prendendendo le tre caselle di fronte al corpo del arma e le cambio di colore finche non incontro una cella con classe "b" , bordo della griglia , che mi fare interropmere il ciclo.
+        raggioAzioneLaser();
+        res(true);
+    });
+}
+
+function raggioAzioneLaser() {
+    console.log("sono in raggio azione laser ");
+    // mi prendo le tre caselle superiori del corpo della torretta e per ognuna di esse faccio partire un setinterval che gli fa mangiare la casella davanti a se ogni x ms
+    // le prime tre cell da cui far partire il ciclo sono le ultime tre presenti in util.corpoarma
+
+    // prendo gli ultimi 3 valori dall array che corrispondono alle 3 caselle fontali del laser, da cui faccio partire un ciclo
+    console.log(corpoRaggioLaserComputer);
+    let cellSnClass = corpoRaggioLaserComputer[corpoRaggioLaserComputer.length - 1];
+    let cellCentrClass = corpoRaggioLaserComputer[corpoRaggioLaserComputer.length - 2];
+    let cellDxClass = corpoRaggioLaserComputer[corpoRaggioLaserComputer.length - 3];
+
+    console.log(cellSnClass, cellCentrClass, cellDxClass);
+
+    // prendo le caselle dal DOM
+    const cellSn = document.querySelector(`.${cellSnClass}`);
+    const cellCentr = document.querySelector(`.${cellCentrClass}`);
+    const cellDx = document.querySelector(`.${cellDxClass}`);
+
+    if (cellSn && cellCentr && cellDx) {
+        avanzaLaser(cellSnClass);
+        avanzaLaser(cellCentrClass);
+        avanzaLaser(cellDxClass);
+    }
+}
+
+export function avanzaLaser(classeRef: string) {
+    console.log(classeRef);
+    let numero = parseInt(classeRef.slice(1)); // Estrai la parte numerica e convertila in numero
+    console.log(numero);
+
+    let somma = numero - 43; // Somma il valore desiderato iniziale
+
+    // inserisco tutti i riferimenti ai setinterval generati in un array , quando devo chiamare pausa chiamo la funzione di stop "stopAvanzaLaser()" che ferma tutti gli interval pushati nell array.
+
+    let id = setInterval(() => {
+        // se il gioco è in pausa, quindi la variabile è false, non fare nulla e ritorna.
+        if (!util.isGameStarted) {
+            return;
+        }
+
+        const nuovaClasse = `c${somma}`; // Crea la nuova stringa con il prefisso "c"
+        console.log("sono in start laser");
+        console.log("nuovaClasse", nuovaClasse);
+
+        const cellaAvanti = document.querySelector(`.${nuovaClasse}`); // Seleziona l'elemento con la nuova classe
+
+        // se ilraggio laser raggiunge la fine della griglia (celle con classe "b"), l'interval viene automaticamente interrotto per quel raggio laser (fila di celle)
+        if (cellaAvanti && cellaAvanti.classList.contains("b")) {
+            clearInterval(id);
+            console.log("intervallo interrotto");
+        }
+        // altrimenti continua la propagazione
+        // per identificare a quale div è stato aggiunto il laser gli inserisco un laser insieme a datetime.now() in modo da avere un riferimento temporale a quale div è stato aggiunto per ultimo. in modo tale da poterlo adentificare all occorrenza. FIX: NO ATTRIBUTO
+        if (cellaAvanti) {
+            if (!cellaAvanti.classList.contains("blue") && !cellaAvanti.classList.contains("b")) {
+                cellaAvanti.classList.add("red");
+                cellaAvanti.classList.remove("blue");
+                cellaAvanti.classList.add("laser");
+                cellaAvanti.classList.add("flip-cell");
+                // cellaAvanti.setAttribute("time-deploy", Date.now().toString());
+            }
+            somma -= 43; // Aggiorna somma per la prossima iterazione
+        }
+    }, 50);
 }
