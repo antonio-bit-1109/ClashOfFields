@@ -1,3 +1,5 @@
+import { eliminaCorpoArma } from "../HANDLEGAME/eliminaCorpoArma";
+import { removeAnimationClass } from "../HANDLEGAME/pulisciCellaDaAnimazione";
 import { util } from "../main";
 
 export async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemove: string): Promise<boolean> {
@@ -49,15 +51,20 @@ export async function deployRaggioAzioneMissile(colorToAdd: string, colorToRemov
             "c" + (parseInt(util.selectedCell.slice(1)) - 172).toString()
         );
         console.log(util);
+
         util.raggioAzioneArma.forEach((value) => {
             let cell = document.querySelector(`.${value}`);
             console.log(cell, "cella selezionata");
             if (cell && !cell.classList.contains("b")) {
-                //se la cella cliccata si trova distanziato di n-3, n-4 , n-46 , n+40 ad una delle celle della successione regolare classe "b" alla classe n
-                // adiacentCellToBorderCell(value);
                 cell.classList.add(colorToAdd);
                 cell.classList.remove(colorToRemove);
                 cell.classList.add("flip-cell");
+                cell.addEventListener("animationend", () => {
+                    removeAnimationClass(cell);
+                });
+
+                // ogni qual volta faccio deploy missile, se nelle classi bersaglio è presente una classe corpo (corpoarma) la rimuovo. A video verrà rimossa la classe che identifica il corpo dell arma
+                eliminaCorpoArma(cell);
             }
         });
 

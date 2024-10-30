@@ -20,6 +20,7 @@ import { nascondiOptions, scegliTempoDiGioco } from "./HANDLETIME/ScegliTempoGio
 import { stopSchieraTruppa, stopSelezioneTruppe, truppaSelezionata } from "./HANDLEGAME/handleTruppaSelezionata";
 import { deployRaggioAzioneMartello } from "./DEPLOYWEAPON/deployRaggioAzioneMartello";
 import { AvviaMossaComputer } from "./COMPUTERMOVES/AvviaMossaComputer";
+// import { removeAnimationClasses } from "./HANDLEGAME/pulisciCellaDaAnimazione";
 
 // oggetto builder per generare parole random
 let parolaObj = new builderName();
@@ -49,13 +50,12 @@ interface IUtil {
     intervalTruppaSelez: ReturnType<typeof setInterval>;
     intervalSchieraTruppa: ReturnType<typeof setInterval>;
     intervalRicaricaBatteria: ReturnType<typeof setInterval>;
-    // intervalPropagazioneLineareMartello: ReturnType<typeof setInterval>;
-    // intervalPropagazioneAngolareMartello: ReturnType<typeof setInterval>;
     linearIntervalUpCentr: ReturnType<typeof setInterval>;
     linearIntervalMidSn: ReturnType<typeof setInterval>;
     linearIntervalMidDx: ReturnType<typeof setInterval>;
     linearIntervalDownCntr: ReturnType<typeof setInterval>;
     intervalRicaricaBattPc: ReturnType<typeof setInterval>;
+    // ritardaRimozioneAnimazione: ReturnType<typeof setInterval>;
     faiMossaPc: ReturnType<typeof setInterval>;
     refAvanzamentoLaser: string;
     selectedCell: string;
@@ -85,13 +85,12 @@ export const util: IUtil = {
     intervalTruppaSelez: setInterval(() => {}, 0), // Placeholder initialization
     intervalSchieraTruppa: setInterval(() => {}, 0), // Placeholder initialization
     intervalRicaricaBatteria: setInterval(() => {}, 0), // Placeholder initialization
-    // intervalPropagazioneLineareMartello: setInterval(() => {}, 0),
-    // intervalPropagazioneAngolareMartello: setInterval(() => {}, 0),
     linearIntervalUpCentr: setInterval(() => {}, 0),
     linearIntervalMidSn: setInterval(() => {}, 0),
     linearIntervalMidDx: setInterval(() => {}, 0),
     linearIntervalDownCntr: setInterval(() => {}, 0),
     intervalRicaricaBattPc: setInterval(() => {}, 0),
+    // ritardaRimozioneAnimazione: setInterval(() => {}, 0),
     faiMossaPc: setInterval(() => {}, 0),
     refAvanzamentoLaser: "",
     selectedCell: "",
@@ -268,7 +267,6 @@ function schieraTruppa() {
         case "Missle":
             deployWeapon(3, missleExplSound, deployRaggioAzioneMissile, Patch_removePacMan_Effect);
             giveMessage(`Hai selezionato  <span style='color:red;font-size:1.5em;'>${util.selectedTruppa}</span>`);
-
             break;
         case "Laser":
             deployWeapon(2, laserZapSound, deployRaggioAzioneLaser);

@@ -1,3 +1,4 @@
+import { eliminaCorpoArma } from "../HANDLEGAME/eliminaCorpoArma";
 import { giveWarningMessage } from "../HANDLEMESSAGES/warningMessage";
 import { util } from "../main";
 
@@ -103,7 +104,7 @@ export function avanzaLaser(classeRef: string) {
                 cellaAvanti.classList.remove("red");
                 cellaAvanti.classList.add("laser");
                 cellaAvanti.classList.add("flip-cell");
-                // cellaAvanti.setAttribute("time-deploy", Date.now().toString());
+                eliminaCorpoArma(cellaAvanti);
             }
             somma -= 43; // Aggiorna somma per la prossima iterazione
         }

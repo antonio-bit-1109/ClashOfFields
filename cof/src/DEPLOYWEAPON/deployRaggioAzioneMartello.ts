@@ -134,18 +134,18 @@ function linearPropagation(
                     return;
                 }
 
-                if (raggioUpCentr < 4) {
-                    let nextCell = document.querySelector(value);
-                    if (!nextCell?.classList.contains("b")) {
-                        if (nextCell) {
-                            let val = propagate(nextCell, value, -43);
-                            value = val;
-                            raggioUpCentr++;
-                        }
+                // if (raggioUpCentr < 4) {
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) {
+                    if (nextCell) {
+                        let val = propagate(nextCell, value, -43);
+                        value = val;
+                        raggioUpCentr++;
                     }
-                } else {
-                    clearInterval(util.linearIntervalUpCentr);
                 }
+                // } else {
+                //     clearInterval(util.linearIntervalUpCentr);
+                // }
             }, 800);
         }
     });
@@ -159,18 +159,18 @@ function linearPropagation(
                     return;
                 }
 
-                if (raggioMidSn < 4) {
-                    let nextCell = document.querySelector(value);
-                    if (!nextCell?.classList.contains("b")) {
-                        if (nextCell) {
-                            let val = propagate(nextCell, value, -1);
-                            value = val;
-                            raggioMidSn++;
-                        }
+                // if (raggioMidSn < 4) {
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) {
+                    if (nextCell) {
+                        let val = propagate(nextCell, value, -1);
+                        value = val;
+                        raggioMidSn++;
                     }
-                } else {
-                    clearInterval(util.linearIntervalMidSn);
                 }
+                // } else {
+                //     clearInterval(util.linearIntervalMidSn);
+                // }
             }, 800);
         }
     });
@@ -184,18 +184,18 @@ function linearPropagation(
                     return;
                 }
 
-                if (raggioMidDx < 4) {
-                    let nextCell = document.querySelector(value);
-                    if (!nextCell?.classList.contains("b")) {
-                        if (nextCell) {
-                            let val = propagate(nextCell, value, +1);
-                            value = val;
-                            raggioMidDx++;
-                        }
+                // if (raggioMidDx < 4) {
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) {
+                    if (nextCell) {
+                        let val = propagate(nextCell, value, +1);
+                        value = val;
+                        raggioMidDx++;
                     }
-                } else {
-                    clearInterval(util.linearIntervalMidDx);
                 }
+                // } else {
+                //     clearInterval(util.linearIntervalMidDx);
+                // }
             }, 800);
         }
     });
@@ -209,18 +209,18 @@ function linearPropagation(
                     return;
                 }
 
-                if (raggioDownCentr < 4) {
-                    let nextCell = document.querySelector(value);
-                    if (!nextCell?.classList.contains("b")) {
-                        if (nextCell) {
-                            let val = propagate(nextCell, value, +43);
-                            value = val;
-                            raggioDownCentr++;
-                        }
+                // if (raggioDownCentr < 4) {
+                let nextCell = document.querySelector(value);
+                if (!nextCell?.classList.contains("b")) {
+                    if (nextCell) {
+                        let val = propagate(nextCell, value, +43);
+                        value = val;
+                        raggioDownCentr++;
                     }
-                } else {
-                    clearInterval(util.linearIntervalDownCntr);
                 }
+                // } else {
+                //     clearInterval(util.linearIntervalDownCntr);
+                // }
             }, 800);
         }
     });

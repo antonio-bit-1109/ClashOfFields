@@ -45,6 +45,8 @@ body {
 }
 
 .pStyle {
+    margin-inline: auto;
+    width: 90%;
     font-size: 2em;
     font-weight: bold;
     color: red;
@@ -244,7 +246,7 @@ body {
 }
 
 .corpoLaserComputer {
-    background-color: rgb(232, 68, 68);
+    background-color: rgb(104, 9, 9);
 }
 /* .bounce-martello {
     animation: bounce-top 0.9s both;

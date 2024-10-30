@@ -41,12 +41,14 @@
 
 -   [x] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
--   [] modifica funzione deploy laser del computer in modo che faccia deploy dalle sue caselle rosse, verso le celle blue
--   [] fix del div/p che vibra che fa apparire lo scroll orizzontale
+-   [x] modifica funzione deploy laser del computer in modo che faccia deploy dalle sue caselle rosse, verso le celle blue
+-   [x] fix del div/p che vibra che fa apparire lo scroll orizzontale
+
+-   [] quanod faccio deploy missile, voglio che venga eliminata un eventuale classe corpoarma che ne cambia il colore
 
 -   [] implementa meccanismo di difficoltà del pc, in base alla difficoltà selezionata pc parte gia con carica iniziale e fa attacchi piu ravvicinati nel tempo ??
 
--   [] implementa una funzione per ripulire tutte le celle dalla classe flip cell dell animaizone, dopo ogni attacco
+-   [] implementa una funzione per ripulire tutte le celle dalla classe flip cell dell animaizone, dopo ogni attacco ( fatto solo missile utente, pc )
 
 -   [] implementa color thief e controlla se l'immagine di sfondo caricata è scura, se sì, allora metti i testi del div message scuri.
 
