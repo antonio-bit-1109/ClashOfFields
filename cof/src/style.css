@@ -209,6 +209,7 @@ body {
     text-align: center;
     background-image: url("../imgs/logo_transparent.png");
     background-position: center;
+    overflow-x: scroll;
 }
 
 .alternativeSfondo {
