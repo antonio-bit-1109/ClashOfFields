@@ -41,6 +41,8 @@
 
 -   [x] eliminare effetto PacMan anche sulle celle che sono distaccate n +2 o n-2 dal bordo
 
+-   [] fix del div/p che vibra che fa apparire lo scroll orizzontale
+
 -   [] implementa meccanismo di difficoltà del pc, in base alla difficoltà selezionata pc parte gia con carica iniziale e fa attacchi piu ravvicinati nel tempo ??
 
 -   [] modifica funzione deploy laser del computer in modo che faccia deploy dalle sue caselle rosse, verso le celle blue
